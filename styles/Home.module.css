@@ -46,6 +46,12 @@
   height: 100vh;
 }
 
+.projectContainer iframe {
+    border: 0px;
+    width: 400px;
+    height: 400px;
+}
+
 /* coloration */
 .projectScroller > div:nth-child(even) {
   background-color: white;

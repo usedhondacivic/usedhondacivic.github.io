@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import React from 'react'
+import Link from 'next/link'
 
 import NoisePlanetProject from '../data/projects/Raymarching/NoisePlanetProject'
 
@@ -118,7 +119,28 @@ function projectContainer(ProjComp, OverlayComp) {
 	}
 }
 
+class KhanTest extends React.Component {
+	onActiveChange() {
+
+	}
+
+	render() {
+		return (
+			<>
+				<iframe className="khan" src="https://www.khanacademy.org/computer-programming/rocket-jump/5031586312617984/embedded?id=1641096192235-0.6875093508071066&origin=file%3A%2F%2F&buttons=no&embed=yes&editor=no&author=no" frameborder="0" scrolling="no" />
+				<iframe className="khan" src="https://www.khanacademy.org/computer-programming/planes/5623717173657600/embedded?id=1641097768704-0.19610459693174764&origin=file%3A%2F%2F&buttons=no&embed=yes&editor=no&author=no" frameborder="0" scrolling="no" />
+				<iframe className="khan" src="https://www.khanacademy.org/computer-programming/some-sketchy-game/4823112592785408/embedded?id=1641098160258-0.983890450619725&origin=file%3A%2F%2F&buttons=no&embed=yes&editor=no&author=no" frameborder="0" scrolling="no" />
+				<iframe className="khan" src="https://www.khanacademy.org/computer-programming/writers-block/2966001495/embedded?id=1641098485965-0.7241882868228726&origin=file%3A%2F%2F&buttons=no&embed=yes&editor=no&author=no" frameborder="0" scrolling="no" />
+				<iframe className="khan" src="https://www.khanacademy.org/computer-programming/rocket/5785976875122688/embedded?id=1641099196335-0.25135898971323867&origin=file%3A%2F%2F&buttons=no&embed=yes&editor=no&author=no" frameborder="0" scrolling="no" />
+				<iframe className="khan" src="https://www.khanacademy.org/computer-programming/blok-adventures-5/5391392645578752/embedded?id=1641099422413-0.49102958983390543&origin=file%3A%2F%2F&buttons=no&embed=yes&editor=no&author=no" frameborder="0" scrolling="no" />
+			</>
+		)
+	}
+}
+
 const HelloComp = projectContainer(Hello, HelloOverlay);
+
+const Khan = projectContainer(KhanTest);
 
 const Planet = projectContainer(NoisePlanetProject);
 
@@ -134,9 +156,8 @@ export default function Home() {
 			</Head>
 			<Header />
 			<ProjectScroller>
-				<HelloComp>
-					<h1>Hello!</h1>
-				</HelloComp>
+				<HelloComp />
+				<Khan />
 				<Planet />
 				<Bulb />
 			</ProjectScroller>
