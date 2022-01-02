@@ -25,7 +25,7 @@ class Header extends React.Component {
 			<div className={styles.header} >
 				<h3>Michael Crum</h3>
 				<a href="">Top</a>
-				<a>Orbs!</a>
+				<a>Graphics</a>
 				<a>Robots</a>
 				<a>Games</a>
 				<a>Bottom</a>
