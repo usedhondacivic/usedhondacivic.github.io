@@ -70,7 +70,7 @@ class HelloOverlay extends React.Component {
 }
 
 function projectContainer(ProjComp, OverlayComp) {
-	return class extends React.Component {
+	return class Ret extends React.Component {
 		active = false;
 
 		constructor(props) {
