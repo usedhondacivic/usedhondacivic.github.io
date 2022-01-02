@@ -61,6 +61,8 @@ class HelloOverlay extends React.Component {
 				<h1>Hello...</h1>
 				<p>I am Michael Crum, welcome to my portfolio.</p>
 				<p>I like to make things! </p>
+
+
 				<p><b>This is a work in progress. More to come soon :)</b></p>
 				<p>Scroll to see what I have so far.</p>
 			</>
@@ -153,6 +155,10 @@ export default function Home() {
 				<title>Michael Crum: Portfolio</title>
 				<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"></link>
 				<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet"></link>
+				<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+				<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+				<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+				<link rel="manifest" href="/site.webmanifest"></link>
 			</Head>
 			<Header />
 			<ProjectScroller>
