@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Use NPM 7
+      - name: Update NPM
         run: npm i -g npm@latest
 
       - name: Cache dependencies
@@ -34,13 +34,11 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
-
       - name: Build
         run: |
-          npm i
+          npm i --legacy-peer-deps
           npm run build
           npm run export
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
