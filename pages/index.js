@@ -157,9 +157,9 @@ export default function Home() {
 			<Header />
 			<ProjectScroller>
 				<HelloComp />
-				<Khan />
 				<Planet />
 				<Bulb />
+				<Khan />
 			</ProjectScroller>
 		</>
 	)
