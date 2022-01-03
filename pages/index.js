@@ -9,6 +9,10 @@ import MandlebulbProject from '../data/projects/Raymarching/MandlebulbProject'
 
 import Hello from '../data/projects/Welcome/hello'
 
+import TurretProject from '../data/projects/Robots/TurretProject'
+
+import ElevatorProject from '../data/projects/Robots/ElevatorProject'
+
 
 class ProjectScroller extends React.Component {
 	render() {
@@ -26,8 +30,8 @@ class Header extends React.Component {
 			<div className={styles.header} >
 				<h3>Michael Crum</h3>
 				<a href="">Top</a>
-				<a>Graphics</a>
 				<a>Robots</a>
+				<a>Graphics</a>
 				<a>Games</a>
 				<a>Bottom</a>
 				<Socials />
@@ -65,6 +69,50 @@ class HelloOverlay extends React.Component {
 
 				<p><b>This is a work in progress. More to come soon :)</b></p>
 				<p>Scroll to see what I have so far.</p>
+			</>
+		)
+	}
+}
+
+class RobotOverlay extends React.Component {
+	render() {
+		return (
+			<div className="robotOverlay">
+				<h2>{this.props.title}</h2>
+				<div>
+					<p>{this.props.description}</p>
+					<p><b>Features:</b></p>
+					<b>My responsibilities:</b>
+				</div>
+			</div>
+		)
+	}
+}
+
+class FRCOverlay extends React.Component {
+	render() {
+		return (
+			<>
+				<h2>FRC 2020:<br />Infinite Recharge</h2>
+			</>
+		)
+	}
+}
+
+class ElevatorOverlay extends React.Component {
+	render() {
+		return (
+			<>
+				<h2>Preseason Project:<br />Elevator Bot</h2>
+				<p>
+					Created as an individual project over the course of one month,
+					this elevator bot was my first experiment with Computer Aided Design and fabrication.
+					In fact, it was the first CAD based system ever created at 3648, setting a president for seasons to come.
+				</p>
+				<p>
+					Features:
+
+				</p>
 			</>
 		)
 	}
@@ -110,9 +158,9 @@ function projectContainer(ProjComp, OverlayComp) {
 			return (
 				<>
 					<div className={styles.projectContainer} ref={this.containerRef}>
-						<ProjComp parentRef={this.containerRef} {...this.props} ref={this.childRef} />
+						<ProjComp parentRef={this.containerRef} ref={this.childRef} />
 						<div className={styles.overlay}>
-							{OverlayComp != null ? <OverlayComp parentRef={this.containerRef} projRef={this.childRef} /> : <></>}
+							{OverlayComp != null ? <OverlayComp parentRef={this.containerRef} projRef={this.childRef} {...this.props} /> : <></>}
 						</div>
 					</div>
 				</>
@@ -148,6 +196,10 @@ const Planet = projectContainer(NoisePlanetProject);
 
 const Bulb = projectContainer(MandlebulbProject);
 
+const Turret = projectContainer(TurretProject, FRCOverlay);
+
+const Elevator = projectContainer(ElevatorProject, RobotOverlay);
+
 export default function Home() {
 	return (
 		<>
@@ -163,9 +215,10 @@ export default function Home() {
 			<Header />
 			<ProjectScroller>
 				<HelloComp />
+				<Turret />
+				<Elevator title={<>Preseason Project:<br />Elevator Bot</>} />
 				<Planet />
 				<Bulb />
-				<Khan />
 			</ProjectScroller>
 		</>
 	)

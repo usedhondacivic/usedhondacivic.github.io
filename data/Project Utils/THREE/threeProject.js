@@ -1,6 +1,8 @@
 import React from 'react'
 import * as THREE from 'three'
 
+import { OrbitControls } from '../../../node_modules/three/examples/jsm/controls/OrbitControls.js';
+
 import ProjectBase from '../projectBase';
 
 export default class ThreeProject extends ProjectBase {
@@ -10,6 +12,12 @@ export default class ThreeProject extends ProjectBase {
     origin = new THREE.Vector3(0, 0, 0);
 
     active = false;
+    orbitControls = false;
+    cameraLight = false;
+    cameraLightDist = 2;
+
+    controls;
+    light;
 
     mousePosition = {
         x: 0,
@@ -34,9 +42,28 @@ export default class ThreeProject extends ProjectBase {
         this.camera = this.buildCamera(this.screenDimensions);
         this.sceneSubjects = this.createSceneSubjects(this.scene);
 
+        this.controls = new OrbitControls(this.camera, this.canvas);
+        this.controls.target.set(0, 0, 0);
+        this.controls.enablePan = false;
+        this.controls.enableZoom = false;
+
+        this.controls.enabled = this.orbitControls;
+
+        const color = 0xFFFFFF;
+        const intensity = 0.75;
+        this.light = new THREE.PointLight(color, intensity);
+        this.light.distance = this.cameraLightDist;
+        this.light.position.set(0, 3, 0);
+
+        if (this.cameraLight) {
+            this.scene.add(this.light);
+        }
+
         this.postBuild();
 
         this.resizeCanvas();
+
+        this.controls.update();
 
         this.display();
     }
@@ -60,7 +87,7 @@ export default class ThreeProject extends ProjectBase {
     buildCamera({ width, height }) {
         const aspectRatio = width / height;
         const fieldOfView = 60;
-        const nearPlane = 4;
+        const nearPlane = 0.1;
         const farPlane = 100;
         const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
 
@@ -97,6 +124,7 @@ export default class ThreeProject extends ProjectBase {
         for (let i = 0; i < this.sceneSubjects.length; i++)
             this.sceneSubjects[i].update(elapsedTime);
 
+        this.light.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
 
         this.renderer.render(this.scene, this.camera);
     }

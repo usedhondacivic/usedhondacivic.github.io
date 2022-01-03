@@ -233,6 +233,8 @@ gl_FragColor = vec4((gl_FragCoord.x / iResolution.x) - ambientOcclusion, (gl_Fra
 `;
 
 export default class NoisePlanetProject extends ShaderProject {
+    orbitControls = true;
+
     constructor(props) {
         super(props, vertex, fragment, {});
     }

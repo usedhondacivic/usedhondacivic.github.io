@@ -13,6 +13,12 @@
   margin-top: 200px;
 }
 
+.overlay h2{
+  font-size: 2vw;
+  margin-bottom: 10px;
+  margin-top: 100px;
+}
+
 .socialBar svg {
   display: inline;
   width: 20px;

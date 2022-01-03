@@ -29,7 +29,7 @@ a {
   box-sizing: border-box;
 }
 
-h1, h2, h3 {
+h1, h3 {
   color: #fefff5;
   mix-blend-mode: difference;
   font-family: 'Pacifico', cursive;
