@@ -4,7 +4,9 @@
   top: -100%;
   left: 0px;
   padding-left: 100px;
+  padding-right: 100px;
   mix-blend-mode: difference;
+  pointer-events: none;
 }
 
 .overlay h1{
@@ -16,7 +18,17 @@
 .overlay h2{
   font-size: 2vw;
   margin-bottom: 10px;
+}
+
+.robotOverlay {
+  white-space: pre-line;
   margin-top: 100px;
+  pointer-events: none;
+}
+
+.robotOverlay div {
+  display: inline-block;
+  max-width: 25%;
 }
 
 .socialBar svg {

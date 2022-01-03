@@ -29,10 +29,11 @@ class Header extends React.Component {
 		return (
 			<div className={styles.header} >
 				<h3>Michael Crum</h3>
-				<a href="">Top</a>
+				<a>Top</a>
 				<a>Robots</a>
 				<a>Graphics</a>
 				<a>Games</a>
+				<a>WebDev</a>
 				<a>Bottom</a>
 				<Socials />
 			</ div>
@@ -62,6 +63,7 @@ class HelloOverlay extends React.Component {
 	render() {
 		return (
 			<>
+				<span id="top"></span>
 				<h1>Hello...</h1>
 				<p>I am Michael Crum, welcome to my portfolio.</p>
 				<p>I like to make things! </p>
@@ -75,16 +77,29 @@ class HelloOverlay extends React.Component {
 }
 
 class RobotOverlay extends React.Component {
+
 	render() {
+		const features = this.props.features.map((f) =>
+			<li key={f}>{f}</li>
+		);
+		const resp = this.props.resp.map((f) =>
+			<li key={f}>{f}</li>
+		);
+
 		return (
-			<div className="robotOverlay">
-				<h2>{this.props.title}</h2>
+			<div className={styles.robotOverlay}>
 				<div>
+					<h2>{this.props.title}</h2>
 					<p>{this.props.description}</p>
-					<p><b>Features:</b></p>
-					<b>My responsibilities:</b>
 				</div>
-			</div>
+				<div style={{ float: 'right' }}>
+					<p><b>Features:</b></p>
+					<ul>{features}</ul>
+					<br></br>
+					<p><b>My responsibilities:</b></p>
+					<ul>{resp}</ul>
+				</div>
+			</div >
 		)
 	}
 }
@@ -196,7 +211,7 @@ const Planet = projectContainer(NoisePlanetProject);
 
 const Bulb = projectContainer(MandlebulbProject);
 
-const Turret = projectContainer(TurretProject, FRCOverlay);
+const Turret = projectContainer(TurretProject, RobotOverlay);
 
 const Elevator = projectContainer(ElevatorProject, RobotOverlay);
 
@@ -215,8 +230,37 @@ export default function Home() {
 			<Header />
 			<ProjectScroller>
 				<HelloComp />
-				<Turret />
-				<Elevator title={<>Preseason Project:<br />Elevator Bot</>} />
+				<Turret title={<>FRC 2020:<br />Infinite Recharge</>} description={
+					`
+					Team 3648: Sparta Robotica's entry into the 2020 First Robotics Competition.
+					
+					I was responsible for the full development cycle of two subsystems: the turreted shooter and the powercell intake. I was also the team lead, programming lead, and driver.
+
+					This bot placed 8th in the Utah regional and was being prepared for the Denver regional when it was canceled due to COVID-19.
+
+					Check out the CAD on OnShape: PUT LINK HERE
+
+					And the code on GitHub: PUT LINK HERE
+					`
+				}
+					features={["360° autonomously targeting + ranging turret", "Consistent inner-goal shots from beyond the control panel", "Pneumaticity adjustable hood for high angle shots", "Full width, over bumper powercell intake"]}
+					resp={["Team Lead", "Programming Lead", "Driver", "CAD design using OnShape", "CNC and manual machining", "Java development of remote operations", "Java development of autonomous routines (pathfinding, motion planning, and computer vision)", "Wiring"]}
+				/>
+				<Elevator title={<>Preseason Project:<br />Elevator Bot</>} description={
+					`An individual project created to learn about computer aided design and fabrication.
+					
+					Taken from inception to reality in under a month.
+					
+					The first CAD designed system created by 3648, bringing the team inline with competitive standards and setting precedent for future seasons.
+					
+					Check out the CAD on OnShape: PUT LINK HERE
+
+					And the code on GitHub: PUT LINK HERE
+					`
+				}
+					features={["Collapsed height: 3' 9\"", "Expanded height: 7' 0\"", "Riveted modular design", "Low profile + cost bearing modules", "Low center of gravity"]}
+					resp={["Research and development", "CAD design", "Material sourcing + acquirement", "CNC + manual machining", "Assembly", "Programming", "Testing"]}
+				/>
 				<Planet />
 				<Bulb />
 			</ProjectScroller>
