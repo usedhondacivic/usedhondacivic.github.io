@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
 import Link from 'next/link'
 
 import NoisePlanetProject from '../data/projects/Raymarching/NoisePlanetProject'
@@ -75,38 +76,28 @@ class HelloOverlay extends React.Component {
 	}
 }
 
-class RobotOverlay extends React.Component {
-
-	render() {
-		const features = this.props.features.map((f) =>
-			<li key={f}>{f}</li>
-		);
-		const resp = this.props.resp.map((f) =>
-			<li key={f}>{f}</li>
-		);
-
-		return (
-			<>
-				<div>
-					<h2>{this.props.title}</h2>
-					<p>{this.props.description}</p>
-					<p><b>Features:</b></p>
-					<ul>{features}</ul>
-					<br></br>
-					<p><b>My responsibilities:</b></p>
-					<ul>{resp}</ul>
-				</div>
-			</>
-		)
-	}
-}
-
 class FRCOverlay extends React.Component {
 	render() {
 		return (
-			<>
-				<h2>FRC 2020:<br />Infinite Recharge</h2>
-			</>
+			<ReactMarkdown children={`
+## FRC 2020: Infinite Recharge
+
+Team 3648: Sparta Robotica's entry into the 2020 First Robotics Competition.
+	
+I was responsible for the robot's software, as well as the mechanical development of two subsystems: the turreted shooter and the powercell intake.
+
+This bot placed 8th in the Utah regional and was being prepared for the Denver regional when it was canceled due to COVID-19.
+
+Check out the [CAD on OnShape](https://cad.onshape.com/documents/4f4f140286eedbc3147a5adb/w/726c6be2b235598525d86c19/e/4401aaf8d59f8b8317928fe9?renderMode=0&uiState=62abac51f4f21d3c3ff60cae)
+
+And the code on [Github](https://github.com/usedhondacivic/FRC-2020-Infinite-Recharge)
+
+<details>
+<summary>How do I dropdown?</summary>
+<br>
+This is how you dropdown.
+</details>
+			`} />
 		)
 	}
 }
@@ -114,15 +105,19 @@ class FRCOverlay extends React.Component {
 class ElevatorOverlay extends React.Component {
 	render() {
 		return (
-			<>
-				<h2>Preseason Project:<br />Elevator Bot</h2>
-				<p>
-				</p>
-				<p>
-					Features:
+			<ReactMarkdown children={`
+## Preseason Project: Elevator Bot
 
-				</p>
-			</>
+An individual project created to learn about computer aided design and fabrication.
+					
+Taken from inception to reality in under a month.
+
+The first CAD designed system created by 3648, bringing the team inline with competitive standards and setting precedent for future seasons.
+
+Check out the [CAD on OnShape](https://cad.onshape.com/documents/2638b1fbc9a97c197a516962/w/94baea28c309a62481d243fb/e/dbb2a3ab6cb6bb470a024fb5?renderMode=0&uiState=62abaf3219b28f5d66178544)
+
+And the code on [Github](https://github.com/usedhondacivic/FRC-Elevator-Bot)
+			`} />
 		)
 	}
 }
@@ -206,9 +201,9 @@ const Planet = projectContainer(NoisePlanetProject);
 
 const Bulb = projectContainer(MandlebulbProject);
 
-const Turret = projectContainer(TurretProject, RobotOverlay, side_by_side_overlay);
+const Turret = projectContainer(TurretProject, FRCOverlay, side_by_side_overlay);
 
-const Elevator = projectContainer(ElevatorProject, RobotOverlay, side_by_side_overlay);
+const Elevator = projectContainer(ElevatorProject, ElevatorOverlay, side_by_side_overlay);
 
 export default function Home() {
 	return (
