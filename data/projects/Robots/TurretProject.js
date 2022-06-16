@@ -12,7 +12,7 @@ export default class TurretProject extends ObjProject {
     }
 
     postBuild() {
-        this.camera.position.set(0.5, 0.5, -0.5);
+        this.camera.position.set(0.35, 0.35, -0.35);
         this.controls.target.set(0, 0, 0);
         this.controls.update();
         this.camera.updateProjectionMatrix();

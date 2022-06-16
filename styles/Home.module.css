@@ -1,34 +1,6 @@
-.overlay{
-  position: relative;
-  color: #fefff5;
-  top: -100%;
-  left: 0px;
-  padding-left: 100px;
-  padding-right: 100px;
-  mix-blend-mode: difference;
-  pointer-events: none;
-}
-
-.overlay h1{
-  font-size: 10vw;
-  margin-bottom: 10px;
-  margin-top: 200px;
-}
-
-.overlay h2{
-  font-size: 2vw;
-  margin-bottom: 10px;
-}
-
 .robotOverlay {
   white-space: pre-line;
-  margin-top: 100px;
   pointer-events: none;
-}
-
-.robotOverlay div {
-  display: inline-block;
-  max-width: 25%;
 }
 
 .socialBar svg {
@@ -45,6 +17,8 @@
   display: inline-block;
   width: 100%;
   padding-left: 50px;
+  pointer-events: all;
+  z-index: 10;
 }
 
 .header * {
@@ -55,28 +29,6 @@
 
 .projectScroller{
   width: 100vw;
-}
-
-.projectContainer{
-  scroll-snap-align: center;
-  overflow: hidden;
-  width: 100%;
-  height: 100vh;
-}
-
-.projectContainer iframe {
-    border: 0px;
-    width: 400px;
-    height: 400px;
-}
-
-/* coloration */
-.projectScroller > div:nth-child(even) {
-  background-color: white;
-}
-
-.projectScroller > div:nth-child(odd) {
-  background-color: black;
 }
 
 .description {

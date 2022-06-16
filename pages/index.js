@@ -4,14 +4,13 @@ import React from 'react'
 import Link from 'next/link'
 
 import NoisePlanetProject from '../data/projects/Raymarching/NoisePlanetProject'
-
 import MandlebulbProject from '../data/projects/Raymarching/MandlebulbProject'
-
 import Hello from '../data/projects/Welcome/hello'
-
 import TurretProject from '../data/projects/Robots/TurretProject'
-
 import ElevatorProject from '../data/projects/Robots/ElevatorProject'
+
+import total_overlay from '../styles/layouts/total_overlay.module.css'
+import side_by_side_overlay from '../styles/layouts/side_by_side_overlay.module.css'
 
 
 class ProjectScroller extends React.Component {
@@ -29,12 +28,12 @@ class Header extends React.Component {
 		return (
 			<div className={styles.header} >
 				<h3>Michael Crum</h3>
-				<a>Top</a>
-				<a>Robots</a>
-				<a>Graphics</a>
-				<a>Games</a>
-				<a>WebDev</a>
-				<a>Bottom</a>
+				<Link href="#top">Top</Link>
+				<Link href="#about">About</Link>
+				<Link href="#robots">Robots</Link>
+				<Link href="#graphics">Graphics</Link>
+				<Link href="#games">Games</Link>
+				<Link href="#webdev">WebDev</Link>
 				<Socials />
 			</ div>
 		)
@@ -87,19 +86,17 @@ class RobotOverlay extends React.Component {
 		);
 
 		return (
-			<div className={styles.robotOverlay}>
+			<>
 				<div>
 					<h2>{this.props.title}</h2>
 					<p>{this.props.description}</p>
-				</div>
-				<div style={{ float: 'right' }}>
 					<p><b>Features:</b></p>
 					<ul>{features}</ul>
 					<br></br>
 					<p><b>My responsibilities:</b></p>
 					<ul>{resp}</ul>
 				</div>
-			</div >
+			</>
 		)
 	}
 }
@@ -120,9 +117,6 @@ class ElevatorOverlay extends React.Component {
 			<>
 				<h2>Preseason Project:<br />Elevator Bot</h2>
 				<p>
-					Created as an individual project over the course of one month,
-					this elevator bot was my first experiment with Computer Aided Design and fabrication.
-					In fact, it was the first CAD based system ever created at 3648, setting a president for seasons to come.
 				</p>
 				<p>
 					Features:
@@ -133,7 +127,7 @@ class ElevatorOverlay extends React.Component {
 	}
 }
 
-function projectContainer(ProjComp, OverlayComp) {
+function projectContainer(ProjComp, OverlayComp, layout) {
 	return class Ret extends React.Component {
 		active = false;
 
@@ -147,6 +141,7 @@ function projectContainer(ProjComp, OverlayComp) {
 		componentDidMount() {
 			window.addEventListener('scroll', () => { this.checkActive() });
 			this.checkActive();
+			console.log(layout);
 		}
 
 		checkActive() {
@@ -171,14 +166,14 @@ function projectContainer(ProjComp, OverlayComp) {
 
 		render() {
 			return (
-				<>
-					<div className={styles.projectContainer} ref={this.containerRef}>
+				<div className={layout != null ? layout.slideContainer : total_overlay.slideContainer}>
+					<div className={layout != null ? layout.projectContainer : total_overlay.projectContainer} ref={this.containerRef}>
 						<ProjComp parentRef={this.containerRef} ref={this.childRef} />
-						<div className={styles.overlay}>
-							{OverlayComp != null ? <OverlayComp parentRef={this.containerRef} projRef={this.childRef} {...this.props} /> : <></>}
-						</div>
 					</div>
-				</>
+					<div className={layout != null ? layout.overlayContainer : total_overlay.overlayContainer}>
+						{OverlayComp != null ? <OverlayComp projRef={this.childRef} {...this.props} /> : <></>}
+					</div>
+				</div>
 			)
 		}
 	}
@@ -203,7 +198,7 @@ class KhanTest extends React.Component {
 	}
 }
 
-const HelloComp = projectContainer(Hello, HelloOverlay);
+const HelloComp = projectContainer(Hello, HelloOverlay, total_overlay);
 
 const Khan = projectContainer(KhanTest);
 
@@ -211,9 +206,9 @@ const Planet = projectContainer(NoisePlanetProject);
 
 const Bulb = projectContainer(MandlebulbProject);
 
-const Turret = projectContainer(TurretProject, RobotOverlay);
+const Turret = projectContainer(TurretProject, RobotOverlay, side_by_side_overlay);
 
-const Elevator = projectContainer(ElevatorProject, RobotOverlay);
+const Elevator = projectContainer(ElevatorProject, RobotOverlay, side_by_side_overlay);
 
 export default function Home() {
 	return (
@@ -230,6 +225,8 @@ export default function Home() {
 			<Header />
 			<ProjectScroller>
 				<HelloComp />
+				<span id="about"></span>
+				<span id="robots"></span>
 				<Turret title={<>FRC 2020:<br />Infinite Recharge</>} description={
 					`
 					Team 3648: Sparta Robotica's entry into the 2020 First Robotics Competition.
@@ -261,8 +258,11 @@ export default function Home() {
 					features={["Collapsed height: 3' 9\"", "Expanded height: 7' 0\"", "Riveted modular design", "Low profile + cost bearing modules", "Low center of gravity"]}
 					resp={["Research and development", "CAD design", "Material sourcing + acquirement", "CNC + manual machining", "Assembly", "Programming", "Testing"]}
 				/>
+				<span id="graphics"></span>
 				<Planet />
 				<Bulb />
+				<span id="games"></span>
+				<span id="webdev"></span>
 			</ProjectScroller>
 		</>
 	)
