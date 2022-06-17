@@ -21,6 +21,12 @@
   z-index: 10;
 }
 
+.header h3{
+  color: #fefff5;
+  mix-blend-mode: difference;
+  font-family: 'Pacifico', cursive;
+}
+
 .header a{
   color:#fefff5;
 }
