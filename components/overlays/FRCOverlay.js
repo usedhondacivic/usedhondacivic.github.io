@@ -22,7 +22,7 @@ And the code on [Github](https://github.com/usedhondacivic/FRC-2020-Infinite-Rec
 			<details>
 				<summary>Read the write up</summary>
 				<ReactMarkdown rehypePlugins={[rehypeRaw]} children={`
-![Infinite Recharge logo](/projects/robotics/FRC_2020/infinite_recharge.jpg)
+![Infinite Recharge logo](pictures/FRC_2020/infinite_recharge.jpg)
 
 ## Infinite Recharge: Game Overview
 Shamelessly stolen from [Wikipedia](https://en.wikipedia.org/wiki/Infinite_Recharge):
@@ -45,25 +45,25 @@ Given that I was one of only two members with four years of experience, I was as
 My first project was the shooter. To begin the design, I CAD'd a prototype "half-circle" shooter that was designed to allow for rapidly testing different compression of the ball while it was shot. By moving the plexiglass panel backward or forward in the slots, we were able to collect data on what changing compression did to the accuracy and power of the shots. In the end, we determined that 2.5" was the optimal level of compression. We also tested a variety of wheels and ended up settling for a  pair of 4" green stealth wheels.
 
 <p float="left">
-    <img alt="First shooter prototype" src="/projects/robotics/FRC_2020/shooter_first_proto.jpg" height="280"/>
-    <img alt="A different view" src="/projects/robotics/FRC_2020/shooter_first_proto_two.jpg" height="280"/>
+    <img alt="First shooter prototype" src="pictures/FRC_2020/shooter_first_proto.jpg" height="280"/>
+    <img alt="A different view" src="pictures/FRC_2020/shooter_first_proto_two.jpg" height="280"/>
 </p>
 
 At this point, we determined that we wanted to be able to shoot into the high goal from the trench run at about 60% power on the motors. This would limit the impact on the battery and give us flexibility with the range and wear. The immediate problem was the single CIM motor we were using. It just wasn't powerful enough for that range. We prototyped solutions using two 775 redline motors but ended up going for a single NEO Brushless motor on a 1:1.6 belt ratio. The NEO gave a great increase in torque and came bundled with an encoder for our control loops.
 
-<img alt="Smaller shooter footprint" src="/projects/robotics/FRC_2020/shooter_wood_metal.jpg" height="280"/>
+<img alt="Smaller shooter footprint" src="pictures/FRC_2020/shooter_wood_metal.jpg" height="280"/>
 
 With the basic shooter concept finalized, I began CADing a rotating platform to mount it on. We had determined that having a turreted shooter would be valuable for avoiding defense, make us more accurate, and make our cycles more efficient. Through researching other team's solutions to the problem, I settled on a simple bearing stack that would run along the inside of a piece of aluminum.
 
 By placing four bearing stacks around the outside of a circle, they could move smoothly around a plate mounted to the frame. I added several removable sections of gear tooth that could be attached to the turret head and would mesh with the gears we already had in the shop. I cut all the pieces on the team laser cutter and had a prototype built soon after.
 
-<img alt="Turret cut in aluminum" src="/projects/robotics/FRC_2020/turret.jpg" height="280"/>
+<img alt="Turret cut in aluminum" src="pictures/FRC_2020/turret.jpg" height="280"/>
 
 > ##### Final turret design, cut in aluminum with delrin gear teeth
 
 After many design iterations and much testing, I had finals cut out of aluminum and we tested the final assembly. It functioned very well, consistently hitting the top goal even from behind the control panel.
 
-<img alt="Shooter assembled in aluminum" src="/projects/robotics/FRC_2020/shooter_metal_one.jpg" height="280"/>
+<img alt="Shooter assembled in aluminum" src="pictures/FRC_2020/shooter_metal_one.jpg" height="280"/>
 
 > ##### Shooter + turret final assembly
 
@@ -71,7 +71,7 @@ Next, I moved on to integrating the system with the rest of the robot. At this p
 
 The kicker wheel design worked well, and we were soon able to launch our first power cells.
 <p float="center">
-    <img alt="Kicker wheel assembly" src="/projects/robotics/FRC_2020/kicker_wheel.jpg" height="280"/>
+    <img alt="Kicker wheel assembly" src="pictures/FRC_2020/kicker_wheel.jpg" height="280"/>
 </p>
 
 > ##### Kicker wheel assembled in CAD
@@ -79,8 +79,8 @@ The kicker wheel design worked well, and we were soon able to launch our first p
 The final feature that I wanted to add was an adjustable hood. As part of the 2020 game, there were protected shooting areas in the trench run (where we planned to do most of our shooting) and right below the goal (aka the "bumper shot"). To hit the bumper shot we would need the backplate of the shooter to hinge backward and allow for a higher angle. I designed the "hood" of our shooter to be actuated with a small pneumatic cylinder, but initial testing showed that it was too weak to resist the ball, and would make our shots inaccurate. To fix that problem, I designed a locking linkage where two pieces of Delrin would "lock" in the upright position against the force of the ball, making it strong yet easily actuated by the pneumatic. The addition of the adjustable hood allowed us to shoot from anywhere on the field and gave us the flexibility to play as either a forward or long shooter.
 
 <p float="left">
-    <img alt="Hood lock forward" src="/projects/robotics/FRC_2020/hood_lock_back.jpg" height="280"/>
-    <img alt="Hood lock back" src="/projects/robotics/FRC_2020/hood_lock_forward.jpg" height="280"/>
+    <img alt="Hood lock forward" src="pictures/FRC_2020/hood_lock_back.jpg" height="280"/>
+    <img alt="Hood lock back" src="pictures/FRC_2020/hood_lock_forward.jpg" height="280"/>
 </p>
 
 > ##### The hood back, then forward (pneumatic not shown in the CAD)
@@ -88,7 +88,7 @@ The final feature that I wanted to add was an adjustable hood. As part of the 20
 ### Intake
 I made a very rapid prototype intake at the beginning of the season to give some less experienced team members a starting place to work from. 
 
-<img alt="Shooter assembled in aluminum" src="/projects/robotics/FRC_2020/intake_proto.jpg" height="280"/>
+<img alt="Shooter assembled in aluminum" src="pictures/FRC_2020/intake_proto.jpg" height="280"/>
 
 > ##### Early prototype of the intake (feat. Shalom)
 
@@ -102,7 +102,7 @@ We broke our first version at our local scrimmage, so I redesigned to create an 
 
 The final design was cut out of 1/4" Delrin and 1"x1" aluminum stock.
 
-<img alt="Final intake in CAD" src="/projects/robotics/FRC_2020/intake_CAD.jpg" height="280"/>
+<img alt="Final intake in CAD" src="pictures/FRC_2020/intake_CAD.jpg" height="280"/>
 
 > ##### Final intake design in CAD
 
@@ -118,8 +118,8 @@ This was my third year as a driver and I was able to participate in a local scri
 
 
 <p float="left">
-    <img alt="Picture of the 3648 drive team" src="/projects/robotics/FRC_2020/drive_team_one.jpg" width="325">
-    <img alt="Picture of the 3648 drive team" src="/projects/robotics/FRC_2020/drive_team_two.jpg" width="325"/> 
+    <img alt="Picture of the 3648 drive team" src="pictures/FRC_2020/drive_team_one.jpg" width="325">
+    <img alt="Picture of the 3648 drive team" src="pictures/FRC_2020/drive_team_two.jpg" width="325"/> 
 </p>
 
 > ##### The glorious 3648 drive team on the steps of the Maveric Center in Salt Lake City, UT
@@ -128,9 +128,9 @@ This was my third year as a driver and I was able to participate in a local scri
 Before the season began, I experimented with the CAD program OnShape. I decided to model and build an elevator as practice before the real season. One of our mentors had recently bought a CNC router and was happy to help me fabricate the parts for my design. In just over four weeks, I designed and built a functional elevator robot with the help of a few friends. The elevator worked phenomenally, and it was the first subsystem to ever be produced by 3648 using computer-aided design.
 
 <p float="left">
-    <img alt="Elevator bot from the back" src="/projects/robotics/FRC_2020/elevator_back.jpg" height="280">
-    <img alt="Elevator CAD" src="/projects/robotics/FRC_2020/elevator_cad.jpg" height="280"/> 
-    <img alt="Elevator bot from the front" src="/projects/robotics/FRC_2020/elevator_front.jpg" height="280"/>
+    <img alt="Elevator bot from the back" src="pictures/FRC_2020/elevator_back.jpg" height="280">
+    <img alt="Elevator CAD" src="pictures/FRC_2020/elevator_cad.jpg" height="280"/> 
+    <img alt="Elevator bot from the front" src="pictures/FRC_2020/elevator_front.jpg" height="280"/>
 </p>
 
 > ##### The CAD model for the elevator bot next to the fabricated version
