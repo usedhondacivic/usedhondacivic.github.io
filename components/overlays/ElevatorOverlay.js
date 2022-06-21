@@ -1,9 +1,11 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 
 export default class ElevatorOverlay extends React.Component {
 	render() {
 		return (
+			<>
 			<ReactMarkdown children={`
 ## Preseason Project: Elevator Bot
 
@@ -17,6 +19,24 @@ Check out the [CAD on OnShape](https://cad.onshape.com/documents/2638b1fbc9a97c1
 
 And the code on [Github](https://github.com/usedhondacivic/FRC-Elevator-Bot)
 			`} />
+			<details>
+				<summary>Read the write up</summary>
+				<ReactMarkdown rehypePlugins={[rehypeRaw]} children={`
+### Preseason Project
+Before the season began, I experimented with the CAD program OnShape. I decided to model and build an elevator as practice before the real season. One of our mentors had recently bought a CNC router and was happy to help me fabricate the parts for my design. In just over four weeks, I designed and built a functional elevator robot with the help of a few friends. The elevator worked phenomenally, and it was the first subsystem to ever be produced by 3648 using computer-aided design.
+
+<p float="left">
+    <img alt="Elevator bot from the back" src="pictures/FRC_2020/elevator_back.jpg" height="280">
+    <img alt="Elevator CAD" src="pictures/FRC_2020/elevator_cad.jpg" height="280"/> 
+    <img alt="Elevator bot from the front" src="pictures/FRC_2020/elevator_front.jpg" height="280"/>
+</p>
+
+> ##### The CAD model for the elevator bot next to the fabricated version
+
+This project proved the feasibility of using CAD in our shop and paved the way for using CAD for design and rapid prototyping for the rest of the season.
+				`} />
+			</details>
+			</>
 		)
 	}
 }

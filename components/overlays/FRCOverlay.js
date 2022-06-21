@@ -123,22 +123,6 @@ This was my third year as a driver and I was able to participate in a local scri
 </p>
 
 > ##### The glorious 3648 drive team on the steps of the Maveric Center in Salt Lake City, UT
-
-## Preseason Project
-Before the season began, I experimented with the CAD program OnShape. I decided to model and build an elevator as practice before the real season. One of our mentors had recently bought a CNC router and was happy to help me fabricate the parts for my design. In just over four weeks, I designed and built a functional elevator robot with the help of a few friends. The elevator worked phenomenally, and it was the first subsystem to ever be produced by 3648 using computer-aided design.
-
-<p float="left">
-    <img alt="Elevator bot from the back" src="pictures/FRC_2020/elevator_back.jpg" height="280">
-    <img alt="Elevator CAD" src="pictures/FRC_2020/elevator_cad.jpg" height="280"/> 
-    <img alt="Elevator bot from the front" src="pictures/FRC_2020/elevator_front.jpg" height="280"/>
-</p>
-
-> ##### The CAD model for the elevator bot next to the fabricated version
-
-This project proved the feasibility of using CAD in our shop and paved the way for using CAD for design and rapid prototyping for the rest of the season.
-
-## Postmortem
-This year's robot was, in my opinion, **by far** the best robot 3648 has ever produced. Aside from performance in competition, the robot was the most robust, functional, and reliable robot the team has made, and I am so happy I was able to be a part of it. My time on the team has been unforgettable, and I am going to miss the people most of all. Thanks to everyone who made it that way.
 				`} />
 			</details>
 			</>
