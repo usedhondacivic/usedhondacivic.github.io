@@ -27,7 +27,6 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 		componentDidMount() {
 			window.addEventListener('scroll', () => { this.checkActive() });
 			this.checkActive();
-			console.log(layout);
 		}
 
 		checkActive() {
@@ -75,4 +74,4 @@ const Turret = projectContainer(TurretProject, FRCOverlay, side_by_side_overlay)
 
 const Elevator = projectContainer(ElevatorProject, ElevatorOverlay, side_by_side_overlay);
 
-export {HelloComp, Planet, Bulb, Turret, Elevator}
+export { HelloComp, Planet, Bulb, Turret, Elevator }
