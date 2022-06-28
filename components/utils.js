@@ -37,4 +37,50 @@ class Socials extends React.Component {
 	}
 }
 
-export {Header};
+class Tabs extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {active: 0};
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+	handleClick(i){
+		this.setState({
+			active: i
+		});
+	}
+
+	render() {
+		let tabs = [];
+		for(var t in this.props.tabs){
+			tabs[t] = <Tab clickHandle={this.handleClick}>{this.props.tabs[t]}</Tab>
+		}
+
+		return (
+			<div className={styles.tabGroup}>
+				{tabs}
+			</div>
+		)
+	}
+}
+
+class Tab extends React.Component {
+	constructor(props){
+		super(props);
+		this.click = this.click.bind(this);
+	}
+
+	click(){
+		this.props.clickHandle(this.props.id);
+	}
+
+	render() {
+		return <button type="button" onClick={this.click}>
+			<span>
+				{this.props.children}
+			</span>
+		</button>
+	}
+}
+
+export {Header, Tabs};

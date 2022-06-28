@@ -2,10 +2,13 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 
+import {Tabs} from '../utils'
+
 export default class FRCOverlay extends React.Component {
 	render() {
 		return (
 			<>
+			<Tabs tabs={["hello", "test"]} />
 			<ReactMarkdown children={`
 ## FRC 2020: Infinite Recharge
 

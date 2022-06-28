@@ -46,3 +46,20 @@
   text-align: left;
   overflow-wrap: break-word;
 }
+
+.tabGroup {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.tabGroup button {
+  display: block;
+  margin: 0px;
+}
+
+.tabGroup button span {
+  display: block;
+  transform: rotate(90deg);
+
+}

@@ -6,7 +6,8 @@
 }
 
 .overlayContainer{
-    display: inline-block;
+    display: block;
+    position: absolute;
     width: 50%;
     height: 80vh;
     margin-top: 5%; 
