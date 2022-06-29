@@ -21,14 +21,14 @@
   z-index: 10;
 }
 
-.header h3{
+.header h3 {
   color: #fefff5;
   mix-blend-mode: difference;
   font-family: 'Pacifico', cursive;
 }
 
-.header a{
-  color:#fefff5;
+.header a {
+  color: #fefff5;
 }
 
 .header * {
@@ -37,7 +37,7 @@
   margin-right: 10px;
 }
 
-.projectScroller{
+.projectScroller {
   width: 100vw;
 }
 
@@ -49,17 +49,27 @@
 
 .tabGroup {
   position: absolute;
+  display: inline-block;
+  white-space: nowrap;
+  transform-origin: top left;
+  transform: rotate(90deg);
   top: 0px;
-  right: 0px;
+  left: 95%;
+  height: 1.2em;
+  padding-left: 18px;
 }
 
 .tabGroup button {
-  display: block;
-  margin: 0px;
+  display: inline-block;
+  background-color: transparent;
+  font-size: 1em;
+  border-bottom: 3px solid;
 }
 
-.tabGroup button span {
-  display: block;
-  transform: rotate(90deg);
+.tabGroup button p {
+  margin: 5px 0px;
+}
 
+.activeTab {
+  color: aqua;
 }

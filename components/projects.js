@@ -13,15 +13,24 @@ import FRCOverlay from './overlays/FRCOverlay'
 import ElevatorOverlay from './overlays/ElevatorOverlay'
 import HelloOverlay from './overlays/Hello'
 
+let isArray = function (a) {
+	return (!!a) && (a.constructor === Array);
+};
+
 function projectContainer(ProjComp, OverlayComp, layout) {
 	return class Ret extends React.Component {
-		active = false;
-
 		constructor(props) {
 			super(props);
+
 			this.checkActive = this.checkActive.bind(this);
 			this.containerRef = React.createRef();
 			this.childRef = React.createRef();
+			this.state = {
+				current: "null"
+			}
+			if (isArray(ProjComp) == false) {
+				console.log("hit");
+			}
 		}
 
 		componentDidMount() {

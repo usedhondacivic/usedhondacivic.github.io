@@ -38,13 +38,13 @@ class Socials extends React.Component {
 }
 
 class Tabs extends React.Component {
-	constructor(props){
+	constructor(props) {
 		super(props);
-		this.state = {active: 0};
+		this.state = { active: 0 };
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleClick(i){
+	handleClick(i) {
 		this.setState({
 			active: i
 		});
@@ -52,8 +52,8 @@ class Tabs extends React.Component {
 
 	render() {
 		let tabs = [];
-		for(var t in this.props.tabs){
-			tabs[t] = <Tab clickHandle={this.handleClick}>{this.props.tabs[t]}</Tab>
+		for (var t in this.props.tabs) {
+			tabs[t] = <Tab active={t == this.state.active} id={t} key={t} clickHandle={this.handleClick}>{this.props.tabs[t]}</Tab>
 		}
 
 		return (
@@ -65,22 +65,26 @@ class Tabs extends React.Component {
 }
 
 class Tab extends React.Component {
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this.click = this.click.bind(this);
 	}
 
-	click(){
+	click() {
 		this.props.clickHandle(this.props.id);
 	}
 
 	render() {
-		return <button type="button" onClick={this.click}>
+		return <button className={this.props.active ? styles.activeTab : null} type="button" onClick={this.click}>
 			<span>
-				{this.props.children}
+				<p>
+					<b>
+						{this.props.children}
+					</b>
+				</p>
 			</span>
 		</button>
 	}
 }
 
-export {Header, Tabs};
+export { Header, Tabs };

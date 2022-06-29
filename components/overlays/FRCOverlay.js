@@ -2,14 +2,14 @@ import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 
-import {Tabs} from '../utils'
+import { Tabs } from '../utils'
 
 export default class FRCOverlay extends React.Component {
 	render() {
 		return (
 			<>
-			<Tabs tabs={["hello", "test"]} />
-			<ReactMarkdown children={`
+				<Tabs tabs={["Full", "Turret", "Intake"]} />
+				<ReactMarkdown children={`
 ## FRC 2020: Infinite Recharge
 
 Team 3648: Sparta Robotica's entry into the 2020 First Robotics Competition.
@@ -22,9 +22,9 @@ Check out the [CAD on OnShape](https://cad.onshape.com/documents/4f4f140286eedbc
 
 And the code on [Github](https://github.com/usedhondacivic/FRC-2020-Infinite-Recharge)
 			`} />
-			<details>
-				<summary>Read the write up</summary>
-				<ReactMarkdown rehypePlugins={[rehypeRaw]} children={`
+				<details>
+					<summary>Read the write up</summary>
+					<ReactMarkdown rehypePlugins={[rehypeRaw]} children={`
 ![Infinite Recharge logo](pictures/FRC_2020/infinite_recharge.jpg)
 
 ## Infinite Recharge: Game Overview
@@ -127,7 +127,7 @@ This was my third year as a driver and I was able to participate in a local scri
 
 > ##### The glorious 3648 drive team on the steps of the Maveric Center in Salt Lake City, UT
 				`} />
-			</details>
+				</details>
 			</>
 		)
 	}
