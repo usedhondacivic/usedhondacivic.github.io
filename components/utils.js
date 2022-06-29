@@ -48,6 +48,7 @@ class Tabs extends React.Component {
 		this.setState({
 			active: i
 		});
+		this.props.tabChange(this.props.tabs[i]);
 	}
 
 	render() {

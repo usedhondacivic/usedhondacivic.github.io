@@ -8,6 +8,7 @@ import MandlebulbProject from '../data/projects/Raymarching/MandlebulbProject'
 import Hello from '../data/projects/Welcome/hello'
 import TurretProject from '../data/projects/Robots/TurretProject'
 import ElevatorProject from '../data/projects/Robots/ElevatorProject'
+import IntakeProject from '../data/projects/Robots/IntakeProject'
 
 import FRCOverlay from './overlays/FRCOverlay'
 import ElevatorOverlay from './overlays/ElevatorOverlay'
@@ -23,13 +24,11 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 			super(props);
 
 			this.checkActive = this.checkActive.bind(this);
+			this.setTab = this.setTab.bind(this);
 			this.containerRef = React.createRef();
 			this.childRef = React.createRef();
 			this.state = {
-				current: "null"
-			}
-			if (isArray(ProjComp) == false) {
-				console.log("hit");
+				current: Object.keys(ProjComp)[0]
 			}
 		}
 
@@ -58,14 +57,27 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 			return mode === 'above' ? above : (mode === 'below' ? below : !above && !below);
 		}
 
+		setTab(name) {
+			console.log(name);
+			this.setState({
+				current: name
+			});
+		}
+
 		render() {
+			let CurProj = null;
+			if (typeof ProjComp !== 'object') {
+				CurProj = ProjComp;
+			}else{
+				CurProj = ProjComp[this.state.current];
+			}
 			return (
 				<div className={layout != null ? layout.slideContainer : total_overlay.slideContainer}>
 					<div className={layout != null ? layout.projectContainer : total_overlay.projectContainer} ref={this.containerRef}>
-						<ProjComp parentRef={this.containerRef} ref={this.childRef} />
+						<CurProj parentRef={this.containerRef} ref={this.childRef} />
 					</div>
 					<div className={layout != null ? layout.overlayContainer : total_overlay.overlayContainer}>
-						{OverlayComp != null ? <OverlayComp projRef={this.childRef} {...this.props} /> : <></>}
+						{OverlayComp != null ? <OverlayComp tabChange={this.setTab} projRef={this.childRef} {...this.props} /> : <></>}
 					</div>
 				</div>
 			)
@@ -79,7 +91,7 @@ const Planet = projectContainer(NoisePlanetProject);
 
 const Bulb = projectContainer(MandlebulbProject);
 
-const Turret = projectContainer(TurretProject, FRCOverlay, side_by_side_overlay);
+const Turret = projectContainer({"Intake": IntakeProject, "Turret": TurretProject}, FRCOverlay, side_by_side_overlay);
 
 const Elevator = projectContainer(ElevatorProject, ElevatorOverlay, side_by_side_overlay);
 
