@@ -29,12 +29,17 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 			this.childRef = React.createRef();
 			this.state = {
 				current: Object.keys(ProjComp)[0]
+				
 			}
 		}
 
 		componentDidMount() {
 			window.addEventListener('scroll', () => { this.checkActive() });
 			this.checkActive();
+		}
+
+		componentDidUpdate() {
+			this.childRef.current.onActiveChange(this.active);
 		}
 
 		checkActive() {
@@ -67,14 +72,24 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 		render() {
 			let CurProj = null;
 			if (typeof ProjComp !== 'object') {
-				CurProj = ProjComp;
+				CurProj = <ProjComp parentRef={this.containerRef} ref={this.childRef} />;
 			}else{
-				CurProj = ProjComp[this.state.current];
+				if(this.childRef.current){
+					this.childRef.current.onActiveChange(false);
+				}
+				for(var i in ProjComp){
+					CurProj = [];
+					let Temp = ProjComp[i];
+					CurProj.push(
+						<Temp parentRef={this.containerRef} ref={i == this.state.current ? this.childRef : null} />
+					);
+				}
 			}
+
 			return (
 				<div className={layout != null ? layout.slideContainer : total_overlay.slideContainer}>
 					<div className={layout != null ? layout.projectContainer : total_overlay.projectContainer} ref={this.containerRef}>
-						<CurProj parentRef={this.containerRef} ref={this.childRef} />
+						{CurProj}
 					</div>
 					<div className={layout != null ? layout.overlayContainer : total_overlay.overlayContainer}>
 						{OverlayComp != null ? <OverlayComp tabChange={this.setTab} projRef={this.childRef} {...this.props} /> : <></>}

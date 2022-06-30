@@ -151,6 +151,10 @@ export default class ThreeProject extends ProjectBase {
     }
 
     render() {
-        return this.component;
+        if(this.active){
+            return this.component;
+        }else{
+            return <></>;
+        }
     }
 }
