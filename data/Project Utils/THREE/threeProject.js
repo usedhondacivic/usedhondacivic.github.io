@@ -113,6 +113,7 @@ export default class ThreeProject extends ProjectBase {
 
     onActiveChange(active) {
         this.active = active;
+        this.resizeCanvas();
         if (active) {
             this.display();
         }
@@ -151,10 +152,6 @@ export default class ThreeProject extends ProjectBase {
     }
 
     render() {
-        if(this.active){
-            return this.component;
-        }else{
-            return <></>;
-        }
+        return this.component;
     }
 }

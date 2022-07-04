@@ -14,7 +14,9 @@ class ObjSubject {
             objLoader.load(model, (root) => {
                 root.rotation.x = -Math.PI / 2;
                 if (offset != null) {
-                    root.position.y += offset;
+                    root.position.x += offset[0];
+                    root.position.y += offset[1];
+                    root.position.z += offset[2];
                 }
                 scene.add(root);
             });

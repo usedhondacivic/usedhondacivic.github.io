@@ -7,8 +7,7 @@ export default class TurretProject extends ObjProject {
     cameraLight = true;
 
     constructor(props) {
-        super(props, "./models/turret/Turret.obj", "./models/turret/Turret.mtl", -0.05);
-        //super(props, "./models/intake/Intake.obj", "./models/intake/Intake.mtl");
+        super(props, "./models/turret/Turret.obj", "./models/turret/Turret.mtl", [0, -0.05, 0]);
     }
 
     postBuild() {

@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import React from 'react'
-import {HelloComp, Planet, Bulb, Turret, Elevator} from '../components/projects'
-import {Header} from '../components/utils'
+import { HelloComp, Planet, Bulb, Turret, Elevator } from '../components/projects'
+import { Header } from '../components/utils'
 
 class ProjectScroller extends React.Component {
 	render() {

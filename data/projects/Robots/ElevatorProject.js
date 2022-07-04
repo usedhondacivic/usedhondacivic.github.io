@@ -8,7 +8,7 @@ export default class ElevatorProject extends ObjProject {
     cameraLightDist = 3;
 
     constructor(props) {
-        super(props, "./models/elevator/elevator_down.obj", "./models/elevator/elevator_down.mtl", -0.6);
+        super(props, "./models/elevator/elevator_down.obj", "./models/elevator/elevator_down.mtl", [0, -0.6, 0]);
     }
 
     postBuild() {

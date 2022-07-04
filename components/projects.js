@@ -29,7 +29,6 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 			this.childRef = React.createRef();
 			this.state = {
 				current: Object.keys(ProjComp)[0]
-				
 			}
 		}
 
@@ -39,14 +38,18 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 		}
 
 		componentDidUpdate() {
-			this.childRef.current.onActiveChange(this.active);
+			if (this.childRef.current) {
+				this.childRef.current.onActiveChange(this.active);
+			}
 		}
 
 		checkActive() {
 			let visible = this.checkVisible(this.containerRef.current);
 			if (this.active != visible) {
 				this.active = visible;
-				this.childRef.current.onActiveChange(this.active);
+				if (this.childRef.current) {
+					this.childRef.current.onActiveChange(this.active);
+				}
 			}
 		}
 
@@ -63,7 +66,6 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 		}
 
 		setTab(name) {
-			console.log(name);
 			this.setState({
 				current: name
 			});
@@ -73,21 +75,23 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 			let CurProj = null;
 			if (typeof ProjComp !== 'object') {
 				CurProj = <ProjComp parentRef={this.containerRef} ref={this.childRef} />;
-			}else{
-				if(this.childRef.current){
+			} else {
+				if (this.childRef.current) {
 					this.childRef.current.onActiveChange(false);
 				}
-				for(var i in ProjComp){
-					CurProj = [];
+				CurProj = [];
+				for (var i in ProjComp) {
 					let Temp = ProjComp[i];
 					CurProj.push(
-						<Temp parentRef={this.containerRef} ref={i == this.state.current ? this.childRef : null} />
+						<span key={i} style={i == this.state.current ? {} : { display: 'none' }}>
+							<Temp parentRef={this.containerRef} ref={i == this.state.current ? this.childRef : null} />
+						</span>
 					);
 				}
 			}
 
 			return (
-				<div className={layout != null ? layout.slideContainer : total_overlay.slideContainer}>
+				<div className={layout != null ? layout.slideContainer : total_overlay.slideContainer} >
 					<div className={layout != null ? layout.projectContainer : total_overlay.projectContainer} ref={this.containerRef}>
 						{CurProj}
 					</div>
@@ -106,7 +110,7 @@ const Planet = projectContainer(NoisePlanetProject);
 
 const Bulb = projectContainer(MandlebulbProject);
 
-const Turret = projectContainer({"Intake": IntakeProject, "Turret": TurretProject}, FRCOverlay, side_by_side_overlay);
+const Turret = projectContainer({ "Turret": TurretProject, "Intake": IntakeProject }, FRCOverlay, side_by_side_overlay);
 
 const Elevator = projectContainer(ElevatorProject, ElevatorOverlay, side_by_side_overlay);
 

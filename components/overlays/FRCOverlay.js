@@ -8,7 +8,7 @@ export default class FRCOverlay extends React.Component {
 	render() {
 		return (
 			<>
-				<Tabs tabChange={this.props.tabChange} tabs={["Full", "Turret", "Intake"]} />
+				<Tabs tabChange={this.props.tabChange} tabs={["Turret", "Intake"]} />
 				<ReactMarkdown children={`
 ## FRC 2020: Infinite Recharge
 
