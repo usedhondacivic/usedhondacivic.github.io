@@ -10,8 +10,8 @@ class Header extends React.Component {
 				<Link href="#top">Top</Link>
 				<Link href="#about">About</Link>
 				<Link href="#robots">Robots</Link>
-				<Link href="#graphics">Graphics</Link>
 				<Link href="#games">Games</Link>
+				<Link href="#graphics">Graphics</Link>
 				<Link href="#webdev">WebDev</Link>
 				<Socials />
 			</ div>

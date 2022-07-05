@@ -7,11 +7,11 @@ export default class TurretProject extends ObjProject {
     cameraLight = true;
 
     constructor(props) {
-        super(props, "./models/turret/Turret.obj", "./models/turret/Turret.mtl", [0, -0.05, 0]);
+        super(props, "./models/turret/Turret.obj", "./models/turret/Turret.mtl", [0, 0.05, 0]);
     }
 
     postBuild() {
-        this.camera.position.set(0.35, 0.35, -0.35);
+        this.camera.position.set(-0.45, 0.45, -0.45);
         this.controls.target.set(0, 0, 0);
         this.controls.update();
         this.camera.updateProjectionMatrix();

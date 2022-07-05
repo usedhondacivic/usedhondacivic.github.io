@@ -7,8 +7,9 @@ import NoisePlanetProject from '../data/projects/Raymarching/NoisePlanetProject'
 import MandlebulbProject from '../data/projects/Raymarching/MandlebulbProject'
 import Hello from '../data/projects/Welcome/hello'
 import TurretProject from '../data/projects/Robots/TurretProject'
-import ElevatorProject from '../data/projects/Robots/ElevatorProject'
+import { ElevatorUpProject, ElevatorDownProject } from '../data/projects/Robots/ElevatorProject'
 import IntakeProject from '../data/projects/Robots/IntakeProject'
+import FullBotProject from '../data/projects/Robots/FullBot'
 
 import FRCOverlay from './overlays/FRCOverlay'
 import ElevatorOverlay from './overlays/ElevatorOverlay'
@@ -110,8 +111,8 @@ const Planet = projectContainer(NoisePlanetProject);
 
 const Bulb = projectContainer(MandlebulbProject);
 
-const Turret = projectContainer({ "Turret": TurretProject, "Intake": IntakeProject }, FRCOverlay, side_by_side_overlay);
+const Turret = projectContainer({ /*"Full": FullBotProject,*/ "Turret": TurretProject, "Intake": IntakeProject }, FRCOverlay, side_by_side_overlay);
 
-const Elevator = projectContainer(ElevatorProject, ElevatorOverlay, side_by_side_overlay);
+const Elevator = projectContainer({ "Retracted": ElevatorDownProject, "Extended": ElevatorUpProject }, ElevatorOverlay, side_by_side_overlay);
 
 export { HelloComp, Planet, Bulb, Turret, Elevator }
