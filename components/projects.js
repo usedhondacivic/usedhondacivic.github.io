@@ -111,7 +111,7 @@ const Planet = projectContainer(NoisePlanetProject);
 
 const Bulb = projectContainer(MandlebulbProject);
 
-const Turret = projectContainer({ /*"Full": FullBotProject,*/ "Turret": TurretProject, "Intake": IntakeProject }, FRCOverlay, side_by_side_overlay);
+const Turret = projectContainer({ "Full": FullBotProject, "Turret": TurretProject, "Intake": IntakeProject }, FRCOverlay, side_by_side_overlay);
 
 const Elevator = projectContainer({ "Retracted": ElevatorDownProject, "Extended": ElevatorUpProject }, ElevatorOverlay, side_by_side_overlay);
 
