@@ -9,7 +9,7 @@ import Hello from '../data/projects/Welcome/hello'
 import TurretProject from '../data/projects/Robots/TurretProject'
 import { ElevatorUpProject, ElevatorDownProject } from '../data/projects/Robots/ElevatorProject'
 import IntakeProject from '../data/projects/Robots/IntakeProject'
-import FullBotProject from '../data/projects/Robots/FullBot'
+import FullBotProject from '../data/projects/Robots/FullBotProject'
 
 import FRCOverlay from './overlays/FRCOverlay'
 import ElevatorOverlay from './overlays/ElevatorOverlay'
