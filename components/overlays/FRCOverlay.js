@@ -27,7 +27,7 @@ And the code on [Github](https://github.com/usedhondacivic/FRC-2020-Infinite-Rec
 					<ReactMarkdown rehypePlugins={[rehypeRaw]} children={`
 ![Infinite Recharge logo](pictures/FRC_2020/infinite_recharge.jpg)
 
-## Infinite Recharge: Game Overview
+### Infinite Recharge: Game Overview
 
 Shamelessly stolen from [Wikipedia](https://en.wikipedia.org/wiki/Infinite_Recharge):
 
