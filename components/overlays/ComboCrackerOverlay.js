@@ -20,9 +20,9 @@ Programmed bare-metal on the FRDM-KL46Z board, in C++ and assembly.
 Custom hardware control board interfaces with the FRDM-KL46Z through custom built drivers.
 Fabricated using a 3D printer and laser cuter.
 
-Check out the [CAD on OnShape](https://cad.onshape.com/documents/4f4f140286eedbc3147a5adb/w/726c6be2b235598525d86c19/e/4401aaf8d59f8b8317928fe9?renderMode=0&uiState=62abac51f4f21d3c3ff60cae)
+Check out the [CAD on OnShape](https://cad.onshape.com/documents/05aac48a55782d85d245cccd/v/781c610616c3169cbd71e8cf/e/72aafb165d7a97047a56eae0)
 
-And the code on [Github](https://github.com/usedhondacivic/FRC-2020-Infinite-Recharge)
+And the code on [Github](https://github.com/usedhondacivic/ECE-3140-Lock-Cracking-Robot)
 			`} />
 				<details>
 					<summary>Read the write up</summary>

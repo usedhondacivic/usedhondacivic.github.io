@@ -16,7 +16,7 @@ export default class ComboCrackerProject extends ObjProject {
         this.controls.update();
         this.camera.updateProjectionMatrix();
 
-        const color = 0xf2fffe;
+        const color = 0xffffff;
         const intensity = 0.5;
         const amb = new THREE.AmbientLight(color, intensity);
 
