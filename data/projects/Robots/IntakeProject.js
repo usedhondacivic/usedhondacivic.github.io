@@ -15,9 +15,10 @@ export default class IntakeProject extends ObjProject {
         this.controls.target.set(0, 0, 0);
         this.controls.update();
         this.camera.updateProjectionMatrix();
+        this.light.distance = 4;
 
         const color = 0xFFFFFF;
-        const intensity = 0.55;
+        const intensity = 0.5;
         const amb = new THREE.AmbientLight(color, intensity);
 
         this.scene.add(amb);
