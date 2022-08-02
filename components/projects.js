@@ -10,10 +10,12 @@ import TurretProject from '../data/projects/Robots/TurretProject'
 import { ElevatorUpProject, ElevatorDownProject } from '../data/projects/Robots/ElevatorProject'
 import IntakeProject from '../data/projects/Robots/IntakeProject'
 import FullBotProject from '../data/projects/Robots/FullBotProject'
+import ComboCrackerProject from '../data/projects/Robots/ComboCrackerProject'
 
 import FRCOverlay from './overlays/FRCOverlay'
 import ElevatorOverlay from './overlays/ElevatorOverlay'
 import HelloOverlay from './overlays/Hello'
+import ComboCrackerOverlay from './overlays/ComboCrackerOverlay'
 
 let isArray = function (a) {
 	return (!!a) && (a.constructor === Array);
@@ -111,8 +113,10 @@ const Planet = projectContainer(NoisePlanetProject);
 
 const Bulb = projectContainer(MandlebulbProject);
 
+const ComboCracker = projectContainer(ComboCrackerProject, ComboCrackerOverlay, side_by_side_overlay);
+
 const Turret = projectContainer({ "Full": FullBotProject, "Turret": TurretProject, "Intake": IntakeProject }, FRCOverlay, side_by_side_overlay);
 
 const Elevator = projectContainer({ "Retracted": ElevatorDownProject, "Extended": ElevatorUpProject }, ElevatorOverlay, side_by_side_overlay);
 
-export { HelloComp, Planet, Bulb, Turret, Elevator }
+export { HelloComp, Planet, Bulb, Turret, Elevator, ComboCracker }

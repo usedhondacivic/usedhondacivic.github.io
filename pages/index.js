@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import React from 'react'
-import { HelloComp, Planet, Bulb, Turret, Elevator } from '../components/projects'
+import { HelloComp, Planet, Bulb, Turret, Elevator, ComboCracker } from '../components/projects'
 import { Header } from '../components/utils'
 
 class ProjectScroller extends React.Component {
@@ -32,12 +32,13 @@ export default function Home() {
 				<HelloComp />
 				<span id="about"></span>
 				<span id="robots"></span>
+				<ComboCracker />
 				<Turret />
 				<Elevator />
+				<span id="games"></span>
 				<span id="graphics"></span>
 				<Planet />
 				<Bulb />
-				<span id="games"></span>
 				<span id="webdev"></span>
 			</ProjectScroller>
 		</>
