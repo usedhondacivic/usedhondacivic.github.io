@@ -28,9 +28,8 @@ export default function Home() {
 			</Head>
 			<Header />
 			<ProjectScroller>
-				<span id="top"></span>
-				<HelloComp />
 				<span id="about"></span>
+				<HelloComp />
 				<span id="robots"></span>
 				<ComboCracker />
 				<Turret />

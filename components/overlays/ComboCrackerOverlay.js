@@ -16,8 +16,8 @@ Crack any master-lock combination lock in under 30 seconds - hands free.
 My final project for ECE 3140: Embedded Systems at Cornell University. 
 Fabricated, programmed, and documented in two weeks.
 
-Programmed bare-metal on the FRDM-KL46Z board, in C++ and assembly.
-Custom hardware control board interfaces with the FRDM-KL46Z through purpose built drivers.
+Programmed bare-metal on the FRDM-KL46Z board using C and assembly.
+Electronic control board is custom made, interfacing with the FRDM-KL46Z through purpose built drivers.
 Fabricated using a PRUSA I3 MK3S 3D printer and an Epilog Fusion M2 laser cuter.
 
 Check out the [CAD on OnShape](https://cad.onshape.com/documents/05aac48a55782d85d245cccd/v/781c610616c3169cbd71e8cf/e/72aafb165d7a97047a56eae0)

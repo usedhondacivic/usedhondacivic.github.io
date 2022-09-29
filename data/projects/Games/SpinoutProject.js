@@ -5,7 +5,7 @@ import styles from '../../../styles/projects/spinout.module.css'
 export default class SpinoutProject extends ProjectBase {
     render() {
         return (
-            <div className={styles.background}>hello</div>
+            <div className={styles.background}></div>
         )
     }
 }

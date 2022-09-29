@@ -14,7 +14,7 @@ export default class FRCOverlay extends React.Component {
 
 Team 3648: Sparta Robotica's entry into the 2020 First Robotics Competition.
 	
-I was responsible for the robot's software, as well as the mechanical development of two subsystems: the turreted shooter and the powercell intake.
+I was responsible for the robot's software and the mechanical development of two subsystems: the turreted shooter and the powercell intake.
 
 This bot placed 8th in the Utah regional and was being prepared for the Denver regional when it was canceled due to COVID-19.
 
