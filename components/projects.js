@@ -2,6 +2,7 @@ import React from 'react'
 
 import total_overlay from '../styles/layouts/total_overlay.module.css'
 import side_by_side_overlay from '../styles/layouts/side_by_side_overlay.module.css'
+import half_total_overlay from '../styles/layouts/half_total_overlay.module.css'
 
 import NoisePlanetProject from '../data/projects/Raymarching/NoisePlanetProject'
 import MandlebulbProject from '../data/projects/Raymarching/MandlebulbProject'
@@ -11,15 +12,15 @@ import { ElevatorUpProject, ElevatorDownProject } from '../data/projects/Robots/
 import IntakeProject from '../data/projects/Robots/IntakeProject'
 import FullBotProject from '../data/projects/Robots/FullBotProject'
 import ComboCrackerProject from '../data/projects/Robots/ComboCrackerProject'
+import SpinoutProject from '../data/projects/Games/SpinoutProject'
 
 import FRCOverlay from './overlays/FRCOverlay'
 import ElevatorOverlay from './overlays/ElevatorOverlay'
 import HelloOverlay from './overlays/Hello'
 import ComboCrackerOverlay from './overlays/ComboCrackerOverlay'
-
-let isArray = function (a) {
-	return (!!a) && (a.constructor === Array);
-};
+import SpinoutOverlay from './overlays/SpinoutOverlay'
+import PlanetOverlay from './overlays/PlanetOverlay'
+import MandlebulbOverlay from './overlays/MandlebulbOverlay'
 
 function projectContainer(ProjComp, OverlayComp, layout) {
 	return class Ret extends React.Component {
@@ -109,9 +110,9 @@ function projectContainer(ProjComp, OverlayComp, layout) {
 
 const HelloComp = projectContainer(Hello, HelloOverlay, total_overlay);
 
-const Planet = projectContainer(NoisePlanetProject);
+const Planet = projectContainer(NoisePlanetProject, PlanetOverlay, total_overlay);
 
-const Bulb = projectContainer(MandlebulbProject);
+const Bulb = projectContainer(MandlebulbProject, MandlebulbOverlay);
 
 const ComboCracker = projectContainer(ComboCrackerProject, ComboCrackerOverlay, side_by_side_overlay);
 
@@ -119,4 +120,6 @@ const Turret = projectContainer({ "Full": FullBotProject, "Turret": TurretProjec
 
 const Elevator = projectContainer({ "Retracted": ElevatorDownProject, "Extended": ElevatorUpProject }, ElevatorOverlay, side_by_side_overlay);
 
-export { HelloComp, Planet, Bulb, Turret, Elevator, ComboCracker }
+const Spinout = projectContainer(SpinoutProject, SpinoutOverlay, half_total_overlay);
+
+export { HelloComp, Planet, Bulb, Turret, Elevator, ComboCracker, Spinout }

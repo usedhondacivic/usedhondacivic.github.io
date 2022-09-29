@@ -9,7 +9,7 @@ export default class ElevatorOverlay extends React.Component {
 			<>
 				<Tabs tabChange={this.props.tabChange} tabs={["Retracted", "Extended"]} />
 				<ReactMarkdown children={`
-## Preseason Project: Elevator Bot
+## Elevator Bot
 
 An individual project created to learn about computer aided design and fabrication.
 					
@@ -24,7 +24,7 @@ And the code on [Github](https://github.com/usedhondacivic/FRC-Elevator-Bot)
 				<details>
 					<summary>Read the write up</summary>
 					<ReactMarkdown rehypePlugins={[rehypeRaw]} children={`
-### Preseason Project
+### Elevator Bot
 Before the season began, I experimented with the CAD program OnShape. I decided to model and build an elevator as practice before the real season. One of our mentors had recently bought a CNC router and was happy to help me fabricate the parts for my design. In just over four weeks, I designed and built a functional elevator robot with the help of a few friends. The elevator worked phenomenally, and it was the first subsystem to ever be produced by 3648 using computer-aided design.
 
 <p float="left">

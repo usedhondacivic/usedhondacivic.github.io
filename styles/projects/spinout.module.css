@@ -1,0 +1,25 @@
+.spinout {
+    color: black;
+    font-weight: 300;
+    pointer-events: all;
+}
+
+.spinout object {
+    width: 80%;
+}
+
+.spinout a {
+    color: red;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    background-image: url(../../public/pictures/Spinout/spinout_background.jpg);
+    background-repeat: no-repeat;
+    background-position-x: right;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}

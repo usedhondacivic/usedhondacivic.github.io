@@ -12,7 +12,6 @@ class Header extends React.Component {
 				<Link href="#robots">Robots</Link>
 				<Link href="#games">Games</Link>
 				<Link href="#graphics">Graphics</Link>
-				<Link href="#webdev">WebDev</Link>
 				<Socials />
 			</ div>
 		)
