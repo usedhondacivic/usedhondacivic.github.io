@@ -1,0 +1,5 @@
+{
+    "title": "Spinout",
+    "description": "An online multiplayer racing game built from the ground up. Uses Node.js for backend, socket.io for real-time networking, and processing.js for frontend.",
+    "date": "11.23.2018"
+}
