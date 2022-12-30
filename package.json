@@ -10,6 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "fs": "0.0.1-security",
-    "fs-extra": "^11.1.0"
+    "fs-extra": "^11.1.0",
+    "glob": "^8.0.3",
+    "showdown": "^2.1.0"
   }
 }

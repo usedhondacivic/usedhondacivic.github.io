@@ -98,6 +98,8 @@ section.entry aside {
 section.entry aside img {
     width: 250px;
     border-radius: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
 }
 
 section.entry h2 {
