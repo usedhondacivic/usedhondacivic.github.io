@@ -71,6 +71,7 @@ section#splash>footer {
     flex-direction: column;
     position: relative;
     margin-bottom: 50px;
+    transform: translateY(-50px);
 }
 
 section#splash>footer img {
