@@ -56,7 +56,7 @@ glob("posts/*/*.md", function (er, files) {
         pages[new_path] = contents_page;
         // Copy assets
         resize_and_relocate(path_name.replace("/content.md", "/assets"), new_path + '/assets');
-        info.rel_post_link = new_path.replace("docs", "") + "/index.html";
+        info.rel_post_link = new_path.replace("docs", "");
         info.rel_snapshot_link = new_path.replace("docs", "") + "/assets/snapshot.png";
         info_arr.push(info);
     })
