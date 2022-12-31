@@ -129,7 +129,7 @@ header h2 {
     margin-bottom: 0px;
 }
 
-@media only all and (orientation: portrait) {
+@media only screen and (max-width: 1000px) {
     section#card aside {
         text-align: center;
     }

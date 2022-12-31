@@ -12,11 +12,11 @@ const homepage_entry_template = fs.readFileSync(path.resolve(__dirname, 'templat
 const sidebar_entry_template = fs.readFileSync(path.resolve(__dirname, 'templates/sidebar_entry.html'), 'utf8');
 const content_template = fs.readFileSync(path.resolve(__dirname, 'templates/content.html'), 'utf8');
 
-// Clean the build directory
-fsExtra.emptyDirSync(path.resolve(__dirname, 'build'));
+// Clean the docs directory
+fsExtra.emptyDirSync(path.resolve(__dirname, 'docs'));
 
 // Copy over styles
-fsExtra.copySync(path.resolve(__dirname, 'styles'), path.resolve(__dirname, 'build/styles'))
+fsExtra.copySync(path.resolve(__dirname, 'styles'), path.resolve(__dirname, 'docs/styles'))
 
 var pages = new Object();
 var info_arr = [];
@@ -52,12 +52,12 @@ glob("posts/*/*.md", function (er, files) {
         var contents_page = content_template.replaceAll("<!-- TITLE -->", info.title)
             .replace("<!-- CONTENT -->", contents_html)
             .replace("<!-- DATE -->", info.date);
-        var new_path = path_name.replace("posts", "build").replace("/content.md", "");
+        var new_path = path_name.replace("posts", "docs").replace("/content.md", "");
         pages[new_path] = contents_page;
         // Copy assets
         resize_and_relocate(path_name.replace("/content.md", "/assets"), new_path + '/assets');
-        info.rel_post_link = new_path.replace("build", "") + "/index.html";
-        info.rel_snapshot_link = new_path.replace("build", "") + "/assets/snapshot.png";
+        info.rel_post_link = new_path.replace("docs", "") + "/index.html";
+        info.rel_snapshot_link = new_path.replace("docs", "") + "/assets/snapshot.png";
         info_arr.push(info);
     })
     info_arr.sort(function (a, b) {
@@ -80,15 +80,15 @@ glob("posts/*/*.md", function (er, files) {
             .replace("snapshot_link", "." + info.rel_snapshot_link);
         homepage_entries.push(homepage_entry);
     })
-    // Write the html files for each project to the build folder
+    // Write the html files for each project to the docs folder
     for (const [path_loc, html] of Object.entries(pages)) {
         var content = html.replace("<!-- NAV -->", sidebar.join("\n"));
         fs.mkdirSync(path_loc, { recursive: true });
         fs.writeFileSync(path.resolve(__dirname, path_loc, "index.html"), content);
     }
-    // Write the home page to the build folder
+    // Write the home page to the docs folder
     var content = index_template.replace("<!-- PROJECTS -->", homepage_entries.join("\n"));
-    fs.writeFileSync(path.resolve(__dirname, "build/index.html"), content);
-    // Write global assets to the build folder
-    fsExtra.copySync(path.resolve(__dirname, "global_assets"), path.resolve(__dirname, "build/global_assets"));
+    fs.writeFileSync(path.resolve(__dirname, "docs/index.html"), content);
+    // Write global assets to the docs folder
+    fsExtra.copySync(path.resolve(__dirname, "global_assets"), path.resolve(__dirname, "docs/global_assets"));
 })
