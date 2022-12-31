@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const fsExtra = require('fs-extra');
 const glob = require("glob");
-const { info } = require('console');
 var showdown = require('showdown'),
     converter = new showdown.Converter();
 
@@ -70,4 +69,6 @@ glob("posts/*/*.md", function (er, files) {
     // Write the home page to the build folder
     var content = index_template.replace("<!-- PROJECTS -->", homepage_entries.join("\n"));
     fs.writeFileSync(path.resolve(__dirname, "build/index.html"), content);
+    // Write global assets to the build folder
+    fsExtra.copySync(path.resolve(__dirname, "global_assets"), path.resolve(__dirname, "build/global_assets"));
 })

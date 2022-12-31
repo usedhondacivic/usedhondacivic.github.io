@@ -1,6 +1,7 @@
 html {
     min-height: 100vh;
     background-color: #141414;
+    background-image: url("/global_assets/background.png");
 }
 
 body {
@@ -24,6 +25,11 @@ aside h1 {
         cursive;
     font-size: 27px;
     margin-bottom: 0px;
+}
+
+aside h1 a {
+    text-decoration: none;
+    color: #fefff5;
 }
 
 aside h3 {
@@ -165,9 +171,10 @@ pre {
     }
 
     nav img {
+        order: -1;
         margin-left: auto;
         margin-right: auto;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         width: 100px;
         height: 100px;
     }

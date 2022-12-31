@@ -1,5 +1,3 @@
-![The robot](https://github.com/usedhondacivic/ECE-3140-Lock-Cracking-Robot/blob/a446c6641c8168151990c3ba1408715b4531936a/docs/assets/cover.png?raw=true)
-
 ## Introduction
 
 The CNC Combination Cracker (who I call Clicky) is a robot designed to efficiently find the combination to any master lock brand combination lock.
@@ -7,6 +5,8 @@ These are the classic locks you probably associate with your high school locker.
 First, place the lock in the lock holder and ensure the dial manipulator is seated on the dial.
 Rotate the dial so that the lock is at 0, then press the button on the microcontroller.
 Clicky will begin speedily trying combinations, and crack the combo!
+
+![The robot](https://github.com/usedhondacivic/ECE-3140-Lock-Cracking-Robot/blob/a446c6641c8168151990c3ba1408715b4531936a/docs/assets/cover.png?raw=true)
 
 ## System Overview
 

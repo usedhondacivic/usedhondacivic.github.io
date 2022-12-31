@@ -2,6 +2,6 @@
     "title": "Holographic POV Display",
     "description": "My open source persistance of vision display. 30 FPS, full RGB color, and 26\" diameter. Updates remotely over WIFI. Includes my first experiments with ECAD and PCB fabrication!",
     "date": "12.16.2022",
-    "tech": "Fusion360, KiCad, Raspberry Pi Pico C-SDK, Protothreads, C, PIO",
+    "tech": "Fusion360, KiCad, Raspberry Pi Pico C-SDK, Protothreads, C, Python, TCP, PIO",
     "tools": "Prusa I3 MK3S 3D Printer, Epilog M2 Laser Cuter"
 }

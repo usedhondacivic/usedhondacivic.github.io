@@ -2,6 +2,7 @@ html {
     display: flex;
     min-height: 100vh;
     background-color: #141414;
+    background-image: url("/global_assets/background.png");
 }
 
 body {
@@ -34,7 +35,7 @@ section#card {
 
 section#card article {
     float: left;
-    padding-right: 10px;
+    margin-right: 50px;
 }
 
 section#card aside {
