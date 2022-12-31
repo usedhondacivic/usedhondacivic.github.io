@@ -5,3 +5,5 @@ and the markdown for each entry is populated into the templates from the /templa
 The end result is written to the /docs folder, which is served by github pages.
 
 The system was designed for simplicity and maintainability, avoiding the head-ache inducing hellscape that is javascript frameworks.
+
+Check it out at [michael-crum.com](https://michael-crum.com)
