@@ -43,8 +43,9 @@ section#card aside {
 }
 
 section#card article img {
-    width: 200px;
-    height: 200px;
+    width: auto;
+    height: 250px;
+    aspect-ratio: 1/1;
     border-radius: 100%;
 }
 
