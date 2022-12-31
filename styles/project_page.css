@@ -1,7 +1,7 @@
 html {
     min-height: 100vh;
     background-color: #141414;
-    background-image: url("/global_assets/background.png");
+    background-image: url("../global_assets/background.png");
 }
 
 body {

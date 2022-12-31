@@ -56,8 +56,8 @@ glob("posts/*/*.md", function (er, files) {
         pages[new_path] = contents_page;
         // Copy assets
         resize_and_relocate(path_name.replace("/content.md", "/assets"), new_path + '/assets');
-        info.abs_post_link = "/" + new_path + "/index.html";
-        info.abs_snapshot_link = "/" + new_path + "/assets/snapshot.png";
+        info.rel_post_link = new_path.replace("build", "") + "/index.html";
+        info.rel_snapshot_link = new_path.replace("build", "") + "/assets/snapshot.png";
         info_arr.push(info);
     })
     info_arr.sort(function (a, b) {
@@ -67,8 +67,8 @@ glob("posts/*/*.md", function (er, files) {
         // Create sidebar entry
         var sidebar_entry = sidebar_entry_template.replace("<!-- TITLE -->", info.title)
             .replace("<!-- DATE -->", info.date)
-            .replace("project_link", info.abs_post_link)
-            .replace("snapshot_link", info.abs_snapshot_link);
+            .replace("project_link", ".." + info.rel_post_link)
+            .replace("snapshot_link", ".." + info.rel_snapshot_link);
         sidebar.push(sidebar_entry);
         // Create home page entry
         var homepage_entry = homepage_entry_template.replace("<!-- TITLE -->", info.title)
@@ -76,8 +76,8 @@ glob("posts/*/*.md", function (er, files) {
             .replace("<!-- DESCRIPTION -->", info.description)
             .replace("<!-- TECH -->", info.tech ? "Technologies used: " + info.tech : "")
             .replace("<!-- TOOLS -->", info.tools ? "Tools used: " + info.tools : "")
-            .replace("post_link", info.abs_post_link)
-            .replace("snapshot_link", info.abs_snapshot_link);
+            .replace("post_link", "." + info.rel_post_link)
+            .replace("snapshot_link", "." + info.rel_snapshot_link);
         homepage_entries.push(homepage_entry);
     })
     // Write the html files for each project to the build folder
