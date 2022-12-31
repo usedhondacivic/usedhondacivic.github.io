@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Michael Crum</title>
+
+    <!-- seo -->
+    <meta name="author" content="Michael Crum">
+    <meta name="description" content="Michael Crum's portfolio and blog website.">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <!-- display -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- icon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../pics/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../pics/icons/favicon-16x16.png" />
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="../styles/index.css">
+
+    <!-- font -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <section id="splash">
+        <section id="card">
+            <span>
+                <article>
+                    <img src="../global_assets/profile_pic.png">
+                </article>
+                <aside>
+                    <h1>Michael Crum</h1>
+                    <p>Roboticist and tinkerer. <br> Student at Cornell University.</p>
+                    <footer>
+                        <a href="https://www.linkedin.com/in/michael-crum-ab3799198/">
+                            <img src="../pics/icons/linkedin.svg" alt="LinkedIn" title="LinkedIn">
+                        </a>
+                        <a href="https://github.com/usedhondacivic">
+                            <img src="../pics/icons/github.svg" alt="GitHub" title="GitHub">
+                        </a>
+                        <a href="https://www.instagram.com/tricycle.boy/">
+                            <img src="../pics/icons/instagram.svg" alt="Instagram" title="Instagram">
+                        </a>
+                    </footer>
+                </aside>
+            </span>
+        </section>
+        <footer>
+            <p>See my projects</p>
+            <img src="../pics/icons/down-arrow.svg" alt="Down Arrow">
+        </footer>
+    </section>
+
+    <header>
+        <h2>My Projects</h2>
+        <p>A selection of my personal / school projects. <br>For my professional work, see <a
+                href="https://www.linkedin.com/in/michael-crum-ab3799198/">my LinkedIn.</a></p>
+    </header>
+
+    <section class="entry">
+    <article>
+        <a href="./pov_display/index.html">
+            <h2>Holographic POV Display</h2>
+        </a>
+        <em>12.16.2022</em>
+        <p>My open source persistance of vision display. 30 FPS, full RGB color, and 26" diameter. Updates remotely over WIFI. Includes my first experiments with ECAD and PCB fabrication!</p>
+        <em>Technologies used: Fusion360, KiCad, Raspberry Pi Pico C-SDK, Protothreads, C, Python, TCP, PIO</em>
+        <br>
+        <em>Tools used: Prusa I3 MK3S 3D Printer, Epilog M2 Laser Cuter</em>
+    </article>
+    <aside>
+        <img src="./pov_display/assets/snapshot.png">
+    </aside>
+</section>
+<section class="entry">
+    <article>
+        <a href="./lock_cracking_robot/index.html">
+            <h2>CNC Lock Cracking Robot</h2>
+        </a>
+        <em>4.12.2022</em>
+        <p>A robot designed to efficiently find the combination to any master lock brand combination lock. Programmed bare-metal on the FRDM-KL46Z board using C and assembly. Electronics control board custom made, interfacing with the FRDM-KL46Z through purpose built drivers. Fabricated using a PRUSA I3 MK3S 3D printer and an Epilog Fusion M2 laser cuter.</p>
+        <em>Technologies used: OnShape, MCUXpresso, C, Assembly</em>
+        <br>
+        <em>Tools used: Prusa I3 MK3S 3D Printer, Epilog M2 Laser Cuter</em>
+    </article>
+    <aside>
+        <img src="./lock_cracking_robot/assets/snapshot.png">
+    </aside>
+</section>
+<section class="entry">
+    <article>
+        <a href="./raymarching/index.html">
+            <h2>Raymarching Experiments</h2>
+        </a>
+        <em>6.26.2021</em>
+        <p>Experiments using raymarching and shaders to create performant real time renderings of fractals, planets, and more.</p>
+        <em>Technologies used: Three.js, GLSL</em>
+        <br>
+        <em></em>
+    </article>
+    <aside>
+        <img src="./raymarching/assets/snapshot.png">
+    </aside>
+</section>
+<section class="entry">
+    <article>
+        <a href="./frc-2020/index.html">
+            <h2>FRC - Infinite Recharge</h2>
+        </a>
+        <em>3.6.2020</em>
+        <p>An overview of my robotics work as team lead for the 2020 FRC season. I was responsible for the robot's software and the mechanical development of two subsystems: the turreted shooter and the powercell intake. This bot placed 8th in the Utah regional and was being prepared for the Denver regional when it was canceled due to COVID-19.</p>
+        <em>Technologies used: OnShape, Java</em>
+        <br>
+        <em>Tools used: CNC Machining, various metal shop tools</em>
+    </article>
+    <aside>
+        <img src="./frc-2020/assets/snapshot.png">
+    </aside>
+</section>
+<section class="entry">
+    <article>
+        <a href="./frc-elevator/index.html">
+            <h2>FRC - Elevator Robot</h2>
+        </a>
+        <em>11.15.2019</em>
+        <p>My FRC preseason solo project. Custom designed collapsible elevator robot. Designed, manufactured, wired and programmed in four weeks. This robot was my introduction to Computer Aided Design (CAD) and CNC Machining.</p>
+        <em>Technologies used: OnShape, Java</em>
+        <br>
+        <em>Tools used: CNC Machining, various metal shop tools</em>
+    </article>
+    <aside>
+        <img src="./frc-elevator/assets/snapshot.png">
+    </aside>
+</section>
+<section class="entry">
+    <article>
+        <a href="./spinout/index.html">
+            <h2>Spinout</h2>
+        </a>
+        <em>11.23.2018</em>
+        <p>Spinout is an online muli-player, top down, arcade style racer. Slide, drift, and bounce your way to victory on recreations of real F1 tracks. I built Spinout over the course of two years, creating both the front and back end from scratch. This includes networking, graphics, physics, database management, AI, and more.</p>
+        <em>Technologies used: Node.js, Express, Socket.io, Processing.js, Docker, AWS Elastic Beanstalk</em>
+        <br>
+        <em></em>
+    </article>
+    <aside>
+        <img src="./spinout/assets/snapshot.png">
+    </aside>
+</section>
+</body>
+
+</html>

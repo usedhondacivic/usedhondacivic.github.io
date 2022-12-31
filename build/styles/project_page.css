@@ -1,0 +1,181 @@
+html {
+    min-height: 100vh;
+    background-color: #141414;
+    background-image: url("../global_assets/background.png");
+}
+
+body {
+    font-family: 'Noto Sans', 'Source Code Pro', monospace, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    color: #fefff5;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-top: 50px;
+    padding-bottom: 50px;
+}
+
+aside {
+    min-width: 280px;
+    text-align: right;
+}
+
+aside h1 {
+    font-family: 'Pacifico',
+        cursive;
+    font-size: 27px;
+    margin-bottom: 0px;
+}
+
+aside h1 a {
+    text-decoration: none;
+    color: #fefff5;
+}
+
+aside h3 {
+    margin-top: 0px;
+    margin-bottom: 5px;
+    opacity: 0.7;
+}
+
+nav {
+    display: block;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fefff5;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0px;
+}
+
+nav li {
+    display: flex;
+    margin-bottom: 20px;
+    float: right;
+    align-items: center;
+}
+
+nav li div {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+nav li p {
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+
+nav li em {
+    opacity: 0.7;
+}
+
+nav img {
+    width: 75px;
+    height: 75px;
+    border-radius: 100%;
+    margin-left: 15px;
+    margin-right: none;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    order: 1;
+}
+
+article {
+    margin-left: 50px;
+    margin-right: auto;
+    max-width: 900px;
+    min-width: 600px;
+    width: 100%;
+}
+
+article img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 400px;
+}
+
+article h1 {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+}
+
+article em {
+    opacity: 0.7;
+}
+
+article blockquote {
+    border-left: 2px solid #fefff5;
+    padding-left: 10px;
+}
+
+article a {
+    text-decoration: none;
+    color: aqua;
+}
+
+pre {
+    white-space: pre-wrap;
+    /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;
+    /* Mozilla, since 1999 */
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+    /* Internet Explorer 5.5+ */
+}
+
+#right_pad {
+    max-width: 200px;
+    min-width: 50px;
+    width: 100%;
+
+}
+
+#left_pad {
+    max-width: 200px;
+    min-width: 50px;
+    width: 100%;
+}
+
+
+@media only screen and (max-width: 1000px) {
+    body {
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    article {
+        order: -1;
+        margin-right: 50px;
+        min-width: 0px;
+    }
+
+    aside {
+        text-align: center;
+        margin-left: 0px;
+    }
+
+    nav li {
+        flex-direction: column;
+        float: none;
+    }
+
+    nav img {
+        order: -1;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+        width: 100px;
+        height: 100px;
+    }
+}

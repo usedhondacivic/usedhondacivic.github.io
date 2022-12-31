@@ -1,0 +1,155 @@
+html {
+    display: flex;
+    min-height: 100vh;
+    background-color: #141414;
+    background-image: url("../global_assets/background.png");
+}
+
+body {
+    margin: auto;
+    font-family: 'Source Code Pro', monospace, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    color: #fefff5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+    color: aqua;
+}
+
+section#splash {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}
+
+section#card {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+
+section#card article {
+    float: left;
+    margin-right: 50px;
+}
+
+section#card aside {
+    float: right;
+}
+
+section#card article img {
+    width: auto;
+    height: 250px;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+}
+
+section#card aside h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 30px;
+    margin: 35px 0px 0px 0px;
+}
+
+section#card aside p {
+    margin-top: 5px;
+}
+
+section#card footer img {
+    width: 20px;
+    height: 20px;
+    margin: 0px 10px 0px 0px;
+}
+
+section#splash>footer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+section#splash>footer img {
+    width: 25px;
+}
+
+section.entry {
+    display: flex;
+    width: 60vw;
+    justify-content: space-between;
+    margin-bottom: 30px
+}
+
+section.entry article {
+    padding-right: 50px;
+}
+
+section.entry em {
+    opacity: 0.7;
+}
+
+section.entry a {
+    text-decoration: underline;
+    color: #fefff5;
+}
+
+section.entry aside {
+    width: 250px;
+}
+
+section.entry aside img {
+    width: 250px;
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    box-shadow: 0 0 20px 20px #141414 inset;
+}
+
+section.entry h2 {
+    margin-bottom: 7px;
+}
+
+.left {
+    order: -1;
+}
+
+header {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+header h2 {
+    font-family: 'Pacifico', cursive;
+    font-size: 30px;
+    margin-bottom: 0px;
+}
+
+@media only all and (orientation: portrait) {
+    section#card aside {
+        text-align: center;
+    }
+
+    section#card article {
+        margin-right: 0px !important;
+        text-align: center;
+    }
+
+    section#card *,
+    footer * {
+        float: none !important;
+    }
+
+    section.entry {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    section.entry aside {
+        order: -1 !important;
+    }
+}
