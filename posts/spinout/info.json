@@ -1,5 +1,6 @@
 {
     "title": "Spinout",
-    "description": "An online multiplayer racing game built from the ground up. Uses Node.js for backend, socket.io for real-time networking, and processing.js for frontend.",
-    "date": "11.23.2018"
+    "description": "Spinout is an online muli-player, top down, arcade style racer. Slide, drift, and bounce your way to victory on recreations of real F1 tracks. I built Spinout over the course of two years, creating both the front and back end from scratch. This includes networking, graphics, physics, database management, AI, and more.",
+    "date": "11.23.2018",
+    "tech": "Node.js, Express, Socket.io, Processing.js, Docker, AWS Elastic Beanstalk"
 }

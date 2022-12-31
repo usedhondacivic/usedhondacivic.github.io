@@ -1,6 +1,6 @@
 ![The robot](https://github.com/usedhondacivic/ECE-3140-Lock-Cracking-Robot/blob/a446c6641c8168151990c3ba1408715b4531936a/docs/assets/cover.png?raw=true)
 
-### Introduction
+## Introduction
 
 The CNC Combination Cracker (who I call Clicky) is a robot designed to efficiently find the combination to any master lock brand combination lock.
 These are the classic locks you probably associate with your high school locker. 
@@ -8,25 +8,25 @@ First, place the lock in the lock holder and ensure the dial manipulator is seat
 Rotate the dial so that the lock is at 0, then press the button on the microcontroller.
 Clicky will begin speedily trying combinations, and crack the combo!
 
-### System Overview
+## System Overview
 
-#### Hardware
+### Hardware
 
 Clicky's body is made from clear laser cut acrylic, housing the electronics that make him work. A NEMA 17 stepper motor rotates the dial and an analog feedback servo is used to pull on the shackle and determine if the lock has been opened. All of the electronics are driven through a custom circuit board powered by a wall outlet.
 
-#### Software
+### Software
 
 I wrote custom stepper and analog servo drivers to control Clicky, as well a library for using the buttons and capacitive touch slider on the FRDM-KL46Z to control a LCD based UI. I also implemented the cracking algorithm, which requires the user to find and enter three binding points on the lock. Using exploits in the master lock's design, the number of combinations is dropped down to 8, which can be attempted in under 30 seconds.
 
-### Project Video Demo
+## Project Video Demo
 
 [![Video demo of my project](https://img.youtube.com/vi/n434a4aqk5E/0.jpg)](https://www.youtube.com/watch?v=n434a4aqk5E)
 
-*click on the thumbnail to watch the video*
+> ##### click on the thumbnail to watch the video
 
-### Technical Description
+## Technical Description
 
-#### Hardware
+### Hardware
 
 The main drivers of Clicky are the NEMA 17 stepper motor and the analog feedback servo motor. 
 
@@ -44,7 +44,7 @@ Next, I needed to power and control the motors. Clicky uses a custom circuit boa
 
 Power is supplied from a 12V 2A wall adapter, which provides direct power to the stepper motor. I also used a 6V step down to provide power for the FRDM-KL46Z and the servo motor. Due to the nature of DC motors, voltage spikes are unavoidable during operation. To prevent these spikes from disrupting the power to the FRDM-KL46Z, I added a 100 microfarad capacitor across the supply lines. To control the stepper motor, I used Allegro’s A4988 stepper driver. The driver is capable of powering the 2A stepper at full power, and supplies an simple control scheme for direction and position. Finally, I routed all of the signal, power, and ground connections to a central bus that is broken out to connect to the FRDM-KL46Z with minimal lose wires.
 
-#### Software
+### Software
 
 Before I could work on the cracking algorithm, I needed to write drivers for my peripherals.
 
@@ -118,7 +118,7 @@ Once cracking begins, I need to display the combo without interrupting the stepp
 
 When the lock is opened, the LCD continues to display the combo so the user will know what the combination was. 
 
-### Testing
+## Testing
 
 To make sure that my design was feasible, I tested each individual component as I built the system. The stepper motor and driver are the most crucial part of the bot, so they came first. I ensured accuracy by commanding a variety of different steps and ensuring that I could return back to a consistent zero position each time. With the stepper working, I was also able to try my first cracking attempt, where I already knew the combo and made the stepper go to those positions. When that worked, I knew that it was sufficiently accurate for the job.
 
@@ -128,7 +128,13 @@ A second issue was the strength of the servo. I positioned the servo close to th
 
 Finally I used stress testing to test the rest of the system. Cracking a master lock with no prior knowledge takes upwards of 64,000 attempts, which takes Clicky 36 hours straight. This served as the ultimate stress test, and I left it running for a day and a half. The system managed to open the lock after only 20 hours, and displayed the correct combination when finished. 
 
-### Additional Resources Used
+## Further documentation
+
+[GitHub Repository](https://github.com/usedhondacivic/ECE-3140-Lock-Cracking-Robot)
+
+[CAD document](https://cad.onshape.com/documents/05aac48a55782d85d245cccd/w/e7e86bb57175dc86d1433f3c/e/72aafb165d7a97047a56eae0?renderMode=0&uiState=6288668d62c0193394baf0e8)
+
+## Additional Resources Used
 
 [Samy Kamkar's fantastic build](https://samy.pl/master/master.html)
 
@@ -140,4 +146,3 @@ Thanks to the RPL for their laser cutting service
 
 [Analog feedback servo](https://www.adafruit.com/product/1404)
 
-[CAD document](https://cad.onshape.com/documents/05aac48a55782d85d245cccd/w/e7e86bb57175dc86d1433f3c/e/72aafb165d7a97047a56eae0?renderMode=0&uiState=6288668d62c0193394baf0e8)

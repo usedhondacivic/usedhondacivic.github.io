@@ -34,7 +34,7 @@ section#card {
 
 section#card article {
     float: left;
-    margin-right: 50px;
+    padding-right: 10px;
 }
 
 section#card aside {
@@ -82,6 +82,10 @@ section.entry {
     margin-bottom: 30px
 }
 
+section.entry article {
+    padding-right: 50px;
+}
+
 section.entry em {
     opacity: 0.7;
 }
@@ -100,6 +104,7 @@ section.entry aside img {
     border-radius: 100%;
     aspect-ratio: 1/1;
     object-fit: cover;
+    box-shadow: 0 0 20px 20px #141414 inset;
 }
 
 section.entry h2 {

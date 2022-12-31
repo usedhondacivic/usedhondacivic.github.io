@@ -55,6 +55,8 @@ glob("posts/*/*.md", function (er, files) {
         var homepage_entry = homepage_entry_template.replace("<!-- TITLE -->", info.title)
             .replace("<!-- DATE -->", info.date)
             .replace("<!-- DESCRIPTION -->", info.description)
+            .replace("<!-- TECH -->", info.tech ? "Technologies used: " + info.tech : "")
+            .replace("<!-- TOOLS -->", info.tools ? "Tools used: " + info.tools : "")
             .replace("post_link", info.abs_post_link)
             .replace("snapshot_link", info.abs_snapshot_link);
         homepage_entries.push(homepage_entry);

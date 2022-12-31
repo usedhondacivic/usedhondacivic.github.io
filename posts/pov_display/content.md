@@ -32,11 +32,11 @@ Our program had several steps. First, we developed a Python script to convert bi
 
 Below are some graphs showing what the processed images look like look at varying radial resolutions.
 
-![Rainbow dog at 60 changes / rotation](./assets/dog_180-min.png)
-
-![Rainbow dog at 90 changes / rotation](./assets/dog_90-min.png)
-
-![Rainbow dog at 180 changes / rotation](./assets/dog_60-min.png)
+<p float="left">
+<img alt="Rainbow dog at 180 changes / rotation" src="./assets/dog_180-min.png" style="height:250px;"/>
+<img alt="Rainbow dog at 90 changes / rotation" src="./assets/dog_90-min.png" style="height:250px;"/>
+<img alt="Rainbow dog at 60 changes / rotation" src="./assets/dog_60-min.png" style="height:250px;"/>
+</p>
 
 #### Python TCP Server
 
@@ -138,7 +138,7 @@ The hall effect sensor we chose is active low, meaning it pulls a GPIO pin to gr
 
     detect_time = time_us_32();
 
-    if (detect_time - old_time > 10000)
+    if (detect_time - old_time > ##### 10000)
     {
         time_period = detect_time - old_time;
 
@@ -146,7 +146,7 @@ The hall effect sensor we chose is active low, meaning it pulls a GPIO pin to gr
         curr_rot = 0;
     }
 
-When the interrupt is triggered, the period of rotation is calculated by subtracting the last activation from the current time. We also check that the period is a reasonable value (> 10000 us), which helps us reject any high-frequency false positives. Finally, we indicate that we have hit our zero point by setting the relevant variable. This stops the display from becoming misaligned relative to the external reference frame.
+When the interrupt is triggered, the period of rotation is calculated by subtracting the last activation from the current time. We also check that the period is a reasonable value (> ##### 10000 us), which helps us reject any high-frequency false positives. Finally, we indicate that we have hit our zero point by setting the relevant variable. This stops the display from becoming misaligned relative to the external reference frame.
 
 #### Pico TCP Client
 
@@ -224,23 +224,25 @@ In our LED timing thread, we cut a full rotation into slices based on the estima
     PT_END(pt);
 
 ### Electrical
+
 ![Our PCBs laid out in KiCad](./assets/PCB_layout-min.png)
-*Our PCBs laid out in KiCad*
+
+> ##### Our PCBs laid out in KiCad
 
 In a system experiencing high accelerations, Printed Circuit Boards (PCB's) are king. Made from high-strength PTFE substrate, these boards can stand many thousands of G's, and soldered connections are extremely resilient to the characteristic forces of a POV display. They are also lightweight and slightly flexible, making them perfect for our use case. We decided to create two PCB's for our design.
 
 The first is what we call the "Arm". The arm holds 40 surface-mounted APA102 LED's and provides standard 0.1 inch headers for interfacing with the LEDs. We added a M3-sided hole on each end of the arm, which allowed us to mount the PCB and screw on nuts, and balance the weight of the rotor. The APA102 LEDs were chosen because they use a two-wire SPI protocol to communicate with the control board. This allows communication rates of up to 20 MHz, more than fast enough for our application. We previously experimented with the popular WS2812B LEDs, but these LEDs capped at around 1 KHz refresh rate. This would limit the radial resolution of our display.
 
 ![The arm lit up](./assets/full_lit_up-min.png)
-*The arm PCB assembled and lit up*
+
+> ##### The arm PCB assembled and lit up
 
 The second PCB is the control board. The control board holds the Pico W and the power / logic electronics to facilitate communication with the LEDs and hall effect sensor. The Pico W uses 3.3v logic levels, which can cause trouble with the APA102 LEDs, which expect 5v logic. To remedy this we included a 74AHCT125 Logic Level shifter. This shifter converts our 3.3v signal to 5v, and is fast enough to deal with our high-speed (20 MHz) SPI signals. To power the control board we use a screw terminal to accept power. A 47 uF decoupling capacitor is placed across the power supply, which is especially important when dealing with the rapidly changing power requirements of the LEDs. We also added a Schottky diode before routing the power into the Pico's VSYS pin. This diode allows the board to take power from other screw terminals and the Pico's onboard USB without connecting 5v rails (which would damage both the Pico and the power supply). To allow for ease of programming we connected a push button between RUN and ground, allowing for the double tap into boot select capability of the Pico to be reached. Finally, we wired the hall effect sensor to pin 21 of the Pico with a 10k pull-up resistor. The sensor is active low.
 
 ![The Control Board PCB](./assets/control_board-min.png)
-*The assembled control board PCB*
-
 ![The Control Board Schematic](./assets/control_board_schematic-min.png)
-*The control board's schematic*
+
+> ##### The control board assembled + it's schematic
 
 All PCB's were designed using KiCad, an open-source ECAD software. Project files are included in our GitHub Repo, linked in Appendix B.
 
@@ -249,7 +251,8 @@ One of the key design choices of a POV display is how to power the rotor. Becaus
 Due to the adoption of wireless charging technology in mobile phones, high-efficiency and inductive coils are readily available on amazon. We picked up a 25$ system that is capable of transmitting 2A of current at 5v across up to 80 mm, more than enough for our application.
 
 ![Inductive coil mounted on the bottom of arm](./assets/arm_coil-min.png)
-*One of the inductive coils mounted on the bottom of the arm*
+
+> ##### One of the inductive coils mounted on the bottom of the arm
 
 Finally, we need to spin the rotor. We initially used cheap and small brushed DC motors. You are probably familiar with these motors, they are the small gray ones that come with about every hobby electronics kit ever made. Because we took care to balance our rotor and minimize its weight, we predicted that the motor would have a very low load. We thought this meant we could get away with a wimpy motor without issues. We were unfortunately wrong, for reasons that aren't entirely clear. Our motors would overheat and burn up, drawing only about 2A of current. We theorize that this was caused either by air resistance generating a much higher load than we predicted or by an interaction with the inductive power supply. The motor was positioned directly in the center of the inductive coil and may have induced current in the motor coils that decreased performance.
 
@@ -261,10 +264,11 @@ We started the design process by working on the rotor. As mentioned in the previ
 
 ![The final rotor front](./assets/rotor_front-min.png)
 ![The final rotor back](./assets/rotor_back-min.png)
-*Final rotor design in CAD*
+
+> ##### Final rotor design in CAD
 
 ![The rotor fully assembled](./assets/full_arm_assembled-min.png)
-*The rotor fully assembled*
+> ##### The rotor fully assembled
 
 Our design is 3D printed with minimal infill to reduce weight. It is only a couple of millimeters thick and is designed to use the PCBs to supplement its strength. Components are connected using M3 screws that are threaded directly into the PLA. With proper print settings, these connections are remarkably strong, and more than strong enough for the mostly lateral load in this application.
 
@@ -274,24 +278,25 @@ The next step was creating a housing for the motor. The housing must include a w
 
 ![The final motor mount front](./assets/motor_mount_front-min.png)
 ![The final motor mount back](./assets/motor_mount_back-min.png)
-*Final motor mount design in CAD*
+> ##### Final motor mount design in CAD
 
 After many tests and iterations, we landed on the motor mount design above. The motor and inductive coil are mounted together using the circular middle section. The cut-out supports the motor and prevents it from rotating. The inductive coil is mounted in the indent, and the 13 mm of the plastic facing the rotor guarantees the minimum coil spacing is respected. The circular section then fits into the table mount and is secured using two M3 screws. The current table mount provides a flat area for clamping to the table, but the entire amount could be redesigned for a wall or floor mount. Again, the two parts are modular to reduce redesign time. All parts are printed in PLA with 20% infill, which was plenty strong enough for the application. PLA is not ferromagnetic, which means that it does not interfere with the inductive power supply.
 
 ![Full system in real life](./assets/full_midswing-min.png)
-*The full system mid-swing*
+
+> ##### The full system mid-swing
 
 #### Aside: Motor mistakes
 
 One of our early designs used a series of belts to increase the speed of a 300-rpm motor up to 1800. This design repeatedly failed due to the 3D printed shafts shearing, so we ended up looking for a faster motor instead.
 
 ![CAD of the belted gearbox design](./assets/gear_box-min.png)
-*Failed belted gearbox design*
+> ##### Failed belted gearbox design
 
 We initially tried using a much smaller motor but scrapped it due to overheating. This design used a significantly different motor mount, which screwed into the back of the inductive coil mount.
 
 ![CAD of the old motor mount](./assets/old_motor_mount-min.png)
-*Old motor mount*
+> ##### Old motor mount
 
 ## Results of the Design
 
@@ -344,7 +349,8 @@ Special thanks to Professor Hunter Adams and Professor Bruce Land for making thi
 Thanks to the TAs for endless help.
 
 ![Our display showing a picture of Hunter and Bruce](./assets/hunter_bruce-min.png)
-*Hunter (Left) and Bruce (Right) displayed the POV display*
+
+> ##### Hunter (Left) and Bruce (Right) displayed the POV display
 
 ## Appendices
 

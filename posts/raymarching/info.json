@@ -1,0 +1,6 @@
+{
+    "title": "Raymarching Experiments",
+    "description": "Experiments using raymarching and shaders to create performant real time renderings of fractals, planets, and more.",
+    "date": "6.26.2021",
+    "tech": "Three.js, GLSL"
+}

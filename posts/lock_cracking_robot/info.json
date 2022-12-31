@@ -1,5 +1,7 @@
 {
     "title": "CNC Lock Cracking Robot",
-    "description": "A robot designed to efficiently find the combination to any master lock brand combination lock.",
-    "date": "4.12.2022"
+    "description": "A robot designed to efficiently find the combination to any master lock brand combination lock. Programmed bare-metal on the FRDM-KL46Z board using C and assembly. Electronics control board custom made, interfacing with the FRDM-KL46Z through purpose built drivers. Fabricated using a PRUSA I3 MK3S 3D printer and an Epilog Fusion M2 laser cuter.",
+    "date": "4.12.2022",
+    "tech": "OnShape, MCUXpresso, C, Assembly",
+    "tools": "Prusa I3 MK3S 3D Printer, Epilog M2 Laser Cuter"
 }
