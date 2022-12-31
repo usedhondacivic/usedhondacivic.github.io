@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const fsExtra = require('fs-extra');
 const glob = require("glob");
+const sharp = require("sharp");
 var showdown = require('showdown'),
     converter = new showdown.Converter();
 
@@ -22,6 +23,26 @@ var info_arr = [];
 var sidebar = [];
 var homepage_entries = [];
 
+// Copy a folder of images, and downsize them to reduce loading times.
+function resize_and_relocate(src_dir, target_dir) {
+    fs.mkdirSync(target_dir, { recursive: true });
+    glob(src_dir + "/**", function (er, files) {
+        files.forEach(path_name => {
+            let file_split = path_name.split("/");
+            let file_name = file_split[file_split.length - 1];
+            if (file_name == "assets") return;
+            console.log(file_name);
+            sharp(path_name)
+                .resize({
+                    width: 900,
+                    height: 600,
+                    fit: sharp.fit.inside
+                })
+                .toFile(target_dir + "/" + file_name)
+        })
+    })
+}
+
 // Iterate over all of the posts
 glob("posts/*/*.md", function (er, files) {
     files.forEach(path_name => {
@@ -35,7 +56,7 @@ glob("posts/*/*.md", function (er, files) {
         var new_path = path_name.replace("posts", "build").replace("/content.md", "");
         pages[new_path] = contents_page;
         // Copy assets
-        fsExtra.copySync(path.resolve(__dirname, path_name.replace("/content.md", "/assets")), path.resolve(__dirname, new_path, 'assets'));
+        resize_and_relocate(path_name.replace("/content.md", "/assets"), new_path + '/assets');
         info.abs_post_link = "/" + new_path + "/index.html";
         info.abs_snapshot_link = "/" + new_path + "/assets/snapshot.png";
         info_arr.push(info);
