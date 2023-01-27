@@ -34,7 +34,7 @@ function resize_and_relocate(src_dir, target_dir) {
             sharp(path_name)
                 .resize({
                     width: 900,
-                    height: 600,
+                    height: 900,
                     fit: sharp.fit.inside
                 })
                 .toFile(target_dir + "/" + file_name)

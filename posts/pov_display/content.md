@@ -300,7 +300,7 @@ We initially tried using a much smaller motor but scrapped it due to overheating
 
 ## Results of the Design
 
-![Splash of images on the display](./assets/final_splash-min.png)
+<img alt="Splash of images on the display" style="width: 100%; height: auto; max-height: none" src="./assets/final_splash-min.png">
 
 We can quantify the performance of our display in terms of several metrics:
 
