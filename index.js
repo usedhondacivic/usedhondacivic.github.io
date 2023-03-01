@@ -23,7 +23,7 @@ var info_arr = [];
 var sidebar = [];
 var homepage_entries = [];
 
-// Copy a folder of images, and downsize them to reduce loading times.
+// Copy a folder of images, and convert them to WebP to reduce loading time
 function resize_and_relocate(src_dir, target_dir) {
     fs.mkdirSync(target_dir, { recursive: true });
     glob(src_dir + "/**", function (er, files) {
@@ -31,13 +31,7 @@ function resize_and_relocate(src_dir, target_dir) {
             let file_split = path_name.split("/");
             let file_name = file_split[file_split.length - 1];
             if (file_name == "assets") return;
-            sharp(path_name)
-                .resize({
-                    width: 900,
-                    height: 900,
-                    fit: sharp.fit.inside
-                })
-                .toFile(target_dir + "/" + file_name)
+            sharp(path_name).toFile(target_dir + "/" + file_name.split(".")[0] + ".webp");
         })
     })
 }
@@ -48,6 +42,7 @@ glob("posts/*/*.md", function (er, files) {
         var info = JSON.parse(fs.readFileSync(path.resolve(__dirname, path_name.replace("content.md", "info.json"))));
         // Populate the content of a project page
         var contents_md = fs.readFileSync(path.resolve(__dirname, path_name), 'utf8');
+        contents_md = contents_md.replaceAll(".png", ".webp").replaceAll(".jpg", ".webp").replaceAll(".jpeg", ".webp");
         var contents_html = converter.makeHtml(contents_md);
         var contents_page = content_template.replaceAll("<!-- TITLE -->", info.title)
             .replace("<!-- CONTENT -->", contents_html)
@@ -57,7 +52,7 @@ glob("posts/*/*.md", function (er, files) {
         // Copy assets
         resize_and_relocate(path_name.replace("/content.md", "/assets"), new_path + '/assets');
         info.rel_post_link = new_path.replace("docs", "");
-        info.rel_snapshot_link = new_path.replace("docs", "") + "/assets/snapshot.png";
+        info.rel_snapshot_link = new_path.replace("docs", "") + "/assets/snapshot.webp";
         info_arr.push(info);
     })
     info_arr.sort(function (a, b) {
