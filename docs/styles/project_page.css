@@ -17,6 +17,7 @@ body {
 
 aside {
     min-width: 280px;
+    max-width: 350px;
     text-align: right;
 }
 
