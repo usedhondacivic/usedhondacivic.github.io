@@ -86,4 +86,6 @@ glob("posts/*/*.md", function (er, files) {
     fs.writeFileSync(path.resolve(__dirname, "docs/index.html"), content);
     // Write global assets to the docs folder
     fsExtra.copySync(path.resolve(__dirname, "global_assets"), path.resolve(__dirname, "docs/global_assets"));
+    // Write CNAME to the docs folder
+    fs.writeFileSync(path.resolve(__dirname, "docs/CNAME"), "michael-crum.com");
 })
