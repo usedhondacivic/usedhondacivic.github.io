@@ -40,52 +40,56 @@ Below are some graphs showing what the processed images look like look at varyin
 
 The image data is sent to the Pico through a Transmission Control Protocol (TCP) socket using the Python socket library. To do this, the full array is divided up into packets consisting of the data for two orientations of the arm. Each packet is flattened and converted into a byte array, then sent to the Pico W. We chose to use a TCP protocol as it is reliable and accurate. It works by establishing a connection with the client via a 3-way handshake process. We then send packets to the client over TCP and each packet is acknowledged before the next one is sent. Below is the TCP server function given a preprocessed image array.
 
-    def send_arr(rot_arr, debug=False):
-        # Open socket to the server
-        sock = socket.socket()
-        addr = ('0.0.0.0', SERVER_PORT)
-        sock.bind(addr)
-        sock.listen(1)
-        print('server listening on', addr)
+<pre>
+<code class="language-clike">
+def send_arr(rot_arr, debug=False):
+    # Open socket to the server
+    sock = socket.socket()
+    addr = ('0.0.0.0', SERVER_PORT)
+    sock.bind(addr)
+    sock.listen(1)
+    print('server listening on', addr)
 
-        # Wait for the client
-        con = None
-        con, addr = sock.accept()
-        print('client connected from', addr)
+    # Wait for the client
+    con = None
+    con, addr = sock.accept()
+    print('client connected from', addr)
 
 
-        total_bytes = 0
+    total_bytes = 0
 
-        # repeat test for a number of iterations
-        for i in range(PACKET_NUM):
+    # repeat test for a number of iterations
+    for i in range(PACKET_NUM):
 
-            # Take RPB rotations from image
-            curr_data = rot_arr[RPB*i : RPB*i+RPB][:][:]
-            write_buf = bytearray(curr_data.flatten())
-            if debug:
-                print(len(curr_data.flatten()))
-                print(len(write_buf))
-                prstr = ""
-                for i, b in enumerate(write_buf):
-                    if i % 3 == 0: prstr += 'r: ' + str(int(b)) + ' '
-                    if i % 3 == 1: prstr += 'g: ' + str(int(b)) + ' '
-                    if i % 3 == 2: prstr += 'b: ' + str(int(b)) + '\n'
-                print(prstr)
-            # write BUF_SIZE bytes to the client
-            write_len = con.send(write_buf)
-            print('Wrote %d bytes to client' % write_len)
-            total_bytes += write_len
+        # Take RPB rotations from image
+        curr_data = rot_arr[RPB*i : RPB*i+RPB][:][:]
+        write_buf = bytearray(curr_data.flatten())
+        if debug:
+            print(len(curr_data.flatten()))
+            print(len(write_buf))
+            prstr = ""
+            for i, b in enumerate(write_buf):
+                if i % 3 == 0: prstr += 'r: ' + str(int(b)) + ' '
+                if i % 3 == 1: prstr += 'g: ' + str(int(b)) + ' '
+                if i % 3 == 2: prstr += 'b: ' + str(int(b)) + '\n'
+            print(prstr)
+        # write BUF_SIZE bytes to the client
+        write_len = con.send(write_buf)
+        print('Wrote %d bytes to client' % write_len)
+        total_bytes += write_len
 
-            # Check size of data written
-            if write_len != BUF_SIZE:
-                raise RuntimeError('wrong amount of data written')
+        # Check size of data written
+        if write_len != BUF_SIZE:
+            raise RuntimeError('wrong amount of data written')
 
-        # All done
-        con.close()
-        sock.close()
+    # All done
+    con.close()
+    sock.close()
 
-        print(f"In total wrote {total_bytes} bytes")
-        print("send completed")
+    print(f"In total wrote {total_bytes} bytes")
+    print("send completed")
+</code>
+</pre>
 
 ### APA102 LEDs
 
@@ -93,40 +97,43 @@ The APA102 LEDs use a two-wire SPI protocol to communicate with the PI Pico. Thi
 
 ![The communication protocol from the APA102 data sheet](./assets/apa102_protocol-min.png)
 
-Below is our code for constructing the packets based on a three-dimensional array representing the color of each LED on the strip.
+Below is our code for constructing the packets based on a three-dimensional array representing the color of each LED on the strip. 
 
-    void apa102_write_strip(uint8_t (*color_data)[3], uint16_t num_leds)
+<pre>
+<code class="language-clike">
+void apa102_write_strip(uint8_t (*color_data)[3], uint16_t num_leds)
+{
+    uint8_t spi_buffer[num_leds * 4 + 8];
+    // Start frame
+    spi_buffer[0] = 0x00;
+    spi_buffer[1] = 0x00;
+    spi_buffer[2] = 0x00;
+    spi_buffer[3] = 0x00;
+    // LED frames
+    for (int i = 0; i < num_leds; i++)
     {
-        uint8_t spi_buffer[num_leds * 4 + 8];
-        // Start frame
-        spi_buffer[0] = 0x00;
-        spi_buffer[1] = 0x00;
-        spi_buffer[2] = 0x00;
-        spi_buffer[3] = 0x00;
-        // LED frames
-        for (int i = 0; i < num_leds; i++)
+        if (i < 5) // Inner most LEDs move slower, so appear brighter. Lower their brightness
         {
-            if (i < 5) // Inner most LEDs move slower, so appear brighter. Lower their brightness
-            {
-                spi_buffer[i * 4 + 4] = 0b11100001; // Not full brightness so I don't kill my retinas
-            }
-            else
-            {
-                spi_buffer[i * 4 + 4] = 0b11100011; // Not full brightness so I don't kill my retinas
-            }
-            // APA102's we have are RBG instead of RGB,so flip the BG inputs here.
-            spi_buffer[i * 4 + 5] = color_data[i][0];
-            spi_buffer[i * 4 + 6] = color_data[i][2];
-            spi_buffer[i * 4 + 7] = color_data[i][1];
+            spi_buffer[i * 4 + 4] = 0b11100001; // Not full brightness so I don't kill my retinas
         }
-        // End frame
-        spi_buffer[num_leds * 4 + 4] = 0xFF;
-        spi_buffer[num_leds * 4 + 5] = 0xFF;
-        spi_buffer[num_leds * 4 + 6] = 0xFF;
-        spi_buffer[num_leds * 4 + 7] = 0xFF;
-
-        spi_write_blocking(SPI_PORT, spi_buffer, num_leds * 4 + 8);
+        else
+        {
+            spi_buffer[i * 4 + 4] = 0b11100011; // Not full brightness so I don't kill my retinas
+        }
+        // APA102's we have are RBG instead of RGB,so flip the BG inputs here.
+        spi_buffer[i * 4 + 5] = color_data[i][0];
+        spi_buffer[i * 4 + 6] = color_data[i][2];
+        spi_buffer[i * 4 + 7] = color_data[i][1];
     }
+    // End frame
+    spi_buffer[num_leds * 4 + 4] = 0xFF;
+    spi_buffer[num_leds * 4 + 5] = 0xFF;
+    spi_buffer[num_leds * 4 + 6] = 0xFF;
+    spi_buffer[num_leds * 4 + 7] = 0xFF;
+
+    spi_write_blocking(SPI_PORT, spi_buffer, num_leds * 4 + 8);
+}</code>
+</pre>
 
 The LEDs are wired in series, with the SCK and MOSI lines of the previous LED leading into the next. When an LED receives a packet, it updates its state, strips the first LED frame off the packet, and then shifts the new packet out of its output SCK and MOSI lines. By doing so the entire strip can be updated from a single message sent to the first LED in the strip.
 
@@ -134,15 +141,19 @@ The LEDs are wired in series, with the SCK and MOSI lines of the previous LED le
 
 The hall effect sensor we chose is active low, meaning it pulls a GPIO pin to ground whenever the south pole of a magnet gets close to it. We set up a falling edge interrupt on the pin, triggering whenever the sensor moves past the stationary magnet on the motor mount. Below is the code inside of the interrupt:
 
-    detect_time = time_us_32();
+<pre>
+<code class="language-clike">
+detect_time = time_us_32();
 
-    if (detect_time - old_time > ##### 10000)
-    {
-        time_period = detect_time - old_time;
+if (detect_time - old_time > ##### 10000)
+{
+    time_period = detect_time - old_time;
 
-        old_time = detect_time;
-        curr_rot = 0;
-    }
+    old_time = detect_time;
+    curr_rot = 0;
+}
+</code>
+</pre>
 
 When the interrupt is triggered, the period of rotation is calculated by subtracting the last activation from the current time. We also check that the period is a reasonable value (> ##### 10000 us), which helps us reject any high-frequency false positives. Finally, we indicate that we have hit our zero point by setting the relevant variable. This stops the display from becoming misaligned relative to the external reference frame.
 
@@ -152,30 +163,34 @@ Then, we established a TCP exchange to transfer the processed image data to the 
 
 This is our code for converting bytes from TCP into LED colors and rotation values.
 
-    static int dump_bytes(const uint8_t *bptr, uint32_t len, int curr_rot)
+<pre>
+<code class="language-clike">
+static int dump_bytes(const uint8_t *bptr, uint32_t len, int curr_rot)
+{
+    // unsigned int start_i = curr_rot * ROTATIONS * LED_NUM * 3;
+    static unsigned int arr_i = 0;
+    unsigned int led_i;
+    unsigned int rot_i;
+    unsigned char rgb_i;
+    uint8_t x;
+    // printf("dump_bytes %d\n", len);
+    for (unsigned int i = 0; i < len; i++)
     {
-        // unsigned int start_i = curr_rot * ROTATIONS * LED_NUM * 3;
-        static unsigned int arr_i = 0;
-        unsigned int led_i;
-        unsigned int rot_i;
-        unsigned char rgb_i;
-        uint8_t x;
-        // printf("dump_bytes %d\n", len);
-        for (unsigned int i = 0; i < len; i++)
-        {
-            x = bptr[i];
-            // arr_i = start_i + i;
-            rgb_i = arr_i % 3;
-            led_i = (arr_i / 3) % LED_NUM;
-            rot_i = (arr_i / (LED_NUM * 3)) % ROTATIONS;
-            led_array[rot_i][led_i][rgb_i] = x;
-            arr_i++;
-            // printf("Should be: %d, Got: %d | ", x, led_array[rot_i][led_i][rgb_i]);
-            // printf("rot: %d, led: %d, rgb: %d\n", rot_i, led_i, rgb_i);
-        }
-        // printf("\n");
-        return rot_i + 1;
+        x = bptr[i];
+        // arr_i = start_i + i;
+        rgb_i = arr_i % 3;
+        led_i = (arr_i / 3) % LED_NUM;
+        rot_i = (arr_i / (LED_NUM * 3)) % ROTATIONS;
+        led_array[rot_i][led_i][rgb_i] = x;
+        arr_i++;
+        // printf("Should be: %d, Got: %d | ", x, led_array[rot_i][led_i][rgb_i]);
+        // printf("rot: %d, led: %d, rgb: %d\n", rot_i, led_i, rgb_i);
     }
+    // printf("\n");
+    return rot_i + 1;
+}
+</code>
+</pre>
 
 ### Pico Entry Point
 
@@ -189,37 +204,45 @@ By using both cores of the RP2040, we can concurrently receive TCP messages and 
 
 The TCP thread is simple and is shown below. We simply check for new messages, and if they have arrived we update the LED array. The inner workings of run_tcp_client_test() are detailed above.
 
-    PT_BEGIN(pt);
-    while (1)
+<pre>
+<code class="language-clike">
+PT_BEGIN(pt);
+while (1)
+{
+    if (run_tcp_client_test() == -1)
     {
-        if (run_tcp_client_test() == -1)
-        {
-            printf("FAILED\n");
-            PT_YIELD_usec(100000);
-        }
-        printf("TCP ");
-        PT_YIELD_usec(1000000);
+        printf("FAILED\n");
+        PT_YIELD_usec(100000);
     }
-    PT_END(pt);
+    printf("TCP ");
+    PT_YIELD_usec(1000000);
+}
+PT_END(pt);
+</code>
+</pre>
 
 In our LED timing thread, we cut a full rotation into slices based on the estimated period from the hall effect sensor. We can then use PT_YIELD_usec to wait until the LEDs need to be written again, and do so.
 
-    // Mark beginning of thread
-    PT_BEGIN(pt);
-    volatile static int begin_time;
-    volatile static int spare_time;
-    while (1)
-    {
-        // Measure time at start of thread
-        begin_time = time_us_32();
-        apa102_write_strip(led_array[curr_rot % ROTATIONS], LED_NUM);
-        curr_rot++;
-        unsigned int theta_time = time_period / ROTATIONS;
-        spare_time = theta_time - (time_us_32() - begin_time);
+<pre>
+<code class="language-clike">
+// Mark beginning of thread
+PT_BEGIN(pt);
+volatile static int begin_time;
+volatile static int spare_time;
+while (1)
+{
+    // Measure time at start of thread
+    begin_time = time_us_32();
+    apa102_write_strip(led_array[curr_rot % ROTATIONS], LED_NUM);
+    curr_rot++;
+    unsigned int theta_time = time_period / ROTATIONS;
+    spare_time = theta_time - (time_us_32() - begin_time);
 
-        PT_YIELD_usec(spare_time);
-    }
-    PT_END(pt);
+    PT_YIELD_usec(spare_time);
+}
+PT_END(pt);
+</code>
+</pre>
 
 ## Electrical
 

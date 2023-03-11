@@ -19,12 +19,14 @@
 
     <!-- stylesheets -->
     <link rel="stylesheet" href="../styles/project_page.css">
+    <link href="../styles/themes/prism.css" rel="stylesheet" />
 
     <!-- font -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
 </head>
 
 <body>
+    <script src="../styles/themes/prism.js"></script>
     <div id="left_pad"></div>
     <aside>
         <h1><a href="..">Michael Crum</a></h1>
@@ -124,7 +126,9 @@
 </p>
 <h3 id="pythontcpserver">Python TCP Server</h3>
 <p>The image data is sent to the Pico through a Transmission Control Protocol (TCP) socket using the Python socket library. To do this, the full array is divided up into packets consisting of the data for two orientations of the arm. Each packet is flattened and converted into a byte array, then sent to the Pico W. We chose to use a TCP protocol as it is reliable and accurate. It works by establishing a connection with the client via a 3-way handshake process. We then send packets to the client over TCP and each packet is acknowledged before the next one is sent. Below is the TCP server function given a preprocessed image array.</p>
-<pre><code>def send_arr(rot_arr, debug=False):
+<pre>
+<code class="language-clike">
+def send_arr(rot_arr, debug=False):
     # Open socket to the server
     sock = socket.socket()
     addr = ('0.0.0.0', SERVER_PORT)
@@ -170,12 +174,15 @@
 
     print(f"In total wrote {total_bytes} bytes")
     print("send completed")
-</code></pre>
+</code>
+</pre>
 <h3 id="apa102leds">APA102 LEDs</h3>
 <p>The APA102 LEDs use a two-wire SPI protocol to communicate with the PI Pico. This allows us to use RP2040's SPI peripheral, which made writing the driver easy. The LEDs expect packets that are broken into "frames" of 32 bits. Each message begins with a start frame of 32 0's, and ends with an end frame of 32 1's. In between, each frame represents the data for a single LED in the strip. A LED frame starts with 111, then is followed by five bits representing the brightness of the LED. This is followed by 8 bits for each of blue, green, and red, giving 256 values for each.</p>
 <p><img src="./assets/apa102_protocol-min.webp" alt="The communication protocol from the APA102 data sheet" /></p>
-<p>Below is our code for constructing the packets based on a three-dimensional array representing the color of each LED on the strip.</p>
-<pre><code>void apa102_write_strip(uint8_t (*color_data)[3], uint16_t num_leds)
+<p>Below is our code for constructing the packets based on a three-dimensional array representing the color of each LED on the strip. </p>
+<pre>
+<code class="language-clike">
+void apa102_write_strip(uint8_t (*color_data)[3], uint16_t num_leds)
 {
     uint8_t spi_buffer[num_leds * 4 + 8];
     // Start frame
@@ -184,9 +191,9 @@
     spi_buffer[2] = 0x00;
     spi_buffer[3] = 0x00;
     // LED frames
-    for (int i = 0; i &lt; num_leds; i++)
+    for (int i = 0; i < num_leds; i++)
     {
-        if (i &lt; 5) // Inner most LEDs move slower, so appear brighter. Lower their brightness
+        if (i < 5) // Inner most LEDs move slower, so appear brighter. Lower their brightness
         {
             spi_buffer[i * 4 + 4] = 0b11100001; // Not full brightness so I don't kill my retinas
         }
@@ -206,12 +213,14 @@
     spi_buffer[num_leds * 4 + 7] = 0xFF;
 
     spi_write_blocking(SPI_PORT, spi_buffer, num_leds * 4 + 8);
-}
-</code></pre>
+}</code>
+</pre>
 <p>The LEDs are wired in series, with the SCK and MOSI lines of the previous LED leading into the next. When an LED receives a packet, it updates its state, strips the first LED frame off the packet, and then shifts the new packet out of its output SCK and MOSI lines. By doing so the entire strip can be updated from a single message sent to the first LED in the strip.</p>
 <h3 id="halleffectsensor">Hall Effect Sensor</h3>
 <p>The hall effect sensor we chose is active low, meaning it pulls a GPIO pin to ground whenever the south pole of a magnet gets close to it. We set up a falling edge interrupt on the pin, triggering whenever the sensor moves past the stationary magnet on the motor mount. Below is the code inside of the interrupt:</p>
-<pre><code>detect_time = time_us_32();
+<pre>
+<code class="language-clike">
+detect_time = time_us_32();
 
 if (detect_time - old_time &gt; ##### 10000)
 {
@@ -220,12 +229,15 @@ if (detect_time - old_time &gt; ##### 10000)
     old_time = detect_time;
     curr_rot = 0;
 }
-</code></pre>
+</code>
+</pre>
 <p>When the interrupt is triggered, the period of rotation is calculated by subtracting the last activation from the current time. We also check that the period is a reasonable value (&gt; ##### 10000 us), which helps us reject any high-frequency false positives. Finally, we indicate that we have hit our zero point by setting the relevant variable. This stops the display from becoming misaligned relative to the external reference frame.</p>
 <h3 id="picotcpclient">Pico TCP Client</h3>
 <p>Then, we established a TCP exchange to transfer the processed image data to the microcontroller which operates the display. We based this code on the open-source TCP examples provided by Raspberry Pi for the Pico W. Wifi was our chosen communication method because it allowed us to update the image while the microcontroller was rotating, which would be impossible with a wired setup. On the microcontroller's side, we had one thread poll for incoming data and handle processing that data, while another thread maintained the display. The data came through as a stream of bytes but had to be formed into a three-dimensional array of color data: angle of rotation * LED number (0 at center) * RGB triple. This structure made displaying the image a simple continuous loop through the array, where all the LEDs are simultaneously updated at a period matching the frequency of the blade's rotation.</p>
 <p>This is our code for converting bytes from TCP into LED colors and rotation values.</p>
-<pre><code>static int dump_bytes(const uint8_t *bptr, uint32_t len, int curr_rot)
+<pre>
+<code class="language-clike">
+static int dump_bytes(const uint8_t *bptr, uint32_t len, int curr_rot)
 {
     // unsigned int start_i = curr_rot * ROTATIONS * LED_NUM * 3;
     static unsigned int arr_i = 0;
@@ -249,14 +261,17 @@ if (detect_time - old_time &gt; ##### 10000)
     // printf("\n");
     return rot_i + 1;
 }
-</code></pre>
+</code>
+</pre>
 <h3 id="picoentrypoint">Pico Entry Point</h3>
 <p>The main Pico code uses all of the micro-controller code above to create the final product.</p>
 <p>In the core 0 main function, we begin by initializing the relevant GPIO, setting up the pin change interrupt for the hall effect sensor, and overclocking the RP2040 to 250 MHz. We also call the initialization functions for our APA102 driver and write a simple pattern to the strip to indicate that the system has powered on. Next, we initialize the TCP client and use it to connect to wifi. Finally, we start a protothread to handle TCP communication and start core 1.</p>
 <p>Core 1 main is fairly simple, as we just start a protothread for writing the current image to the LEDs.</p>
 <p>By using both cores of the RP2040, we can concurrently receive TCP messages and control the LED strip, allowing for seamless operation.</p>
 <p>The TCP thread is simple and is shown below. We simply check for new messages, and if they have arrived we update the LED array. The inner workings of run<em>tcp</em>client_test() are detailed above.</p>
-<pre><code>PT_BEGIN(pt);
+<pre>
+<code class="language-clike">
+PT_BEGIN(pt);
 while (1)
 {
     if (run_tcp_client_test() == -1)
@@ -268,9 +283,12 @@ while (1)
     PT_YIELD_usec(1000000);
 }
 PT_END(pt);
-</code></pre>
+</code>
+</pre>
 <p>In our LED timing thread, we cut a full rotation into slices based on the estimated period from the hall effect sensor. We can then use PT<em>YIELD</em>usec to wait until the LEDs need to be written again, and do so.</p>
-<pre><code>// Mark beginning of thread
+<pre>
+<code class="language-clike">
+// Mark beginning of thread
 PT_BEGIN(pt);
 volatile static int begin_time;
 volatile static int spare_time;
@@ -286,7 +304,8 @@ while (1)
     PT_YIELD_usec(spare_time);
 }
 PT_END(pt);
-</code></pre>
+</code>
+</pre>
 <h2 id="electrical">Electrical</h2>
 <p><img src="./assets/PCB_layout-min.webp" alt="Our PCBs laid out in KiCad" /></p>
 <blockquote>
