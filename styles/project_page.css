@@ -119,6 +119,12 @@ article a {
     color: aqua;
 }
 
+article iframe {
+    width: 100%;
+    aspect-ratio: 9/5;
+    border: none;
+}
+
 pre {
     white-space: pre-wrap;
     /* Since CSS 2.1 */

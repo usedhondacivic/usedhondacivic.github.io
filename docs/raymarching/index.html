@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Raymarching Experiments</title>
+    <title>Ray Marching Experiments</title>
 
     <!-- seo -->
     <meta name="author" content="Michael Crum">
@@ -57,7 +57,7 @@
     <li>
         <img src="../raymarching/assets/snapshot.webp">
         <div>
-            <p>Raymarching Experiments</p>
+            <p>Ray Marching Experiments</p>
             <em> 6.26.2021</em>
         </div>
     </li>
@@ -98,15 +98,33 @@
     </aside>
     <article id="article">
         <h1>
-            Raymarching Experiments
+            Ray Marching Experiments
         </h1>
         <em class="date">
             6.26.2021
         </em>
-        <p><img src="./assets/mandlebulb.webp" alt="A mandlebulb raymarched" /></p>
-<p><em>Put showcase in this section</em></p>
-<h2 id="whatisraymarching">What is Raymarching?</h2>
-<p>This write up is under construction, come back soon :)</p>
+        <p>This write up is under construction, come back soon for more :)</p>
+<p><em>Warning: Some demos on this page are graphically demanding. I recommend enabling GPU acceleration for your web browser for the best experience.</em></p>
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb" title="Raymarching Demo"></iframe>
+<blockquote>
+  <p><em>Click and drag to rotate, scroll to zoom, right click to pan</em></p>
+</blockquote>
+<h2 id="whatisraymarching">What is Ray Marching?</h2>
+<p>You might be familiar with ray tracing, ray marching’s better known cousin. Ray tracing is a rendering process that uses math to simulate light bouncing around a scene before entering the camera. By computing the path light takes to enter each pixel of the screen, we can determine the color of that pixel based on material properties and lighting. For a simple one file demo of ray tracing, check out <a href="https://michael-crum.com/Js-Raycaster-V1/">my Javascript implementation</a>. </p>
+<p>Ray tracing gives stunning results, but is exceptionally computationally expensive. The main issue lies in the time complexity of ray intersection math, which must be performed many times for each pixel. </p>
+<p>Ray marching follows the same concept as ray tracing (following rays through space), but lowers the computational load through some computational cleverness.</p>
+<h3 id="signeddistancefieldssdfs">Signed Distance Fields (SDFs)</h3>
+<p>If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object.</p>
+<p>Once we know the minimum distance to an object, we can safely step along any ray by that amount and not risk intersecting it. Stepping along the ray yields a new point, from which we can find a new minimum distance, step along the ray once more, and repeat.</p>
+<p><em>Insert 2d demo</em></p>
+<p>SDFs are remarkably efficient, even for many shapes that appear complicated at first glance. Check out <a href="https://iquilezles.org/articles/distfunctions/">Inigo Quilez's site</a> giving SDFs for a huge number of primitives.</p>
+<h3 id="combiningsdfs">Combining SDFs</h3>
+<h3 id="infiniterepetition">Infinite Repetition</h3>
+<h3 id="fractaldistancefields">Fractal Distance Fields</h3>
+<h2 id="myimplementation">My Implementation</h2>
+<h3 id="usingthreejsandglsl">Using Three.js and GLSL</h3>
+<h3 id="pixelshaders">Pixel Shaders</h3>
+<h2 id="moreresources">More Resources</h2>
     </article>
     <div id="right_pad"></div>
 </body>
