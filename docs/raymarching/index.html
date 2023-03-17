@@ -123,13 +123,14 @@
 <h2 id="whatisraymarching">What is Ray Marching?</h2>
 <p>You might be familiar with ray tracing, ray marching’s better known cousin. Ray tracing is a rendering process that uses math to simulate light bouncing around a scene before entering the camera. By computing the path light takes to enter each pixel of the screen, we can determine the color of that pixel based on material properties and lighting. For a simple one file demo of ray tracing, check out <a href="https://michael-crum.com/Js-Raycaster-V1/">my Javascript implementation</a>. </p>
 <p>Ray tracing gives stunning results, but is exceptionally computationally expensive. The main issue lies in the time complexity of ray intersection math, which must be performed many times for each pixel. </p>
-<p>Ray marching follows the same concept as ray tracing (following rays through space), but lowers the computational load through some computational cleverness.</p>
+<p>Ray marching follows the same concept as ray tracing (following rays through space), but lowers the load through some computational cleverness.</p>
 <h3 id="signeddistancefieldssdfs">Signed Distance Fields (SDFs)</h3>
 <p>If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object.</p>
 <p>Once we know the minimum distance to an object, we can safely step along any ray by that amount and not risk intersecting it. Stepping along the ray yields a new point, from which we can find a new minimum distance, step along the ray once more, and repeat.</p>
-<p><em>Insert 2d demo</em></p>
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo.html" title="2D Demo"></iframe>
 <p>SDFs are remarkably efficient, even for many shapes that appear complicated at first glance. Check out <a href="https://iquilezles.org/articles/distfunctions/">Inigo Quilez's site</a> giving SDFs for a huge number of primitives.</p>
 <h3 id="combiningsdfs">Combining SDFs</h3>
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html" title="2D Demo"></iframe>
 <h3 id="infiniterepetition">Infinite Repetition</h3>
 <h3 id="ambientocclusionandglow">Ambient Occlusion and Glow</h3>
 <h3 id="fractaldistancefields">Fractal Distance Fields</h3>
