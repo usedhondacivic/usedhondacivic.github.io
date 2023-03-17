@@ -114,23 +114,57 @@
             6.26.2021
         </em>
         <br>
-        <p>This write up is under construction, come back soon for more :)</p>
+        <p>This write up is under construction, come back soon for more :)
+See the code here: <a href="https://github.com/usedhondacivic/ThreeJS-Raymarcher">https://github.com/usedhondacivic/ThreeJS-Raymarcher</a></p>
 <p><em>Warning: Some demos on this page are graphically demanding. I recommend enabling GPU acceleration for your web browser for the best experience.</em></p>
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb" title="Raymarching Demo"></iframe>
 <blockquote>
-  <p><em>Click and drag to rotate, scroll to zoom, right click to pan</em></p>
+  <p><em>Click and drag to rotate, scroll to zoom, right click to pan.</em></p>
+  <p><em><a href="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb">See demo full screen</a></em></p>
 </blockquote>
 <h2 id="whatisraymarching">What is Ray Marching?</h2>
 <p>You might be familiar with ray tracing, ray marching’s better known cousin. Ray tracing is a rendering process that uses math to simulate light bouncing around a scene before entering the camera. By computing the path light takes to enter each pixel of the screen, we can determine the color of that pixel based on material properties and lighting. For a simple one file demo of ray tracing, check out <a href="https://michael-crum.com/Js-Raycaster-V1/">my Javascript implementation</a>. </p>
 <p>Ray tracing gives stunning results, but is exceptionally computationally expensive. The main issue lies in the time complexity of ray intersection math, which must be performed many times for each pixel. </p>
 <p>Ray marching follows the same concept as ray tracing (following rays through space), but lowers the load through some computational cleverness.</p>
 <h3 id="signeddistancefieldssdfs">Signed Distance Fields (SDFs)</h3>
-<p>If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object.</p>
+<p>If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object this value is &gt; 0, inside it is &lt; 0, and it is equal to 0 on the border.</p>
 <p>Once we know the minimum distance to an object, we can safely step along any ray by that amount and not risk intersecting it. Stepping along the ray yields a new point, from which we can find a new minimum distance, step along the ray once more, and repeat.</p>
+<p>The demo below shows the ray marching process for one ray sweeping a 2D scene. Each blue dot represents the end of one "step", and each ring shows the minimum distance from that point to the scene. Once the distance to the scene is below a threshold, we say we have hit the object and return.</p>
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo.html" title="2D Demo"></iframe>
+<blockquote>
+  <p><em><a href="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo.html">See demo full screen</a></em></p>
+</blockquote>
 <p>SDFs are remarkably efficient, even for many shapes that appear complicated at first glance. Check out <a href="https://iquilezles.org/articles/distfunctions/">Inigo Quilez's site</a> giving SDFs for a huge number of primitives.</p>
 <h3 id="combiningsdfs">Combining SDFs</h3>
+<p>One useful feature of SDF's is how simple they are to combine. The simplest operation is a union, which represents the area inside of either of two shapes. We can find the union of two SDF's by taking the minimum of their two distance fields. This makes sense intuitively as we only care about the minimum distance to any object in the scene.</p>
+<pre>
+<code class="language-js">
+function union(x,y){
+    return min(rectangle.sdf(x, y), circle.sdf(x, y))
+}
+</code>
+</pre>
+<p>We can also find the intersection of two shapes, defined as the shared area or overlap. In terms of SDFs, we want the area where the SDF of both shapes is &lt; 0. We can find this by taking the max of the two.</p>
+<pre>
+<code class="language-js">
+function intersect(x,y){
+    return max(rectangle.sdf(x, y), circle.sdf(x, y));
+}
+</code>
+</pre>
+<p>Finally, we can subtract one shape from another. This comes curtesy of the "signed" part of SDF. A signed distance field is positive outside the shape and negative inside of the shape. By negating the SDF of a shape we can turn it inside out. Taking the intersection of an inside-out shape with another primitive is equivalent to subtracting the first from the second.</p>
+<pre>
+<code class="language-js">
+function subtract(x,y){
+    return max(rectangle.sdf(x, y), -circle.sdf(x, y));
+}
+</code>
+</pre>
+<p>You can see all three operations in the demo below.</p>
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html" title="2D Demo"></iframe>
+<blockquote>
+  <p><em><a href="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html">See demo full screen</a></em></p>
+</blockquote>
 <h3 id="infiniterepetition">Infinite Repetition</h3>
 <h3 id="ambientocclusionandglow">Ambient Occlusion and Glow</h3>
 <h3 id="fractaldistancefields">Fractal Distance Fields</h3>
