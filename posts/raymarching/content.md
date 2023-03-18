@@ -7,7 +7,7 @@ See the code here: [https://github.com/usedhondacivic/ThreeJS-Raymarcher](https:
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb" title="Raymarching Demo"></iframe>
 > *Click and drag to rotate, scroll to zoom, right click to pan.*
 
-> *[See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb)*
+> [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb)
 
 ## What is Ray Marching?
 
@@ -21,13 +21,17 @@ Ray marching follows the same concept as ray tracing (following rays through spa
 
 If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object this value is > 0, inside it is < 0, and it is equal to 0 on the border.
 
+<img style="width: 100%; height: auto; max-height: none" alt="An example of signed distance fields" src="./assets/2d_sdf.png">
+
+> *An example of signed distance fields for various shapes*
+
 Once we know the minimum distance to an object, we can safely step along any ray by that amount and not risk intersecting it. Stepping along the ray yields a new point, from which we can find a new minimum distance, step along the ray once more, and repeat.
 
 The demo below shows the ray marching process for one ray sweeping a 2D scene. Each blue dot represents the end of one "step", and each ring shows the minimum distance from that point to the scene. Once the distance to the scene is below a threshold, we say we have hit the object and return.
 
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo.html" title="2D Demo"></iframe>
 
-> *[See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/2d_demo.html)*
+> [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/2d_demo.html)
 
 SDFs are remarkably efficient, even for many shapes that appear complicated at first glance. Check out [Inigo Quilez's site](https://iquilezles.org/articles/distfunctions/) giving SDFs for a huge number of primitives.
 
@@ -67,7 +71,7 @@ You can see all three operations in the demo below.
 
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html" title="2D Demo"></iframe>
 
-> *[See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html)*
+> [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html)
 
 Another popular and immensely satisfying method is to interpolate between SDFs. This gives the effect of melting the primitives together.
 
