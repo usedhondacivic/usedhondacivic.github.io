@@ -126,11 +126,12 @@ See the code here: <a href="https://github.com/usedhondacivic/ThreeJS-Raymarcher
 <p>You might be familiar with ray tracing, ray marching’s better known cousin. Ray tracing is a rendering process that uses math to simulate light bouncing around a scene before entering the camera. By computing the path light takes to enter each pixel of the screen, we can determine the color of that pixel based on material properties and lighting. For a simple one file demo of ray tracing, check out <a href="https://michael-crum.com/Js-Raycaster-V1/">my Javascript implementation</a>. </p>
 <p>Ray tracing gives stunning results, but is exceptionally computationally expensive. The main issue lies in the time complexity of ray intersection math, which must be performed many times for each pixel. </p>
 <p>Ray marching follows the same concept as ray tracing (following rays through space), but lowers the load through some computational cleverness.</p>
+<p>I'll first walk through the theoretical basis for ray marching before finishing the article talking about my implementation.</p>
 <h3 id="signeddistancefieldssdfs">Signed Distance Fields (SDFs)</h3>
 <p>If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object this value is &gt; 0, inside it is &lt; 0, and it is equal to 0 on the border.</p>
 <p><img style="width: 100%; height: auto; max-height: none" alt="An example of signed distance fields" src="./assets/2d_sdf.webp"></p>
 <blockquote>
-  <p><em>An example of signed distance fields of various shapes</em></p>
+  <p><em>An example of signed distance fields for various shapes</em></p>
 </blockquote>
 <p>Once we know the minimum distance to an object, we can safely step along any ray by that amount and not risk intersecting it. Stepping along the ray yields a new point, from which we can find a new minimum distance, step along the ray once more, and repeat.</p>
 <p>The demo below shows the ray marching process for one ray sweeping a 2D scene. Each blue dot represents the end of one "step", and each ring shows the minimum distance from that point to the scene. Once the distance to the scene is below a threshold, we say we have hit the object and return.</p>
@@ -169,7 +170,21 @@ function subtract(x,y){
 <blockquote>
   <p><a href="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html">See demo full screen</a></p>
 </blockquote>
-<p>Another popular and immensely satisfying method is to interpolate between SDFs. This gives the effect of melting the primitives together.</p>
+<p>Another popular and immensely satisfying method is to interpolate between SDFs. This gives the effect of melting the primitives together, and is called a smooth union.</p>
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_interp.html" title="2D Demo"></iframe>
+<blockquote>
+  <p><a href="https://michael-crum.com/ThreeJS-Raymarcher/2d_interp.html">See demo full screen</a></p>
+</blockquote>
+<p>The code to achieve a smooth union is simple and shown below (courtesy of <a href="https://iquilezles.org/articles/smin/">Inigo Quilez</a>).</p>
+<pre>
+<code class="language-clike">
+float opSmoothUnion( float d1, float d2, float k ) {
+    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+    return mix( d2, d1, h ) - k*h*(1.0-h); 
+}
+</code>
+</pre>
+<p>This implementation is a polynomial interpolation, with the "roundness" of the union controlled by factor k.</p>
 <h3 id="infiniterepetition">Infinite Repetition</h3>
 <h3 id="ambientocclusionandglow">Ambient Occlusion and Glow</h3>
 <h3 id="fractaldistancefields">Fractal Distance Fields</h3>

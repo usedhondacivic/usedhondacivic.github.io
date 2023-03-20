@@ -17,6 +17,8 @@ Ray tracing gives stunning results, but is exceptionally computationally expensi
 
 Ray marching follows the same concept as ray tracing (following rays through space), but lowers the load through some computational cleverness.
 
+I'll first walk through the theoretical basis for ray marching before finishing the article talking about my implementation.
+
 ### Signed Distance Fields (SDFs)
 
 If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object this value is > 0, inside it is < 0, and it is equal to 0 on the border.
@@ -73,7 +75,24 @@ You can see all three operations in the demo below.
 
 > [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html)
 
-Another popular and immensely satisfying method is to interpolate between SDFs. This gives the effect of melting the primitives together.
+Another popular and immensely satisfying method is to interpolate between SDFs. This gives the effect of melting the primitives together, and is called a smooth union.
+
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_interp.html" title="2D Demo"></iframe>
+
+> [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/2d_interp.html)
+
+The code to achieve a smooth union is simple and shown below (courtesy of [Inigo Quilez](https://iquilezles.org/articles/smin/)).
+
+<pre>
+<code class="language-clike">
+float opSmoothUnion( float d1, float d2, float k ) {
+    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+    return mix( d2, d1, h ) - k*h*(1.0-h); 
+}
+</code>
+</pre>
+
+This implementation is a polynomial interpolation, with the "roundness" of the union controlled by factor k.
 
 ### Infinite Repetition
 
