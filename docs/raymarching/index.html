@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Ray Marching Experiments</title>
+    <title>An Introduction to Ray Marching</title>
 
     <!-- seo -->
     <meta name="author" content="Michael Crum">
@@ -33,7 +33,17 @@
         <h3><em>More Projects:</em></h3>
         <nav>
             <ul>
-                <a href="../pov_display">
+                <a href="../raymarching">
+    <li>
+        <img src="../raymarching/assets/snapshot.webp">
+        <div>
+            <p>An Introduction to Ray Marching</p>
+            <em> 3.23.2023</em>
+        </div>
+    </li>
+</a>
+<br>
+<a href="../pov_display">
     <li>
         <img src="../pov_display/assets/snapshot.webp">
         <div>
@@ -53,32 +63,12 @@
     </li>
 </a>
 <br>
-<a href="../raymarching">
-    <li>
-        <img src="../raymarching/assets/snapshot.webp">
-        <div>
-            <p>Ray Marching Experiments</p>
-            <em> 6.26.2021</em>
-        </div>
-    </li>
-</a>
-<br>
 <a href="../frc-2020">
     <li>
         <img src="../frc-2020/assets/snapshot.webp">
         <div>
             <p>FRC - Infinite Recharge</p>
             <em> 3.6.2020</em>
-        </div>
-    </li>
-</a>
-<br>
-<a href="../frc-elevator">
-    <li>
-        <img src="../frc-elevator/assets/snapshot.webp">
-        <div>
-            <p>FRC - Elevator Robot</p>
-            <em> 11.15.2019</em>
         </div>
     </li>
 </a>
@@ -108,10 +98,10 @@
     </aside>
     <article id="article">
         <h1>
-            Ray Marching Experiments
+            An Introduction to Ray Marching
         </h1>
         <em class="date">
-            6.26.2021
+            3.23.2023
         </em>
         <br>
         <p>This write up is under construction, come back soon for more :)
@@ -185,13 +175,43 @@ float opSmoothUnion( float d1, float d2, float k ) {
 </code>
 </pre>
 <p>This implementation is a polynomial interpolation, with the "roundness" of the union controlled by factor k.</p>
+<p>This also works in 3D of course, as shown below.</p>
+<p><em>insert demo</em></p>
 <h3 id="infiniterepetition">Infinite Repetition</h3>
+<p>With a ray tracer, intersections with each primitive in the scene must be independently calculated. This scales poorly with dense scenes (ie a field of blades of grass). With ray marching this problem can be trivialized using domain repetition.</p>
+<p>Each step of the ray marching process calculates the distance to the scene from some point, lets call it <code class="language-clike">(x,y)</code>. In the language of SDF's, "repeating a shape" really means that the SDF of the shape is the same at two positions. A simple way of doing this is using the modulo operation. Replacing <code class="language-clike">(x,y)</code> with <code class="language-clike">(x % 5,y % 5)</code> causes the domain of the SDF to repeat every 5 units in the x and y direction, replicating the SDF infinitely. Modulo is computationally cheap, so these shapes come only at the cost of the increase of ray marching steps.</p>
+<p><em>insert demo</em></p>
 <h3 id="ambientocclusionandglow">Ambient Occlusion and Glow</h3>
+<p>Ambient occlusion refers to the effect that ambient light has on the shading of a scene. Parts of a scene that are more exposed (less occluded) tend to get brighter due to light bounced from other objects. Similarly, details and crevices are less exposed (more occluded) and therefore get less ambient lighting. Calculating the reflections of ambient light in the scene is extremely expensive using ray tracing methods, but ray marching offers a computationally "free" alternative. We are already keeping track of the number of iterations the ray takes to march to the object, and it turns out this number is a good estimate of the occlusion of the pixel. A higher number of iterations means that the ray passed closely by objects during its travel. We can use this as a metric of occlusion while shading to get a remarkably realistic approximation of "true" ambient occlusion.</p>
+<p><em>insert demo</em></p>
 <h3 id="fractaldistancefields">Fractal Distance Fields</h3>
+<p>Many fractals have efficient approximations to their distance fields, allowing them to be rendered in real time. The derivation is beyond the scope of this article (see the references below for more info), but the results are too mesmerizing to not feature in this writeup.</p>
+<p><em>insert demo</em></p>
+<p>We can also generate our own fractals through clever use of domain repetition and transformations of SDFs.</p>
+<p><em>insert demo</em></p>
 <h2 id="myimplementation">My Implementation</h2>
+<p>One popular tool for experimenting with shaders is <a href="https://www.shadertoy.com/">Shadertoy</a>, a website that allows you to write, play with, and share shaders with minimal setup time. I highly recommend this route if you care primarily about making cool stuff quickly. I wanted to gain a deeper understanding of the underlying technologies and be able to embed my work into other applications, so I setup my own stack.</p>
+<p>I first attempted the purist approach of a C++ implementation using OpenGL through the GLFW3 and GLAD libraries. This is the most performant solution but comes with the downside of having to recompile the code each time I tweaked the shader. This could be solved using some kind of live reload functionality, but I decided it wasn't worth the time to try and solve. Additionally, it would be difficult to display the results on this website. My work in this direction is linked in the "More Resources" section below if you'd like to give it a try.</p>
+<p>Instead I turned to the popular Javascript graphics library Three.js. Three has a boat load of awesome functionalities, including WebGL support. WebGL is, as you might have guessed, a browser based implementation of OpenGL, allowing me to render my shaders directly to a <code>&lt;canvas&gt;</code> element.</p>
 <h3 id="usingthreejsandglsl">Using Three.js and GLSL</h3>
+<p><em>explain fragment and vertex shaders</em></p>
 <h3 id="pixelshaders">Pixel Shaders</h3>
+<p>A ray marching is a function called on each pixel of the display, so therefore we want a fragment corresponding to every location in the viewport. I achieved this by generating a plane of size (2, 2) and centering it on the x, y plane. I then applied a vertex shader that maps the real-world coordinates of the planes mesh into viewport coordinates. Because viewport coordinates range from -1 to 1, this causes the plane to cover the whole viewport. Here is the code for the plane and for the vertex shader:</p>
+<p><em>insert code</em></p>
+<p>Note that the vertex shader is independent of camera position, so the plane will cover the viewport no matter what. We can reintegrate the camera information into the fragment shader to allow use of Three's camera controls.</p>
+<p><em>insert code</em></p>
+<p>Here is the full code for a simple ray marched sphere with camera controls. As you can see, it's not as intimidating as the online literature often makes it seem:</p>
+<p><em>insert code</em></p>
+<p><em>insert demo</em></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>And that sums up my experiences learning about ray marching. This is neither the most rigorous nor in depth explanation of the techniques, but is meant as a way to promote interest in this powerful and elegant algorithm. I also got to show off some pretty visualizations along the way, which is always a plus. The following resources were invaluable to my learning, and are a great starting point for someone interested in developing their own code. Thanks for reading! </p>
 <h2 id="moreresources">More Resources</h2>
+<p>All of the code for my ray marching setup + the code for these demos are on my github: <a href="https://github.com/usedhondacivic/ThreeJS-Raymarcher">https://github.com/usedhondacivic/ThreeJS-Raymarcher</a></p>
+<p>Here is the code for my C++ ray marcher implementation: <a href="https://github.com/usedhondacivic/Cpp-raymarcher/blob/master/source/Main.cpp">https://github.com/usedhondacivic/Cpp-raymarcher/blob/master/source/Main.cpp</a></p>
+<p>Inigo Quilez is the worlds foremost authority in ray marching and computer graphics as a whole. His website is one of the most impressive collections of work I have ever seen, and is a must read for anyone interested in math or programming. Find it here: <a href="https://iquilezles.org/">https://iquilezles.org/</a></p>
+<p>I also enjoyed this tutorial from Jamie Wong, which builds into the concepts nicely: <a href="https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/">https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/</a></p>
+<p>Learning GLSL has a bit of a steep learning curve, but this website helped a lot: <a href="https://learnopengl.com/Getting-started/Shaders">https://learnopengl.com/Getting-started/Shaders</a></p>
+<p><em>insert reference for fractal distance field derivation</em></p>
     </article>
     <div id="right_pad"></div>
 </body>

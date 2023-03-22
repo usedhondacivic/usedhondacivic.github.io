@@ -1,6 +1,6 @@
 {
-    "title": "Ray Marching Experiments",
-    "description": "Experiments using ray marching and shaders to create performant real time renderings of fractals, planets, and more.",
-    "date": "6.26.2021",
-    "tech": "Three.js, GLSL"
+    "title": "An Introduction to Ray Marching",
+    "description": "An introduction to the wonders of the ray marching algorithm. Ray marching enables performant real time renderings of fractals, infinite collections of objects, and more. Featuring interactive demos and mesmerizing visualizations.",
+    "date": "3.23.2023",
+    "tech": "Three.js, WebGL, GLSL"
 }

@@ -151,13 +151,6 @@ pre {
     width: 100%;
 }
 
-code {
-    background-color: #141414;
-    display: block;
-    padding: 15px;
-    border-radius: 5px;
-}
-
 @media only screen and (max-width: 1000px) {
     body {
         flex-direction: column;
