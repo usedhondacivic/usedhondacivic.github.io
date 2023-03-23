@@ -140,3 +140,8 @@ Special thanks to Cornell’s Professor Hunter Adams and Professor Bruce Land fo
 
 ![Hunter and Bruce on the POV Display](./assets/hunter_bruce-min.png)
 > *Hunter and Bruce, respectively, shown on the display*
+
+## Source Code and Design Files
+
+Interested in building your own display? All of our code and design files can be found on my github:
+[https://github.com/usedhondacivic/ECE-4760-POV-Display]()

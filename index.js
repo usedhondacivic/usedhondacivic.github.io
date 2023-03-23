@@ -61,7 +61,8 @@ glob("posts/*/*.md", function (er, files) {
         var contents_html = converter.makeHtml(contents_md);
         var contents_page = content_template.replaceAll("<!-- TITLE -->", info.title)
             .replace("<!-- CONTENT -->", contents_html)
-            .replace("<!-- DATE -->", info.date);
+            .replace("<!-- DATE -->", info.date)
+            .replace("<!-- DESCRIPTION -->", info.description);
         var new_path = path_name.replace("posts", "docs").replace("/content.md", "");
         pages[new_path] = contents_page;
         // Copy assets
@@ -75,7 +76,7 @@ glob("posts/*/*.md", function (er, files) {
     })
     info_arr.forEach(info => {
         // Create sidebar entry
-        var sidebar_entry = sidebar_entry_template.replace("<!-- TITLE -->", info.title)
+        var sidebar_entry = sidebar_entry_template.replaceAll("<!-- TITLE -->", info.title)
             .replace("<!-- DATE -->", info.date)
             .replaceAll("project_link", ".." + info.rel_post_link)
             .replace("snapshot_link", ".." + info.rel_snapshot_link);
