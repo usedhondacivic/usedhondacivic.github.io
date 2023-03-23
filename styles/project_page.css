@@ -91,7 +91,7 @@ article {
     max-width: 900px;
     min-width: 600px;
     width: 100%;
-    overflow: wrap;
+    overflow-wrap: anywhere;
 }
 
 article img {
