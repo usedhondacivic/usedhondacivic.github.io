@@ -3,8 +3,23 @@ const path = require('path');
 const fsExtra = require('fs-extra');
 const glob = require("glob");
 const sharp = require("sharp");
+var showdownKatex = require("showdown-katex");
 var showdown = require('showdown'),
-    converter = new showdown.Converter();
+    converter = new showdown.Converter({
+        extensions: [
+            showdownKatex({
+                displayMode: true,
+                throwOnError: true,
+                errorColor: '#ff0000',
+                delimiters: [
+                    { left: "$", right: "$", display: false },
+                    { left: "$$", right: "$$", display: true },
+                    { left: '~', right: '~', display: false, asciimath: true },
+                ],
+            }),
+        ],
+    });
+
 
 // Grab the templates
 const index_template = fs.readFileSync(path.resolve(__dirname, 'templates/index.html'), 'utf8');

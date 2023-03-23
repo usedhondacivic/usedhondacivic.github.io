@@ -6,7 +6,9 @@ First, place the lock in the lock holder and ensure the dial manipulator is seat
 Rotate the dial so that the lock is at 0, then press the button on the microcontroller.
 Clicky will begin speedily trying combinations, and crack the combo!
 
-![The robot](./assets/cover.png)
+<iframe width="100%" style="aspect-ratio: 9/5" src="https://www.youtube.com/embed/n434a4aqk5E" title="CNC Combo cracker: ECE 3140 Final project" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+> ##### click on the thumbnail to watch the video
 
 ## System Overview
 
@@ -17,12 +19,6 @@ Clicky's body is made from clear laser cut acrylic, housing the electronics that
 ### Software
 
 I wrote custom stepper and analog servo drivers to control Clicky, as well a library for using the buttons and capacitive touch slider on the FRDM-KL46Z to control a LCD based UI. I also implemented the cracking algorithm, which requires the user to find and enter three binding points on the lock. Using exploits in the master lock's design, the number of combinations is dropped down to 8, which can be attempted in under 30 seconds.
-
-## Project Video Demo
-
-<iframe width="100%" style="aspect-ratio: 9/5" src="https://www.youtube.com/embed/n434a4aqk5E" title="CNC Combo cracker: ECE 3140 Final project" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-> ##### click on the thumbnail to watch the video
 
 ## Technical Description
 

@@ -102,7 +102,7 @@ This also works in 3D of course, as shown below.
 
 With a ray tracer, intersections with each primitive in the scene must be independently calculated. This scales poorly with dense scenes (ie a field of blades of grass). With ray marching this problem can be trivialized using domain repetition.
 
-Each step of the ray marching process calculates the distance to the scene from some point, lets call it <code class="language-clike">(x,y)</code>. In the language of SDF's, "repeating a shape" really means that the SDF of the shape is the same at two positions. A simple way of doing this is using the modulo operation. Replacing <code class="language-clike">(x,y)</code> with <code class="language-clike">(x % 5,y % 5)</code> causes the domain of the SDF to repeat every 5 units in the x and y direction, replicating the SDF infinitely. Modulo is computationally cheap, so these shapes come only at the cost of the increase of ray marching steps.
+Each step of the ray marching process calculates the distance to the scene from some point, lets call it <code class="language-clike">(x,y)</code>. In the language of SDF's, "repeating a shape" really means that the SDF of the shape is the same in two regions. A simple way of doing this is using the modulo operation. Replacing <code class="language-clike">(x,y)</code> with <code class="language-clike">(x % 5,y % 5)</code> causes the domain of the SDF to repeat every 5 units in the x and y direction, replicating the SDF infinitely. Modulo is computationally cheap, so these shapes come only at the cost of the increase of ray marching steps.
 
 *insert demo*
 
