@@ -191,5 +191,11 @@ pre {
     body {
         padding-left: 10px !important;
         padding-right: 10px !important;
+        padding-top: 10px !important;
+        margin: 5px !important;
+    }
+
+    h1 {
+        margin-top: 15px !important;
     }
 }
