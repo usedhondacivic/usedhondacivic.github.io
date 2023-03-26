@@ -21,7 +21,7 @@ I started the design process with the player's car. A simplified model of the ca
 Where $v$ is the car's forward velocity and $\theta$ is the cars heading with respect to the screen coordinate system. When the car moves forward at velocity $v$, simple trigonometry shows that the new state of the car will be
 
 ```latex
-[x + \frac{v}{dt}*\cos{\theta}, y + \frac{v}{dt}*\sin{\theta}, v, \theta]
+[x + v*dt*\cos{(\theta)}, y + v*dt*\sin{(\theta)}, v, \theta]
 ```
 
 *insert demo*
