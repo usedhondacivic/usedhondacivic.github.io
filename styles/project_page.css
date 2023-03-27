@@ -148,13 +148,14 @@ pre {
     max-width: 50%;
     min-width: 50px;
     width: 100%;
-
+    flex-shrink: 100;
 }
 
 #left_pad {
     max-width: 50%;
     min-width: 50px;
     width: 100%;
+    flex-shrink: 100;
 }
 
 .katex-html {
