@@ -96,6 +96,7 @@ article {
     min-width: 600px;
     width: 100%;
     overflow-wrap: anywhere;
+    flex-shrink: 0.2;
 }
 
 article img {
@@ -144,14 +145,14 @@ pre {
 }
 
 #right_pad {
-    max-width: 200px;
+    max-width: 50%;
     min-width: 50px;
     width: 100%;
 
 }
 
 #left_pad {
-    max-width: 200px;
+    max-width: 50%;
     min-width: 50px;
     width: 100%;
 }
