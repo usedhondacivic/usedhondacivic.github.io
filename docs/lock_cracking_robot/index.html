@@ -139,8 +139,7 @@ Clicky will begin speedily trying combinations, and crack the combo!</p>
 <p>The 2nd number + 2 and the 3rd number are congruent mod 4.</p>
 <p>The 2nd and 3rd number are not within two in either direction.</p>
 <p>Using the collected info and these rules, we can narrow the potential combinations from 64,000 down to just eight. Below is the code for the advanced crack:</p>
-<pre><code class="language-clike">
-void advanced_crack(int lck_one, int lck_two, int resist){
+<pre><code class="cpp language-cpp">void advanced_crack(int lck_one, int lck_two, int resist){
     int one, two, three;
 
     one = resist + 5;
@@ -165,8 +164,7 @@ void advanced_crack(int lck_one, int lck_two, int resist){
         }
     }
 }
-</code>
-</pre>
+</code></pre>
 <p>I implemented these rules by using nested for loops just as before, and using continue statements to skip invalid combos.</p>
 <p>The last step was to make the UI. I chose to use the LCD to display info, and the capacitive touch slider paired with the buttons for control. This avoided any additional hardware.</p>
 <p>I used the TA provided library to control the LCD, touch slider, and buttons. I modified them to avoid using the MCUXpresso clock controls (clock_config.h), as I found them to cause side-effects that broke other code.</p>

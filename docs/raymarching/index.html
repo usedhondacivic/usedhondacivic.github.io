@@ -126,26 +126,20 @@ See the code here: <a href="https://github.com/usedhondacivic/ThreeJS-Raymarcher
 <p>SDFs are remarkably efficient, even for many shapes that appear complicated at first glance. Check out <a href="https://iquilezles.org/articles/distfunctions/">Inigo Quilez's site</a> giving SDFs for a huge number of primitives.</p>
 <h3 id="combiningsdfs">Combining SDFs</h3>
 <p>One useful feature of SDF's is how simple they are to combine. The simplest operation is a union, which represents the area inside of either of two shapes. We can find the union of two SDF's by taking the minimum of their two distance fields. This makes sense intuitively as we only care about the minimum distance to any object in the scene.</p>
-<pre><code class="language-js">
-function union(x,y){
+<pre><code class="js language-js">function union(x,y){
     return min(rectangle.sdf(x, y), circle.sdf(x, y))
 }
-</code>
-</pre>
+</code></pre>
 <p>We can also find the intersection of two shapes, defined as the shared area or overlap. In terms of SDFs, we want the area where the SDF of both shapes is &lt; 0. We can find this by taking the max of the two.</p>
-<pre><code class="language-js">
-function intersect(x,y){
+<pre><code class="js language-js">function intersect(x,y){
     return max(rectangle.sdf(x, y), circle.sdf(x, y));
 }
-</code>
-</pre>
+</code></pre>
 <p>Finally, we can subtract one shape from another. This comes curtesy of the "signed" part of SDF. A signed distance field is positive outside the shape and negative inside of the shape. By negating the SDF of a shape we can turn it inside out. Taking the intersection of an inside-out shape with another primitive is equivalent to subtracting the first from the second.</p>
-<pre><code class="language-js">
-function subtract(x,y){
+<pre><code class="js language-js">function subtract(x,y){
     return max(rectangle.sdf(x, y), -circle.sdf(x, y));
 }
-</code>
-</pre>
+</code></pre>
 <p>You can see all three operations in the demo below.</p>
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html" title="2D Demo"></iframe>
 <blockquote>
@@ -157,13 +151,11 @@ function subtract(x,y){
   <p><a href="https://michael-crum.com/ThreeJS-Raymarcher/2d_interp.html">See demo full screen</a></p>
 </blockquote>
 <p>The code to achieve a smooth union is simple and shown below (courtesy of <a href="https://iquilezles.org/articles/smin/">Inigo Quilez</a>).</p>
-<pre><code class="language-clike">
-float opSmoothUnion( float d1, float d2, float k ) {
+<pre><code class="cpp language-cpp">float opSmoothUnion( float d1, float d2, float k ) {
     float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
     return mix( d2, d1, h ) - k*h*(1.0-h); 
 }
-</code>
-</pre>
+</code></pre>
 <p>This implementation is a polynomial interpolation, with the "roundness" of the union controlled by factor k.</p>
 <p>This also works in 3D of course, as shown below.</p>
 <p><em>insert demo</em></p>
