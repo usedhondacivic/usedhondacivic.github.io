@@ -158,10 +158,6 @@ pre {
     flex-shrink: 100;
 }
 
-.katex-html {
-    display: none;
-}
-
 @media only screen and (max-width: 1000px) {
     body {
         flex-direction: column;

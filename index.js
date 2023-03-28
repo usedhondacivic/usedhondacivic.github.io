@@ -3,22 +3,12 @@ const path = require('path');
 const fsExtra = require('fs-extra');
 const glob = require("glob");
 const sharp = require("sharp");
-var showdownKatex = require("showdown-katex");
-var showdown = require('showdown'),
-    converter = new showdown.Converter({
-        extensions: [
-            showdownKatex({
-                displayMode: true,
-                throwOnError: true,
-                errorColor: '#ff0000',
-                delimiters: [
-                    { left: "$", right: "$", display: false },
-                    { left: "$$", right: "$$", display: true },
-                    { left: '~', right: '~', display: false, asciimath: true },
-                ],
-            }),
-        ],
-    });
+const tm = require('markdown-it-texmath');
+var md = require('markdown-it')({ html: true }).use(tm, {
+    engine: require('katex'),
+    delimiters: 'dollars',
+    katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
+});
 
 
 // Grab the templates
@@ -58,7 +48,7 @@ glob("posts/*/*.md", function (er, files) {
         // Populate the content of a project page
         var contents_md = fs.readFileSync(path.resolve(__dirname, path_name), 'utf8');
         contents_md = contents_md.replaceAll(".png", ".webp").replaceAll(".jpg", ".webp").replaceAll(".jpeg", ".webp");
-        var contents_html = converter.makeHtml(contents_md);
+        var contents_html = md.render(contents_md);
         var contents_page = content_template.replaceAll("<!-- TITLE -->", info.title)
             .replace("<!-- CONTENT -->", contents_html)
             .replace("<!-- DATE -->", info.date)

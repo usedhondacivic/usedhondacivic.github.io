@@ -10,7 +10,6 @@
     <meta name="keywords" content="portfolio,developer,robotics,personal">
 
     <!-- display -->
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- icon -->
@@ -20,11 +19,14 @@
     <!-- stylesheets -->
     <link rel="stylesheet" href="../styles/project_page.css">
     <link rel="stylesheet" href="../styles/highlight/styles/base16/bright.min.css">
+    <link rel="stylesheet" href="../styles/katex/katex.min.css">
 
     <!-- syntax highlighting-->
     <script src="../styles/highlight/highlight.min.js"></script>
     <script>hljs.highlightAll();</script>
 
+    <!-- latex support-->
+    <script defer src="../styles/katex/katex.min.js"></script>
 
     <!-- font -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
@@ -102,32 +104,32 @@
             4.12.2022
         </em>
         <br>
-        <h2 id="introduction">Introduction</h2>
+        <h2>Introduction</h2>
 <p>The CNC Combination Cracker (who I call Clicky) is a robot designed to efficiently find the combination to any master lock brand combination lock.
-These are the classic locks you probably associate with your high school locker. 
+These are the classic locks you probably associate with your high school locker.
 First, place the lock in the lock holder and ensure the dial manipulator is seated on the dial.
 Rotate the dial so that the lock is at 0, then press the button on the microcontroller.
 Clicky will begin speedily trying combinations, and crack the combo!</p>
-<iframe width="100%" style="aspect-ratio: 9/5" src="https://www.youtube.com/embed/n434a4aqk5E" title="CNC Combo cracker: ECE 3140 Final project" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+<iframe width="100%" style="aspect-ratio: 9/5" src="https://www.youtube.com/embed/n434a4aqk5E" title="CNC Combo cracker: ECE 3140 Final project" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 <blockquote>
-  <h5 id="clickonthethumbnailtowatchthevideo">click on the thumbnail to watch the video</h5>
+<h5>click on the thumbnail to watch the video</h5>
 </blockquote>
-<h2 id="systemoverview">System Overview</h2>
-<h3 id="hardware">Hardware</h3>
+<h2>System Overview</h2>
+<h3>Hardware</h3>
 <p>Clicky's body is made from clear laser cut acrylic, housing the electronics that make him work. A NEMA 17 stepper motor rotates the dial and an analog feedback servo is used to pull on the shackle and determine if the lock has been opened. All of the electronics are driven through a custom circuit board powered by a wall outlet.</p>
-<h3 id="software">Software</h3>
+<h3>Software</h3>
 <p>I wrote custom stepper and analog servo drivers to control Clicky, as well a library for using the buttons and capacitive touch slider on the FRDM-KL46Z to control a LCD based UI. I also implemented the cracking algorithm, which requires the user to find and enter three binding points on the lock. Using exploits in the master lock's design, the number of combinations is dropped down to 8, which can be attempted in under 30 seconds.</p>
-<h2 id="technicaldescription">Technical Description</h2>
-<h3 id="hardware-1">Hardware</h3>
-<p>The main drivers of Clicky are the NEMA 17 stepper motor and the analog feedback servo motor. </p>
-<p>The quintessential requirement of combination cracking is turning the dial. For this job I chose a stepper motor. Stepper motors are easy to control, fast, and accurate. Steppers are controlled in discrete "steps", each constituting a consistent percentage of a rotation. For the stepper I chose, this was 200 steps per rotation. Given that a master lock has 40 positions, this gives a resolution of 5 steps per number on the lock.</p>
+<h2>Technical Description</h2>
+<h3>Hardware</h3>
+<p>The main drivers of Clicky are the NEMA 17 stepper motor and the analog feedback servo motor.</p>
+<p>The quintessential requirement of combination cracking is turning the dial. For this job I chose a stepper motor. Stepper motors are easy to control, fast, and accurate. Steppers are controlled in discrete &quot;steps&quot;, each constituting a consistent percentage of a rotation. For the stepper I chose, this was 200 steps per rotation. Given that a master lock has 40 positions, this gives a resolution of 5 steps per number on the lock.</p>
 <p>To open the shackle, and I needed a high torque motor that I could control positionally. A standard hobby servo meets these requirements perfectly, but I also needed to determine if the shackle did in fact open. An analog feedback servo offers an feedback signal reporting the actual position of the arm, allowing me to check if the servo was able to pull the shackle out of the lock.</p>
-<p>Once I decided on the components I wanted to use, I was time to build the body of the robot. I used a CAD program named OnShape to design the parts for Clicky. The parts were then either 3D printed in PLA or laser cut from 3/16" acrylic, and assembled using screws. The end result is a clean transparent look with red and pink highlights.</p>
+<p>Once I decided on the components I wanted to use, I was time to build the body of the robot. I used a CAD program named OnShape to design the parts for Clicky. The parts were then either 3D printed in PLA or laser cut from 3/16&quot; acrylic, and assembled using screws. The end result is a clean transparent look with red and pink highlights.</p>
 <p><img src="./assets/ca.webp" alt="CAD for the robot"></p>
 <p>Next, I needed to power and control the motors. Clicky uses a custom circuit board to provide a central source of power and control.</p>
 <p><img src="./assets/circuitboard.webp" alt="The circuit board"></p>
 <p>Power is supplied from a 12V 2A wall adapter, which provides direct power to the stepper motor. I also used a 6V step down to provide power for the FRDM-KL46Z and the servo motor. Due to the nature of DC motors, voltage spikes are unavoidable during operation. To prevent these spikes from disrupting the power to the FRDM-KL46Z, I added a 100 microfarad capacitor across the supply lines. To control the stepper motor, I used Allegro’s A4988 stepper driver. The driver is capable of powering the 2A stepper at full power, and supplies an simple control scheme for direction and position. Finally, I routed all of the signal, power, and ground connections to a central bus that is broken out to connect to the FRDM-KL46Z with minimal lose wires.</p>
-<h3 id="software-1">Software</h3>
+<h3>Software</h3>
 <p>Before I could work on the cracking algorithm, I needed to write drivers for my peripherals.</p>
 <p>The A4988 stepper driver accepts three inputs for control. These are ENABLE, DIRECTION, and STEP. ENABLE is self explanatory, and I use it to activate and deactivate the stepper. DIRECTION controls the direction of rotation, and STEP converts each low-high transition into a step of the motor. Because the stepper's operation is never interrupted by another routine, I chose to generate the low-high pulses using simple for-loop waits. I also implemented functions to go to certain positions, guided by an accumulator to keep track of the current location of the motor. This will be useful later to hit specific numbers in a combination.</p>
 <p>Next is control of the servo. Servo motors are controlled with PWM (pulse width modulation). My servo uses a frequency of 50 Hz, and pulses that range from 500 to 2000 microseconds. The width of the pulse decides the location of the servo. The FRDM-KL46Z includes a dedicated PWM peripheral called the TPM (timer / PWM module). I followed the chapter in the reference manual to configure the correct registers, then used a digital logic analyzer to verify that my pulses were the correct size. Shown bellow is a 500 microsecond pulse generated by the TPM.</p>
@@ -143,30 +145,30 @@ Clicky will begin speedily trying combinations, and crack the combo!</p>
 <p>The 2nd number + 2 and the 3rd number are congruent mod 4.</p>
 <p>The 2nd and 3rd number are not within two in either direction.</p>
 <p>Using the collected info and these rules, we can narrow the potential combinations from 64,000 down to just eight. Below is the code for the advanced crack:</p>
-<pre><code class="cpp language-cpp">void advanced_crack(int lck_one, int lck_two, int resist){
-    int one, two, three;
+<pre><code class="language-cpp">void advanced_crack(int lck_one, int lck_two, int resist){
+	int one, two, three;
 
-    one = resist + 5;
+	one = resist + 5;
 
-    for(two = 0; two &lt; 40; two++){
-        if(one == two) continue;
-        for(three = 0; three &lt; 40; three++){
-            if(two == three) continue;
-            if(three % 10 != lck_one &amp;&amp; three % 10 != lck_two) continue;
-            if(three % 4 != one % 4) continue;
-            if((two + 2) % 4 != three % 4) continue;
-            if(three - two &lt;= 2 &amp;&amp; three - two &gt;= -2) continue;
-            display_combo(one, two, three);
-            if(try_combo(one, two, three)){
-                return; //Unlocked!
-            }
+	for(two = 0; two &lt; 40; two++){
+		if(one == two) continue;
+		for(three = 0; three &lt; 40; three++){
+			if(two == three) continue;
+			if(three % 10 != lck_one &amp;&amp; three % 10 != lck_two) continue;
+			if(three % 4 != one % 4) continue;
+			if((two + 2) % 4 != three % 4) continue;
+			if(three - two &lt;= 2 &amp;&amp; three - two &gt;= -2) continue;
+			display_combo(one, two, three);
+			if(try_combo(one, two, three)){
+				return; //Unlocked!
+			}
 
-            if(three != 0){
-                go_to_number_right(0);
-            }
+			if(three != 0){
+				go_to_number_right(0);
+			}
 
-        }
-    }
+		}
+	}
 }
 </code></pre>
 <p>I implemented these rules by using nested for loops just as before, and using continue statements to skip invalid combos.</p>
@@ -175,21 +177,22 @@ Clicky will begin speedily trying combinations, and crack the combo!</p>
 <p>The UI is used to enter found positions for advanced mode, and to display the current combination attempt while cracking. To enter a number, tap the sides of the slider to go up or down. Use the right button to confirm the selection, and hit the left button to begin cracking.</p>
 <p>Entering the positions happens before cracking, so I could use polling without interrupting the stepper driver. I poll both the button and the touch slider and update the relevant variables accordingly.</p>
 <p>Once cracking begins, I need to display the combo without interrupting the stepper driver. Additionally, the LCD can only display 4 digits which is not enough for a full combo. I chose to use PIT interrupts to solve this issue, and cycle through the numbers to display the full combo. The last number is followed by a decimal, so that the order of the numbers is obvious.</p>
-<p>When the lock is opened, the LCD continues to display the combo so the user will know what the combination was. </p>
-<h2 id="testing">Testing</h2>
+<p>When the lock is opened, the LCD continues to display the combo so the user will know what the combination was.</p>
+<h2>Testing</h2>
 <p>To make sure that my design was feasible, I tested each individual component as I built the system. The stepper motor and driver are the most crucial part of the bot, so they came first. I ensured accuracy by commanding a variety of different steps and ensuring that I could return back to a consistent zero position each time. With the stepper working, I was also able to try my first cracking attempt, where I already knew the combo and made the stepper go to those positions. When that worked, I knew that it was sufficiently accurate for the job.</p>
-<p>Adding the servo into the mix caused some issues. The first issue was with current draw. When stalled, I estimated that the servo could draw 1 A of current. When tested, it was drawing closer to 1.5 A, and causing the FRDM-KL46Z to lose power. I fixed this by adding capacitance across the power supply lines to stop voltage spikes, and switching to a power supply rated for higher amperage. </p>
+<p>Adding the servo into the mix caused some issues. The first issue was with current draw. When stalled, I estimated that the servo could draw 1 A of current. When tested, it was drawing closer to 1.5 A, and causing the FRDM-KL46Z to lose power. I fixed this by adding capacitance across the power supply lines to stop voltage spikes, and switching to a power supply rated for higher amperage.</p>
 <p>A second issue was the strength of the servo. I positioned the servo close to the stepper, with a fairly short arm to reach out and lift the shackle. I underestimated the amount of force required, so the shackle would sometimes not open. To remedy this, I added a spring to assist the servo in its upward motion.</p>
-<p>Finally I used stress testing to test the rest of the system. Cracking a master lock with no prior knowledge takes upwards of 64,000 attempts, which takes Clicky 36 hours straight. This served as the ultimate stress test, and I left it running for a day and a half. The system managed to open the lock after only 20 hours, and displayed the correct combination when finished. </p>
-<h2 id="furtherdocumentation">Further documentation</h2>
+<p>Finally I used stress testing to test the rest of the system. Cracking a master lock with no prior knowledge takes upwards of 64,000 attempts, which takes Clicky 36 hours straight. This served as the ultimate stress test, and I left it running for a day and a half. The system managed to open the lock after only 20 hours, and displayed the correct combination when finished.</p>
+<h2>Further documentation</h2>
 <p><a href="https://github.com/usedhondacivic/ECE-3140-Lock-Cracking-Robot">GitHub Repository</a></p>
 <p><a href="https://cad.onshape.com/documents/05aac48a55782d85d245cccd/w/e7e86bb57175dc86d1433f3c/e/72aafb165d7a97047a56eae0?renderMode=0&amp;uiState=6288668d62c0193394baf0e8">CAD document</a></p>
-<h2 id="additionalresourcesused">Additional Resources Used</h2>
+<h2>Additional Resources Used</h2>
 <p><a href="https://samy.pl/master/master.html">Samy Kamkar's fantastic build</a></p>
 <p>Thanks to the Cornell Maker Club for letting me use their equipment and space</p>
 <p>Thanks to the RPL for their laser cutting service</p>
 <p><a href="https://www.omc-stepperonline.com/nema-17-bipolar-59ncm-84oz-in-2a-42x48mm-4-wires-w-1m-cable-connector-17hs19-2004s1">NEMA 17 Stepper Motor</a></p>
 <p><a href="https://www.adafruit.com/product/1404">Analog feedback servo</a></p>
+
     </article>
     <div id="right_pad"></div>
 </body>

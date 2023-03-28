@@ -1,3 +1,10 @@
+$$
+\begin{bmatrix}
+a & b \\
+c & d 
+\end{bmatrix}
+$$
+
 *Paint light into ethereal floating images using a Raspberry Pi Pico MCU*
 
 ![Three examples of the POV Display running](./assets/POV_banner-min.png)
@@ -38,7 +45,7 @@ One of the key design choices for a POV display is how to power the rotor. Becau
 
 ![Inductive coil mounted on the bottom of the arm](./assets/figure5_arm_coil.png)
 
-Figure 5: Inductive coil mounted on the bottom of the arm
+> *Figure 5: Inductive coil mounted on the bottom of the arm*
 
 Finally, we need to spin the rotor. We used a spare motor found around the lab, but most motors will do. Our motor used 18W to achieve 1800 RPM (equivalent to 30 fps), so look for something in that range if you build this project yourself. This motor is powered by a motor speed controller built from a second PI Pico and an HBridge. This allowed us to control the motor speed precisely, but a bench supply would also suffice.
 
@@ -103,7 +110,9 @@ We are now almost ready to display the image, but we still need one more piece o
 
 This hall effect sensor provides a stable zero point and the period of the arms rotation. By dividing the period by the number of pixels per rotation, we get the amount of time that each “slice” of the image should be displayed. This is easy to keep track of using an MCU, and we accomplished it using the yield functionality of our thread library. We determined the yield time using the following formula:
 
+```plaintext
 yieldtime = (period of rotation / changes per rotations)- LED update time
+```
 
 Now we can update the LEDs! We chose APA102 LEDs because they use the high-speed SPI protocol to communicate. This has the additional benefit of allowing us to use the Pico’s SPI peripheral to simplify the driver. The LEDs expect packets that are broken into "frames" of 32 bits. Each message begins with a start frame of 32 0's and ends with an end frame of 32 1's. In between, each frame represents the data for a single LED in the strip. A LED frame starts with 111, then is followed by five bits representing the brightness of the LED. This is followed by 8 bits for each of blue, green, and red, giving 256 values for each.
 
