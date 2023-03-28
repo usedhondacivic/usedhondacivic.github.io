@@ -72,8 +72,7 @@ The 2nd and 3rd number are not within two in either direction.
   
 Using the collected info and these rules, we can narrow the potential combinations from 64,000 down to just eight. Below is the code for the advanced crack:
 
-<pre>
-<code class="language-clike">
+```cpp
 void advanced_crack(int lck_one, int lck_two, int resist){
 	int one, two, three;
 
@@ -99,8 +98,7 @@ void advanced_crack(int lck_one, int lck_two, int resist){
 		}
 	}
 }
-</code>
-</pre>
+```
 
 I implemented these rules by using nested for loops just as before, and using continue statements to skip invalid combos.
 

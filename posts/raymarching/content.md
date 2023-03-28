@@ -1,10 +1,10 @@
-
 This write up is under construction, come back soon for more :)
 See the code here: [https://github.com/usedhondacivic/ThreeJS-Raymarcher](https://github.com/usedhondacivic/ThreeJS-Raymarcher)
 
 *Warning: Some demos on this page are graphically demanding. I recommend enabling GPU acceleration for your web browser for the best experience.*
 
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb" title="Raymarching Demo"></iframe>
+
 > *Click and drag to rotate, scroll to zoom, right click to pan.*
 
 > [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb)
@@ -41,33 +41,27 @@ SDFs are remarkably efficient, even for many shapes that appear complicated at f
 
 One useful feature of SDF's is how simple they are to combine. The simplest operation is a union, which represents the area inside of either of two shapes. We can find the union of two SDF's by taking the minimum of their two distance fields. This makes sense intuitively as we only care about the minimum distance to any object in the scene.
 
-<pre>
-<code class="language-js">
+```js
 function union(x,y){
     return min(rectangle.sdf(x, y), circle.sdf(x, y))
 }
-</code>
-</pre>
+```
 
 We can also find the intersection of two shapes, defined as the shared area or overlap. In terms of SDFs, we want the area where the SDF of both shapes is < 0. We can find this by taking the max of the two.
 
-<pre>
-<code class="language-js">
+```js
 function intersect(x,y){
     return max(rectangle.sdf(x, y), circle.sdf(x, y));
 }
-</code>
-</pre>
+```
 
 Finally, we can subtract one shape from another. This comes curtesy of the "signed" part of SDF. A signed distance field is positive outside the shape and negative inside of the shape. By negating the SDF of a shape we can turn it inside out. Taking the intersection of an inside-out shape with another primitive is equivalent to subtracting the first from the second.
 
-<pre>
-<code class="language-js">
+```js
 function subtract(x,y){
     return max(rectangle.sdf(x, y), -circle.sdf(x, y));
 }
-</code>
-</pre>
+```
 
 You can see all three operations in the demo below.
 
@@ -83,14 +77,12 @@ Another popular and immensely satisfying method is to interpolate between SDFs. 
 
 The code to achieve a smooth union is simple and shown below (courtesy of [Inigo Quilez](https://iquilezles.org/articles/smin/)).
 
-<pre>
-<code class="language-clike">
+```cpp
 float opSmoothUnion( float d1, float d2, float k ) {
     float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
     return mix( d2, d1, h ) - k*h*(1.0-h); 
 }
-</code>
-</pre>
+```
 
 This implementation is a polynomial interpolation, with the "roundness" of the union controlled by factor k.
 
