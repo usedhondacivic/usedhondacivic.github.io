@@ -1,10 +1,3 @@
-$$
-\begin{bmatrix}
-a & b \\
-c & d 
-\end{bmatrix}
-$$
-
 *Paint light into ethereal floating images using a Raspberry Pi Pico MCU*
 
 ![Three examples of the POV Display running](./assets/POV_banner-min.png)
