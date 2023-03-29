@@ -26,7 +26,7 @@ $$
 
 *insert demo*
 
-In physical terms, this represents a car that experiences no forces orthogonal to its velocity whatsoever. This means it can perform infinitely sharp turns and move instantaneously in any direction. While this would be ideal for a real race car driver (until they die from the g-forces), its doesn't lead to fun gameplay. Perfect control doesn't lend itself to mastery or chaotic games, so we need to update the formula a bit.
+In physical terms this represents a car that experiences no forces orthogonal to its velocity and can perform infinitely sharp turns. While this would be ideal for a real race car driver (until they die from the g-forces), its doesn't lead to fun gameplay. Perfect control doesn't lend itself to mastery or chaotic games, so we need to update the formula a bit.
 
 To get a more accurate model of the car, we need to think about what is actually going on with a car. When the engine applies power to the wheels, it accelerates the car forward with respect to the cars body. Because the current heading of the body might not be in line with the heading of the velocity, we need to represent velocity as a vector as well .
 
@@ -35,6 +35,8 @@ To get a more accurate model of the car, we need to think about what is actually
 ### Simulating Driving Surfaces
 
 ## Creating Maps
+
+## AI
 
 ## Netcode
 

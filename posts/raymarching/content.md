@@ -104,6 +104,20 @@ Ambient occlusion refers to the effect that ambient light has on the shading of 
 
 *insert demo*
 
+### Calculating Normals
+
+Suppose we want to render a light in our scene. Using ray marching we can calculate the point $p$ on the scene that a ray of light hits, but for a realistic effect we also need to know which way it's going to bounce. If we know what direction the surface is facing at point $p$, we can use simple geometry to determine the angle of reflection, but how do we calculate the direction of the surface?
+
+If you've gotten this far in the article you probably know that the "surface direction" I'm referring to is formally known as a normal vector, and is defined as a vector orthogonal to the scene at a point.
+
+You can also think of the normal vector as the direction you travel to increase your distance from the surface as quickly as possible. This interpretation is very convenient when working with SDF's because it implies that the gradient of the SDF is normal to the scene. For those unfamiliar with multi-variable calculus, the gradient of a function is the multi-dimensional analog of the derivative. It is a vector quantity who's value in each dimension is the rate of change of the function with respect to that direction. We can use finite differences to cheaply calculate the gradient, then use that for our lighting calculations.
+
+*insert code snippet*
+
+*insert graphics demo*
+
+You may have noticed that this method assumes nothing about the contents of the scene. Because of it's generality this lighting will work on any subject, no matter how complex.
+
 ### Fractal Distance Fields
 
 Many fractals have efficient approximations to their distance fields, allowing them to be rendered in real time. The derivation is beyond the scope of this article (see the references below for more info), but the results are too mesmerizing to not feature in this writeup.
@@ -116,19 +130,27 @@ We can also generate our own fractals through clever use of domain repetition an
 
 ## My Implementation
 
+So all of that theory is cool, but how do we actually implement it? You may have noticed that each pixel on the screen is computed separately from every other pixel, so the most performant implementation would calculate them all concurrently. Luckily, modern hardware is highly optimized for exactly this operation. You have probably heard of the Graphics Processing Unit (GPU), a part of your computer who's sole job is to run huge parallel processing loads quickly. Using the GPU to aid rendering is known as hardware accelerated rendering, and it enables real-time rendering of remarkably complicated scenes.
+
+### WebGL and Shaders
+
+WebGL is a widely used API for interfacing with the GPU, and the one I used for my experiments. It is a brother of OpenGL, but focused on browser based uses. The inner workings of WebGL are convoluted and worthy of a whole other article, so I will just give a surface level summary here. The programs we use to interface with the GPU are called shaders, and come in two primary types.
+
+The first is a vertex shader. A vertex shader takes the vertices of the geometry on the scene and is responsible for adding effects to them. This is often converting them from 3D world space to 2D screen space, but can theoretically be any effect you want.
+
+The second is a fragment shader. After the vertex shader has completed, the triangles are passed to a rasterizer. The rasterizer determines which pixels are inside the triangles and generates a "fragment" for each one. These fragments are passed to the fragment shader, which decides their color. 
+
 One popular tool for experimenting with shaders is [Shadertoy](https://www.shadertoy.com/), a website that allows you to write, play with, and share shaders with minimal setup time. I highly recommend this route if you care primarily about making cool stuff quickly. I wanted to gain a deeper understanding of the underlying technologies and be able to embed my work into other applications, so I setup my own stack.
+
+### My Stack
 
 I first attempted the purist approach of a C++ implementation using OpenGL through the GLFW3 and GLAD libraries. This is the most performant solution but comes with the downside of having to recompile the code each time I tweaked the shader. This could be solved using some kind of live reload functionality, but I decided it wasn't worth the time to try and solve. Additionally, it would be difficult to display the results on this website. My work in this direction is linked in the "More Resources" section below if you'd like to give it a try.
 
 Instead I turned to the popular Javascript graphics library Three.js. Three has a boat load of awesome functionalities, including WebGL support. WebGL is, as you might have guessed, a browser based implementation of OpenGL, allowing me to render my shaders directly to a `<canvas>` element.
 
-### Using Three.js and GLSL
-
-*explain fragment and vertex shaders*
-
 ### Pixel Shaders
 
-A ray marching is a function called on each pixel of the display, so therefore we want a fragment corresponding to every location in the viewport. I achieved this by generating a plane of size (2, 2) and centering it on the x, y plane. I then applied a vertex shader that maps the real-world coordinates of the planes mesh into viewport coordinates. Because viewport coordinates range from -1 to 1, this causes the plane to cover the whole viewport. Here is the code for the plane and for the vertex shader:
+A ray marching is a function called on each pixel of the display, so therefore we want a fragment corresponding to every location in the viewport. I achieved this by generating a plane of size (2, 2) and centering it on the x, y plane. I then applied a vertex shader that maps the real-world x-y coordinates of the planes mesh into viewport x-y coordinates. Because viewport coordinates range from -1 to 1, this causes the plane to cover the whole viewport, regardless of size. Here is the code for the plane and for the vertex shader:
 
 *insert code*
 
