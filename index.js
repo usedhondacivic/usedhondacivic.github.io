@@ -26,7 +26,9 @@ fsExtra.copySync(path.resolve(__dirname, 'styles'), path.resolve(__dirname, 'doc
 var pages = new Object();
 var info_arr = [];
 var sidebar = [];
+var sidebar_bits = [];
 var homepage_entries = [];
+var homepage_entries_bits = [];
 
 // Copy a folder of images, and convert them to WebP to reduce loading time
 function resize_and_relocate(src_dir, target_dir) {
@@ -42,7 +44,7 @@ function resize_and_relocate(src_dir, target_dir) {
 }
 
 // Iterate over all of the posts
-glob("posts/*/*.md", function (er, files) {
+glob("projects/*/*.md", function (er, files) {
     files.forEach(path_name => {
         var info = JSON.parse(fs.readFileSync(path.resolve(__dirname, path_name.replace("content.md", "info.json"))));
         // Populate the content of a project page
@@ -53,7 +55,7 @@ glob("posts/*/*.md", function (er, files) {
             .replace("<!-- CONTENT -->", contents_html)
             .replace("<!-- DATE -->", info.date)
             .replace("<!-- DESCRIPTION -->", info.description);
-        var new_path = path_name.replace("posts", "docs").replace("/content.md", "");
+        var new_path = path_name.replace("projects", "docs").replace("/content.md", "");
         pages[new_path] = contents_page;
         // Copy assets
         resize_and_relocate(path_name.replace("/content.md", "/assets"), new_path + '/assets');
@@ -70,7 +72,11 @@ glob("posts/*/*.md", function (er, files) {
             .replace("<!-- DATE -->", info.date)
             .replaceAll("project_link", ".." + info.rel_post_link)
             .replace("snapshot_link", ".." + info.rel_snapshot_link);
-        sidebar.push(sidebar_entry);
+        if (info.bits) {
+            sidebar_bits.push(sidebar_entry);
+        } else {
+            sidebar.push(sidebar_entry);
+        }
         // Create home page entry
         var homepage_entry = homepage_entry_template.replace("<!-- TITLE -->", info.title)
             .replace("<!-- DATE -->", info.date)
@@ -79,16 +85,22 @@ glob("posts/*/*.md", function (er, files) {
             .replace("<!-- TOOLS -->", info.tools ? "Tools used: " + info.tools : "")
             .replaceAll("post_link", "." + info.rel_post_link)
             .replace("snapshot_link", "." + info.rel_snapshot_link);
-        homepage_entries.push(homepage_entry);
+        if (info.bits) {
+            homepage_entries_bits.push(homepage_entry);
+        } else {
+            homepage_entries.push(homepage_entry);
+        }
     })
     // Write the html files for each project to the docs folder
     for (const [path_loc, html] of Object.entries(pages)) {
-        var content = html.replace("<!-- NAV -->", sidebar.join("\n"));
+        var content = html.replace("<!-- NAV -->", sidebar.join("\n"))
+            .replace("<!-- NAV_BITS -->", sidebar_bits.join("\n"));
         fs.mkdirSync(path_loc, { recursive: true });
         fs.writeFileSync(path.resolve(__dirname, path_loc, "index.html"), content);
     }
     // Write the home page to the docs folder
-    var content = index_template.replace("<!-- PROJECTS -->", homepage_entries.join("\n"));
+    var content = index_template.replace("<!-- PROJECTS -->", homepage_entries.join("\n"))
+        .replace("<!-- BITS -->", homepage_entries_bits.join("\n"));
     fs.writeFileSync(path.resolve(__dirname, "docs/index.html"), content);
     // Write global assets to the docs folder
     fsExtra.copySync(path.resolve(__dirname, "global_assets"), path.resolve(__dirname, "docs/global_assets"));
