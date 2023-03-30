@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Building My Own Static Site Generator | Michael Crum's Portfolio</title>
+    <title>Building a 100 Line Static Site Generator | Michael Crum's Portfolio</title>
 
     <!-- seo -->
     <meta name="author" content="Michael Crum">
@@ -115,9 +115,9 @@
             <ul>
                 <li>
     <a href="../static_page_gen">
-        <img src="../static_page_gen/assets/snapshot.webp" alt="Building My Own Static Site Generator">
+        <img src="../static_page_gen/assets/snapshot.webp" alt="Building a 100 Line Static Site Generator">
         <div>
-            <p>Building My Own Static Site Generator</p>
+            <p>Building a 100 Line Static Site Generator</p>
             <em> 3.30.2023</em>
         </div>
     </a>
@@ -127,15 +127,234 @@
     </aside>
     <article id="article">
         <h1>
-            Building My Own Static Site Generator
+            Building a 100 Line Static Site Generator
         </h1>
         <em class="date">
             3.30.2023
         </em>
         <br>
-        <h2>WIP</h2>
-<p>This write up is under construction, come back soon for more :)
-See the code here: <a href="https://github.com/usedhondacivic/usedhondacivic.github.io">https://github.com/usedhondacivic/usedhondacivic.github.io</a></p>
+        <p>See the code here: <a href="https://github.com/usedhondacivic/usedhondacivic.github.io">https://github.com/usedhondacivic/usedhondacivic.github.io</a></p>
+<h2>Warning</h2>
+<p>This page contains sarcastic and derogatory comments about Javascript developers. I'm sorry, I don't mean it, but y'all make it way too easy. Email me if you want to schedule a fist fight.</p>
+<h2>Motivation</h2>
+<p>Building a static website is wayyyy harder than it should be. That isn't to say its that difficult, there are <a href="https://jamstack.org/generators/">plenty</a> of static site generators out there, but investing time into the hellscape of ever changing Javascript frameworks seems futile when something new is just going to pop up tomorrow. For what is essentially a glorified cut and paste, it seems like a lot of effort.</p>
+<p>For all the Javascript experts reading this and foaming at the mouth right now, firstly congrats on learning how to read. Secondly, I know that these approaches come with server side rending and client side route transitions and all the all the bells and whistles that make your ears perk up. And you're right, but for almost all hobbyist applications these features are way overkill. I want a website that features my projects, not one that takes precious time away from working on them. So simple is better, and why not make it into a learning experience along the way.</p>
+<h2>Building My Own Glorified Cut and Paste</h2>
+<h3>Structure</h3>
+<p>I started by deciding how I wanted to structure and store the information for my site. I decided to use Markdown, a wildly popular language for creating formatted text. Markdowns power comes from its simplicity, matching my goal with the website as a whole.</p>
+<p>As an example, here is this section in rendered form, markdown form, and the html generated from the markdown.</p>
+<p>Oh, and heres some fancy things you can do as a showcase:</p>
+<p><em>italics</em>, <code>code</code>, <strong>bold</strong></p>
+<ol>
+<li>Numbered list!</li>
+<li>Hi :)</li>
+</ol>
+<pre><code class="language-markdown">### Structure
+
+I started by deciding how I wanted to structure and store the information for my site. For the content, I decided to use Markdown. Markdown is a wildly popular language for creating formatted text, using only the text itself.
+
+As an example, here is this section in rendered form, markdown form, and the html generated from the markdown.
+
+Oh, and heres some fancy things you can do as a showcase:
+
+*italics*, `code`, **bold**
+
+1. Numbered list!
+2. Hi :)
+</code></pre>
+<pre><code class="language-html">&lt;h3&gt;Structure&lt;/h3&gt;
+&lt;p&gt;I started by deciding how I wanted to structure and store the information for my site. For the content, I decided to use Markdown. Markdown is a wildly popular language for creating formatted text, using only the text itself.&lt;/p&gt;
+&lt;p&gt;As an example, here is this section in rendered form, markdown form, and the html generated from the markdown.&lt;/p&gt;
+&lt;p&gt;Oh, and heres some fancy things you can do as a showcase:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;italics&lt;/em&gt;, &lt;code&gt;code&lt;/code&gt;, &lt;strong&gt;bold&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Numbered list!&lt;/li&gt;
+&lt;li&gt;Hi :)&lt;/li&gt;
+&lt;/ol&gt;
+</code></pre>
+<p>Markdown also allows for raw html to be inserted into the article, allowing me to use iframes for all of my demos. That way each project can host its own demos on its own site, decoupling the projects from the write-ups.</p>
+<p>I also needed to store meta information about each article, like the title, date, description, ect. I once again chose the easiest and most popular option, json. Here is the info.json file for this writeup:</p>
+<pre><code class="language-json">{
+    &quot;title&quot;: &quot;Building My Own Static Site Generator&quot;,
+    &quot;description&quot;: &quot;Webpage generating frameworks are, to put it kindly, a huge pain. Instead of learning how to use someone else's package, I decided to spend a weekend writing my own! The system was designed for simplicity and maintainability, and is just over 100 lines of code. Oh, and it generated the website you're on right now!&quot;,
+    &quot;date&quot;: &quot;3.30.2023&quot;,
+    &quot;tech&quot;: &quot;Node.js, HTML, CSS, Javascript&quot;,
+    &quot;bits&quot;: &quot;true&quot;
+}
+</code></pre>
+<p>Finally, I need a way to organize all of the assets for the page. I used a simple folder.</p>
+<p>All of these elements are grouped into a folder, and placed under the /projects directory. Here's the full stack for my ray marching article:</p>
+<p><img src="./assets/stack.webp" alt="The stack"></p>
+<h3>Templates</h3>
+<p>To keep the structure all nice and modular, I built templates for the home page, project page, various list entries. The list entries are what you see on the left and under the projects section on the home page. Using templates allows for the content to be completely decoupled from the structure of the website, and be reusable if I ever decide to redesign or relocate. Where the content goes is designated by HTML comments, as shown below:</p>
+<pre><code class="language-html">&lt;article id=&quot;article&quot;&gt;
+    &lt;h1&gt;
+        &lt;!-- TITLE --&gt;
+    &lt;/h1&gt;
+    &lt;em class=&quot;date&quot;&gt;
+        &lt;!-- DATE --&gt;
+    &lt;/em&gt;
+    &lt;br&gt;
+    &lt;!-- CONTENT --&gt;
+&lt;/article&gt;
+</code></pre>
+<h3>From Markdown to HTML</h3>
+<p>Once all of the content has been filled in, it must be converted into HTML to be served as a webpage. I used a Node.js script for this purpose, because when in webdev, do as the web devs do.</p>
+<p>A popular solution for generating HTML from Markdown is the npm package <a href="https://github.com/markdown-it/markdown-it">markdown-it</a>. Its easy to use and comes with a rich variety of plugins, so it was a natural fit.</p>
+<p>Using it is as simple as:</p>
+<pre><code class="language-js">var md = require('markdown-it');
+
+md.render(&quot;# This will generate an H1 tag&quot;);
+</code></pre>
+<p>Given that I often stray into some complex math, I wanted to include support for Latex. Luckily, markdown-it has a pluggin for katex, a browser based Latex renderer. Installing it is simple:</p>
+<pre><code class="language-js">const tm = require('markdown-it-texmath');
+var md = require('markdown-it')({ html: true }).use(tm, {
+    engine: require('katex'),
+    delimiters: 'dollars',
+    katexOptions: { macros: { &quot;\\RR&quot;: &quot;\\mathbb{R}&quot; } }
+});
+</code></pre>
+<p>I also want to note (maybe its obvious, but it messed me up big time), that Katex needs its own stylesheet and Javascript to work properly. Don't be like me kids, install your dependencies on the front end too.</p>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;../styles/katex/katex.min.css&quot;&gt;
+&lt;script defer src=&quot;../styles/katex/katex.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>And now I can use over complicated math expressions to my heart's desire!</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msubsup><mo>∫</mo><mrow><mo>−</mo><mi mathvariant="normal">∞</mi></mrow><mi mathvariant="normal">∞</mi></msubsup><mi>f</mi><mover accent="true"><mo stretchy="false">(</mo><mo>^</mo></mover><mi>ξ</mi><mo stretchy="false">)</mo><mtext> </mtext><msup><mi>e</mi><mrow><mn>2</mn><mi>π</mi><mi>i</mi><mi>ξ</mi><mi>x</mi></mrow></msup><mtext> </mtext><mi>d</mi><mi>ξ</mi></mrow><annotation encoding="application/x-tex">
+f(\relax{x}) = \int_{-\infty}^\infty
+    f\hat(\xi)\,e^{2 \pi i \xi x}
+    \,d\xi
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3846em;vertical-align:-0.9703em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.44445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4143em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">∞</span></span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">∞</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9703em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0134em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mopen">(</span></span><span style="top:-3.319em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.25em;"><span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.04601em;">ξ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight">πi</span><span class="mord mathnormal mtight" style="margin-right:0.04601em;">ξ</span><span class="mord mathnormal mtight">x</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.04601em;">ξ</span></span></span></span></span></eqn></section><h3>The Gory Details</h3>
+<p>The details of actually crawling the posts and generating the HTML is honestly better explained in code. See the full listing below if you're interested, but it boils down to crawling the project folder and calling .replace() many times to fill in the relevant fields. As the pages are crawled, a sidebar and homepage entry is also generated and added to a list. Once all pages are generated, I add the relevant sidebars and copy them to the /docs folder.</p>
+<p>Here are the libraries I used for assistance:</p>
+<p>I used <a href="https://www.npmjs.com/package/glob">glob</a> to crawl the /projects folder and handle processing of each post.</p>
+<p>For writing, copying, and deleting files I used <a href="https://www.npmjs.com/package/fs-extra">fs-extra</a>, a superset of the normal Node.js tools that allows for things like copying whole folders.</p>
+<h3>Making it Pretty</h3>
+<p>Because code is a huge part of my work, pretty syntax highlighting is a big deal. After shopping around a bit, I settled on <a href="https://highlightjs.org/">highlight.js</a>. Complete with hundred of themes and automatic language detection, its the whole package. And installing it was super easy:</p>
+<pre><code class="language-html">&lt;!-- syntax highlighting--&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../styles/highlight/styles/base16/bright.min.css&quot;&gt;
+&lt;script src=&quot;../styles/highlight/highlight.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;hljs.highlightAll();&lt;/script&gt;
+</code></pre>
+<h2>Hosting</h2>
+<p>Github Pages is the king of convenience, and so it was my go-to. On top of being already integrated into my source control, its free! I setup Pages serve from my /docs folder, and it was just that easy. It also offers configuration scripts for doing stuff like only deploying when a new release is created, but I opted to just serve directly from the main branch. I feel that mistakes and works in progress are an integral part of the design process, and make my site feel more genuine and homely.</p>
+<h2>Analytics</h2>
+<p>This one is a source of moral debate for me, one that I haven't quite decided on. First and foremost, I'm a nosey and curious bastard. I want to know who's on my site and what they're doing, just because how could I not? The issues is that comes with technical and privacy concerns.</p>
+<p>The king of the analytics world is <a href="https://analytics.google.com/analytics/web/provision/#/provision">Google Analytics</a>, but is rife with <a href="https://secureprivacy.ai/blog/what-is-google-analytics-and-does-it-comply-with-gdpr#:~:text=Google%20Analytics%20and%20other%20modern,cannot%20be%20considered%20privacy%2Dfriendly.">privacy concerns</a>. It is also not GDPR compliant, which isn't an issue for my simple site but is never a good sign.</p>
+<p>What other options do little guys like me have though? The one I'm currently working with is <a href="https://matomo.org/">Matomo</a>, but given the hefty price-tag it's not a partnership thats likely to last. The service is open source however, so I could spin up my own server using a Raspberry Pi or AWS. That's a whole other project though, and it remains to be seen if my moral compass or my wallet has a stronger hold on my actions.</p>
+<h2>The Result</h2>
+<p>This system was used to generate the website you're reading right now! Wow, an article about the website that generated it, so meta, so cool.</p>
+<p>Here's the repository containing the code and all the files: <a href="https://github.com/usedhondacivic/usedhondacivic.github.io">https://github.com/usedhondacivic/usedhondacivic.github.io</a></p>
+<p>And heres a full listing of the 100(ish) lines of code that contain all the magic:</p>
+<pre><code class="language-js">const fs = require('fs');
+const path = require('path');
+const fsExtra = require('fs-extra');
+const glob = require(&quot;glob&quot;);
+const sharp = require(&quot;sharp&quot;);
+const tm = require('markdown-it-texmath');
+var md = require('markdown-it')({ html: true }).use(tm, {
+    engine: require('katex'),
+    delimiters: 'dollars',
+    katexOptions: { macros: { &quot;\\RR&quot;: &quot;\\mathbb{R}&quot; } }
+});
+
+
+// Grab the templates
+const index_template = fs.readFileSync(path.resolve(__dirname, 'templates/index.html'), 'utf8');
+const homepage_entry_template = fs.readFileSync(path.resolve(__dirname, 'templates/homepage_entry.html'), 'utf8');
+const sidebar_entry_template = fs.readFileSync(path.resolve(__dirname, 'templates/sidebar_entry.html'), 'utf8');
+const content_template = fs.readFileSync(path.resolve(__dirname, 'templates/content.html'), 'utf8');
+
+// Clean the docs directory
+fsExtra.emptyDirSync(path.resolve(__dirname, 'docs'));
+
+// Copy over styles
+fsExtra.copySync(path.resolve(__dirname, 'styles'), path.resolve(__dirname, 'docs/styles'))
+
+var pages = new Object();
+var info_arr = [];
+var sidebar = [];
+var sidebar_bits = [];
+var homepage_entries = [];
+var homepage_entries_bits = [];
+
+// Copy a folder of images, and convert them to WebP to reduce loading time
+function resize_and_relocate(src_dir, target_dir) {
+    fs.mkdirSync(target_dir, { recursive: true });
+    glob(src_dir + &quot;/**&quot;, function (er, files) {
+        files.forEach(path_name =&gt; {
+            let file_split = path_name.split(&quot;/&quot;);
+            let file_name = file_split[file_split.length - 1];
+            if (file_name == &quot;assets&quot;) return;
+            sharp(path_name).toFile(target_dir + &quot;/&quot; + file_name.split(&quot;.&quot;)[0] + &quot;.webp&quot;);
+        })
+    })
+}
+
+// Iterate over all of the posts
+glob(&quot;projects/*/*.md&quot;, function (er, files) {
+    files.forEach(path_name =&gt; {
+        var info = JSON.parse(fs.readFileSync(path.resolve(__dirname, path_name.replace(&quot;content.md&quot;, &quot;info.json&quot;))));
+        // Populate the content of a project page
+        var contents_md = fs.readFileSync(path.resolve(__dirname, path_name), 'utf8');
+        contents_md = contents_md.replaceAll(&quot;.webp&quot;, &quot;.webp&quot;).replaceAll(&quot;.webp&quot;, &quot;.webp&quot;).replaceAll(&quot;.webp&quot;, &quot;.webp&quot;);
+        var contents_html = md.render(contents_md);
+        var contents_page = content_template.replaceAll(&quot;&lt;!-- TITLE --&gt;&quot;, info.title)
+            .replace(&quot;&lt;!-- CONTENT --&gt;&quot;, contents_html)
+            .replace(&quot;&lt;!-- DATE --&gt;&quot;, info.date)
+            .replace(&quot;&lt;!-- DESCRIPTION --&gt;&quot;, info.description);
+        var new_path = path_name.replace(&quot;projects&quot;, &quot;docs&quot;).replace(&quot;/content.md&quot;, &quot;&quot;);
+        pages[new_path] = contents_page;
+        // Copy assets
+        resize_and_relocate(path_name.replace(&quot;/content.md&quot;, &quot;/assets&quot;), new_path + '/assets');
+        info.rel_post_link = new_path.replace(&quot;docs&quot;, &quot;&quot;);
+        info.rel_snapshot_link = new_path.replace(&quot;docs&quot;, &quot;&quot;) + &quot;/assets/snapshot.webp&quot;;
+        info_arr.push(info);
+    })
+    info_arr.sort(function (a, b) {
+        return new Date(b.date) - new Date(a.date);
+    })
+    info_arr.forEach(info =&gt; {
+        // Create sidebar entry
+        var sidebar_entry = sidebar_entry_template.replaceAll(&quot;&lt;!-- TITLE --&gt;&quot;, info.title)
+            .replace(&quot;&lt;!-- DATE --&gt;&quot;, info.date)
+            .replaceAll(&quot;project_link&quot;, &quot;..&quot; + info.rel_post_link)
+            .replace(&quot;snapshot_link&quot;, &quot;..&quot; + info.rel_snapshot_link);
+        if (info.bits) {
+            sidebar_bits.push(sidebar_entry);
+        } else {
+            sidebar.push(sidebar_entry);
+        }
+        // Create home page entry
+        var homepage_entry = homepage_entry_template.replace(&quot;&lt;!-- TITLE --&gt;&quot;, info.title)
+            .replace(&quot;&lt;!-- DATE --&gt;&quot;, info.date)
+            .replace(&quot;&lt;!-- DESCRIPTION --&gt;&quot;, info.description)
+            .replace(&quot;&lt;!-- TECH --&gt;&quot;, info.tech ? &quot;Technologies used: &quot; + info.tech : &quot;&quot;)
+            .replace(&quot;&lt;!-- TOOLS --&gt;&quot;, info.tools ? &quot;Tools used: &quot; + info.tools : &quot;&quot;)
+            .replaceAll(&quot;post_link&quot;, &quot;.&quot; + info.rel_post_link)
+            .replace(&quot;snapshot_link&quot;, &quot;.&quot; + info.rel_snapshot_link);
+        if (info.bits) {
+            homepage_entries_bits.push(homepage_entry);
+        } else {
+            homepage_entries.push(homepage_entry);
+        }
+    })
+    // Write the html files for each project to the docs folder
+    for (const [path_loc, html] of Object.entries(pages)) {
+        var content = html.replace(&quot;&lt;!-- NAV --&gt;&quot;, sidebar.join(&quot;\n&quot;))
+            .replace(&quot;&lt;!-- NAV_BITS --&gt;&quot;, sidebar_bits.join(&quot;\n&quot;));
+        fs.mkdirSync(path_loc, { recursive: true });
+        fs.writeFileSync(path.resolve(__dirname, path_loc, &quot;index.html&quot;), content);
+    }
+    // Write the home page to the docs folder
+    var content = index_template.replace(&quot;&lt;!-- PROJECTS --&gt;&quot;, homepage_entries.join(&quot;\n&quot;))
+        .replace(&quot;&lt;!-- BITS --&gt;&quot;, homepage_entries_bits.join(&quot;\n&quot;));
+    fs.writeFileSync(path.resolve(__dirname, &quot;docs/index.html&quot;), content);
+    // Write global assets to the docs folder
+    fsExtra.copySync(path.resolve(__dirname, &quot;global_assets&quot;), path.resolve(__dirname, &quot;docs/global_assets&quot;));
+    // Write CNAME to the docs folder
+    fs.writeFileSync(path.resolve(__dirname, &quot;docs/CNAME&quot;), &quot;michael-crum.com&quot;);
+})
+</code></pre>
 
     </article>
     <div id="right_pad"></div>

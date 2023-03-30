@@ -1,3 +1,283 @@
-## WIP
-This write up is under construction, come back soon for more :)
 See the code here: [https://github.com/usedhondacivic/usedhondacivic.github.io](https://github.com/usedhondacivic/usedhondacivic.github.io)
+
+## Warning
+
+This page contains sarcastic and derogatory comments about Javascript developers. I'm sorry, I don't mean it, but y'all make it way too easy. Email me if you want to schedule a fist fight.
+
+## Motivation
+
+Building a static website is wayyyy harder than it should be. That isn't to say its that difficult, there are [plenty](https://jamstack.org/generators/) of static site generators out there, but investing time into the hellscape of ever changing Javascript frameworks seems futile when something new is just going to pop up tomorrow. For what is essentially a glorified cut and paste, it seems like a lot of effort.
+
+For all the Javascript experts reading this and foaming at the mouth right now, firstly congrats on learning how to read. Secondly, I know that these approaches come with server side rending and client side route transitions and all the all the bells and whistles that make your ears perk up. And you're right, but for almost all hobbyist applications these features are way overkill. I want a website that features my projects, not one that takes precious time away from working on them. So simple is better, and why not make it into a learning experience along the way.
+
+## Building My Own Glorified Cut and Paste
+
+### Structure
+
+I started by deciding how I wanted to structure and store the information for my site. I decided to use Markdown, a wildly popular language for creating formatted text. Markdowns power comes from its simplicity, matching my goal with the website as a whole.
+
+As an example, here is this section in rendered form, markdown form, and the html generated from the markdown.
+
+Oh, and heres some fancy things you can do as a showcase:
+
+*italics*, `code`, **bold**
+
+1. Numbered list!
+2. Hi :)
+
+```markdown
+### Structure
+
+I started by deciding how I wanted to structure and store the information for my site. For the content, I decided to use Markdown. Markdown is a wildly popular language for creating formatted text, using only the text itself.
+
+As an example, here is this section in rendered form, markdown form, and the html generated from the markdown.
+
+Oh, and heres some fancy things you can do as a showcase:
+
+*italics*, `code`, **bold**
+
+1. Numbered list!
+2. Hi :)
+```
+
+```html
+<h3>Structure</h3>
+<p>I started by deciding how I wanted to structure and store the information for my site. For the content, I decided to use Markdown. Markdown is a wildly popular language for creating formatted text, using only the text itself.</p>
+<p>As an example, here is this section in rendered form, markdown form, and the html generated from the markdown.</p>
+<p>Oh, and heres some fancy things you can do as a showcase:</p>
+<p><em>italics</em>, <code>code</code>, <strong>bold</strong></p>
+<ol>
+<li>Numbered list!</li>
+<li>Hi :)</li>
+</ol>
+```
+
+Markdown also allows for raw html to be inserted into the article, allowing me to use iframes for all of my demos. That way each project can host its own demos on its own site, decoupling the projects from the write-ups.
+
+I also needed to store meta information about each article, like the title, date, description, ect. I once again chose the easiest and most popular option, json. Here is the info.json file for this writeup:
+
+```json
+{
+    "title": "Building My Own Static Site Generator",
+    "description": "Webpage generating frameworks are, to put it kindly, a huge pain. Instead of learning how to use someone else's package, I decided to spend a weekend writing my own! The system was designed for simplicity and maintainability, and is just over 100 lines of code. Oh, and it generated the website you're on right now!",
+    "date": "3.30.2023",
+    "tech": "Node.js, HTML, CSS, Javascript",
+    "bits": "true"
+}
+```
+
+Finally, I need a way to organize all of the assets for the page. I used a simple folder.
+
+All of these elements are grouped into a folder, and placed under the /projects directory. Here's the full stack for my ray marching article:
+
+![The stack](./assets/stack.png)
+
+### Templates
+
+To keep the structure all nice and modular, I built templates for the home page, project page, various list entries. The list entries are what you see on the left and under the projects section on the home page. Using templates allows for the content to be completely decoupled from the structure of the website, and be reusable if I ever decide to redesign or relocate. Where the content goes is designated by HTML comments, as shown below:
+
+```html
+<article id="article">
+    <h1>
+        <!-- TITLE -->
+    </h1>
+    <em class="date">
+        <!-- DATE -->
+    </em>
+    <br>
+    <!-- CONTENT -->
+</article>
+```
+
+### From Markdown to HTML
+
+Once all of the content has been filled in, it must be converted into HTML to be served as a webpage. I used a Node.js script for this purpose, because when in webdev, do as the web devs do.
+
+A popular solution for generating HTML from Markdown is the npm package [markdown-it](https://github.com/markdown-it/markdown-it). Its easy to use and comes with a rich variety of plugins, so it was a natural fit. 
+
+Using it is as simple as:
+
+```js
+var md = require('markdown-it');
+
+md.render("# This will generate an H1 tag");
+```
+
+Given that I often stray into some complex math, I wanted to include support for Latex. Luckily, markdown-it has a pluggin for katex, a browser based Latex renderer. Installing it is simple:
+
+```js
+const tm = require('markdown-it-texmath');
+var md = require('markdown-it')({ html: true }).use(tm, {
+    engine: require('katex'),
+    delimiters: 'dollars',
+    katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
+});
+```
+
+I also want to note (maybe its obvious, but it messed me up big time), that Katex needs its own stylesheet and Javascript to work properly. Don't be like me kids, install your dependencies on the front end too.
+
+```html
+<link rel="stylesheet" href="../styles/katex/katex.min.css">
+<script defer src="../styles/katex/katex.min.js"></script>
+```
+
+And now I can use over complicated math expressions to my heart's desire! 
+
+$$
+f(\relax{x}) = \int_{-\infty}^\infty
+    f\hat(\xi)\,e^{2 \pi i \xi x}
+    \,d\xi
+$$
+
+### The Gory Details
+
+The details of actually crawling the posts and generating the HTML is honestly better explained in code. See the full listing below if you're interested, but it boils down to crawling the project folder and calling .replace() many times to fill in the relevant fields. As the pages are crawled, a sidebar and homepage entry is also generated and added to a list. Once all pages are generated, I add the relevant sidebars and copy them to the /docs folder.
+
+Here are the libraries I used for assistance:
+
+I used [glob](https://www.npmjs.com/package/glob) to crawl the /projects folder and handle processing of each post.
+
+For writing, copying, and deleting files I used [fs-extra](https://www.npmjs.com/package/fs-extra), a superset of the normal Node.js tools that allows for things like copying whole folders.
+
+### Making it Pretty
+
+Because code is a huge part of my work, pretty syntax highlighting is a big deal. After shopping around a bit, I settled on [highlight.js](https://highlightjs.org/). Complete with hundred of themes and automatic language detection, its the whole package. And installing it was super easy:
+
+```html
+<!-- syntax highlighting-->
+<link rel="stylesheet" href="../styles/highlight/styles/base16/bright.min.css">
+<script src="../styles/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+```
+
+## Hosting
+
+Github Pages is the king of convenience, and so it was my go-to. On top of being already integrated into my source control, its free! I setup Pages serve from my /docs folder, and it was just that easy. It also offers configuration scripts for doing stuff like only deploying when a new release is created, but I opted to just serve directly from the main branch. I feel that mistakes and works in progress are an integral part of the design process, and make my site feel more genuine and homely.
+
+## Analytics
+
+This one is a source of moral debate for me, one that I haven't quite decided on. First and foremost, I'm a nosey and curious bastard. I want to know who's on my site and what they're doing, just because how could I not? The issues is that comes with technical and privacy concerns.
+
+The king of the analytics world is [Google Analytics](https://analytics.google.com/analytics/web/provision/#/provision), but is rife with [privacy concerns](https://secureprivacy.ai/blog/what-is-google-analytics-and-does-it-comply-with-gdpr#:~:text=Google%20Analytics%20and%20other%20modern,cannot%20be%20considered%20privacy%2Dfriendly.). It is also not GDPR compliant, which isn't an issue for my simple site but is never a good sign.
+
+What other options do little guys like me have though? The one I'm currently working with is [Matomo](https://matomo.org/), but given the hefty price-tag it's not a partnership thats likely to last. The service is open source however, so I could spin up my own server using a Raspberry Pi or AWS. That's a whole other project though, and it remains to be seen if my moral compass or my wallet has a stronger hold on my actions.
+
+## The Result
+
+This system was used to generate the website you're reading right now! Wow, an article about the website that generated it, so meta, so cool.
+
+Here's the repository containing the code and all the files: [https://github.com/usedhondacivic/usedhondacivic.github.io](https://github.com/usedhondacivic/usedhondacivic.github.io)
+
+And heres a full listing of the 100(ish) lines of code that contain all the magic: 
+
+```js
+const fs = require('fs');
+const path = require('path');
+const fsExtra = require('fs-extra');
+const glob = require("glob");
+const sharp = require("sharp");
+const tm = require('markdown-it-texmath');
+var md = require('markdown-it')({ html: true }).use(tm, {
+    engine: require('katex'),
+    delimiters: 'dollars',
+    katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
+});
+
+
+// Grab the templates
+const index_template = fs.readFileSync(path.resolve(__dirname, 'templates/index.html'), 'utf8');
+const homepage_entry_template = fs.readFileSync(path.resolve(__dirname, 'templates/homepage_entry.html'), 'utf8');
+const sidebar_entry_template = fs.readFileSync(path.resolve(__dirname, 'templates/sidebar_entry.html'), 'utf8');
+const content_template = fs.readFileSync(path.resolve(__dirname, 'templates/content.html'), 'utf8');
+
+// Clean the docs directory
+fsExtra.emptyDirSync(path.resolve(__dirname, 'docs'));
+
+// Copy over styles
+fsExtra.copySync(path.resolve(__dirname, 'styles'), path.resolve(__dirname, 'docs/styles'))
+
+var pages = new Object();
+var info_arr = [];
+var sidebar = [];
+var sidebar_bits = [];
+var homepage_entries = [];
+var homepage_entries_bits = [];
+
+// Copy a folder of images, and convert them to WebP to reduce loading time
+function resize_and_relocate(src_dir, target_dir) {
+    fs.mkdirSync(target_dir, { recursive: true });
+    glob(src_dir + "/**", function (er, files) {
+        files.forEach(path_name => {
+            let file_split = path_name.split("/");
+            let file_name = file_split[file_split.length - 1];
+            if (file_name == "assets") return;
+            sharp(path_name).toFile(target_dir + "/" + file_name.split(".")[0] + ".webp");
+        })
+    })
+}
+
+// Iterate over all of the posts
+glob("projects/*/*.md", function (er, files) {
+    files.forEach(path_name => {
+        var info = JSON.parse(fs.readFileSync(path.resolve(__dirname, path_name.replace("content.md", "info.json"))));
+        // Populate the content of a project page
+        var contents_md = fs.readFileSync(path.resolve(__dirname, path_name), 'utf8');
+        contents_md = contents_md.replaceAll(".png", ".webp").replaceAll(".jpg", ".webp").replaceAll(".jpeg", ".webp");
+        var contents_html = md.render(contents_md);
+        var contents_page = content_template.replaceAll("<!-- TITLE -->", info.title)
+            .replace("<!-- CONTENT -->", contents_html)
+            .replace("<!-- DATE -->", info.date)
+            .replace("<!-- DESCRIPTION -->", info.description);
+        var new_path = path_name.replace("projects", "docs").replace("/content.md", "");
+        pages[new_path] = contents_page;
+        // Copy assets
+        resize_and_relocate(path_name.replace("/content.md", "/assets"), new_path + '/assets');
+        info.rel_post_link = new_path.replace("docs", "");
+        info.rel_snapshot_link = new_path.replace("docs", "") + "/assets/snapshot.webp";
+        info_arr.push(info);
+    })
+    info_arr.sort(function (a, b) {
+        return new Date(b.date) - new Date(a.date);
+    })
+    info_arr.forEach(info => {
+        // Create sidebar entry
+        var sidebar_entry = sidebar_entry_template.replaceAll("<!-- TITLE -->", info.title)
+            .replace("<!-- DATE -->", info.date)
+            .replaceAll("project_link", ".." + info.rel_post_link)
+            .replace("snapshot_link", ".." + info.rel_snapshot_link);
+        if (info.bits) {
+            sidebar_bits.push(sidebar_entry);
+        } else {
+            sidebar.push(sidebar_entry);
+        }
+        // Create home page entry
+        var homepage_entry = homepage_entry_template.replace("<!-- TITLE -->", info.title)
+            .replace("<!-- DATE -->", info.date)
+            .replace("<!-- DESCRIPTION -->", info.description)
+            .replace("<!-- TECH -->", info.tech ? "Technologies used: " + info.tech : "")
+            .replace("<!-- TOOLS -->", info.tools ? "Tools used: " + info.tools : "")
+            .replaceAll("post_link", "." + info.rel_post_link)
+            .replace("snapshot_link", "." + info.rel_snapshot_link);
+        if (info.bits) {
+            homepage_entries_bits.push(homepage_entry);
+        } else {
+            homepage_entries.push(homepage_entry);
+        }
+    })
+    // Write the html files for each project to the docs folder
+    for (const [path_loc, html] of Object.entries(pages)) {
+        var content = html.replace("<!-- NAV -->", sidebar.join("\n"))
+            .replace("<!-- NAV_BITS -->", sidebar_bits.join("\n"));
+        fs.mkdirSync(path_loc, { recursive: true });
+        fs.writeFileSync(path.resolve(__dirname, path_loc, "index.html"), content);
+    }
+    // Write the home page to the docs folder
+    var content = index_template.replace("<!-- PROJECTS -->", homepage_entries.join("\n"))
+        .replace("<!-- BITS -->", homepage_entries_bits.join("\n"));
+    fs.writeFileSync(path.resolve(__dirname, "docs/index.html"), content);
+    // Write global assets to the docs folder
+    fsExtra.copySync(path.resolve(__dirname, "global_assets"), path.resolve(__dirname, "docs/global_assets"));
+    // Write CNAME to the docs folder
+    fs.writeFileSync(path.resolve(__dirname, "docs/CNAME"), "michael-crum.com");
+})
+```
