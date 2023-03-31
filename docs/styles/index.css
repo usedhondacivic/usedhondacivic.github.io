@@ -122,6 +122,8 @@ header {
     text-align: center;
     margin-top: 50px;
     margin-bottom: 50px;
+    line-break: strict;
+    white-space: nowrap;
 }
 
 header h2 {
@@ -131,6 +133,11 @@ header h2 {
 }
 
 @media only screen and (max-width: 1000px) {
+    body {
+        padding-left: 10vw !important;
+        padding-right: 10vw !important;
+    }
+
     section#card aside {
         text-align: center;
     }
@@ -149,6 +156,7 @@ header h2 {
         flex-direction: column;
         align-items: center;
         text-align: center;
+        width: 100% !important;
     }
 
     section.entry aside {
@@ -157,5 +165,12 @@ header h2 {
 
     section.entry article {
         padding-right: 0px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    body {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
     }
 }
