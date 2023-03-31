@@ -174,7 +174,7 @@ All of the code for my ray marching setup + the code for these demos are on my g
 
 Here is the code for my C++ ray marcher implementation: [https://github.com/usedhondacivic/Cpp-raymarcher/blob/master/source/Main.cpp](https://github.com/usedhondacivic/Cpp-raymarcher/blob/master/source/Main.cpp)
 
-Inigo Quilez is the worlds foremost authority in ray marching and computer graphics as a whole. His website is one of the most impressive collections of work I have ever seen, and is a must read for anyone interested in math or programming. Find it here: [https://iquilezles.org/](https://iquilezles.org/)
+Inigo Quilez is one of the worlds foremost authorities on ray marching. His website is one of the most impressive collections of work I have seen, and is a must read for anyone interested in math or programming. Find it here: [https://iquilezles.org/](https://iquilezles.org/)
 
 I also enjoyed this tutorial from Jamie Wong, which builds into the concepts nicely: [https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/](https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/)
 
