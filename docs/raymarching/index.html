@@ -139,10 +139,7 @@ See the code here: <a href="https://github.com/usedhondacivic/ThreeJS-Raymarcher
 <p><em>Warning: Some demos on this page are graphically demanding. I recommend enabling GPU acceleration for your web browser for the best experience.</em></p>
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb" title="Raymarching Demo"></iframe>
 <blockquote>
-<p><em>Click and drag to rotate, scroll to zoom, right click to pan.</em></p>
-</blockquote>
-<blockquote>
-<p><a href="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb">See demo full screen</a></p>
+<p><em>Click and drag to rotate, scroll to zoom.</em> <a href="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb">See demo full screen</a></p>
 </blockquote>
 <h2>What is Ray Marching?</h2>
 <p>You might be familiar with ray tracing, ray marching’s better known cousin. Ray tracing is a rendering process that uses math to simulate light bouncing around a scene before entering the camera. By computing the path light takes to enter each pixel of the screen, we can determine the color of that pixel based on material properties and lighting. For a simple one file demo of ray tracing, check out <a href="https://michael-crum.com/Js-Raycaster-V1/">my Javascript implementation</a>.</p>
@@ -179,9 +176,9 @@ See the code here: <a href="https://github.com/usedhondacivic/ThreeJS-Raymarcher
 }
 </code></pre>
 <p>You can see all three operations in the demo below.</p>
-<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html" title="2D Demo"></iframe>
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_sdf_combine.html" title="2D Demo"></iframe>
 <blockquote>
-<p><a href="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html">See demo full screen</a></p>
+<p><a href="https://michael-crum.com/ThreeJS-Raymarcher/2d_sdf_combine.html">See demo full screen</a></p>
 </blockquote>
 <p>Another popular and immensely satisfying method is to interpolate between SDFs. This gives the effect of melting the primitives together, and is called a smooth union.</p>
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_interp.html" title="2D Demo"></iframe>
@@ -196,14 +193,18 @@ See the code here: <a href="https://github.com/usedhondacivic/ThreeJS-Raymarcher
 </code></pre>
 <p>This implementation is a polynomial interpolation, with the &quot;roundness&quot; of the union controlled by factor k.</p>
 <p>This also works in 3D of course, as shown below.</p>
-<p><em>insert demo</em></p>
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/3d_interp.html" title="2D Demo"></iframe>
+<blockquote>
+<p><em>Remember that you can click and drag to look around.</em> <a href="https://michael-crum.com/ThreeJS-Raymarcher/3d_interp.html">See demo full screen</a></p>
+</blockquote>
 <h3>Infinite Repetition</h3>
 <p>With a ray tracer, intersections with each primitive in the scene must be independently calculated. This scales poorly with dense scenes (ie a field of blades of grass). With ray marching this problem can be trivialized using domain repetition.</p>
 <p>Each step of the ray marching process calculates the distance to the scene from some point, lets call it <code class="language-clike">(x,y)</code>. In the language of SDF's, &quot;repeating a shape&quot; really means that the SDF of the shape is the same in two regions. A simple way of doing this is using the modulo operation. Replacing <code class="language-clike">(x,y)</code> with <code class="language-clike">(x % 5,y % 5)</code> causes the domain of the SDF to repeat every 5 units in the x and y direction, replicating the SDF infinitely. Modulo is computationally cheap, so these shapes come only at the cost of the increase of ray marching steps.</p>
-<p><em>insert demo</em></p>
-<h3>Ambient Occlusion and Glow</h3>
-<p>Ambient occlusion refers to the effect that ambient light has on the shading of a scene. Parts of a scene that are more exposed (less occluded) tend to get brighter due to light bounced from other objects. Similarly, details and crevices are less exposed (more occluded) and therefore get less ambient lighting. Calculating the reflections of ambient light in the scene is extremely expensive using ray tracing methods, but ray marching offers a computationally &quot;free&quot; alternative. We are already keeping track of the number of iterations the ray takes to march to the object, and it turns out this number is a good estimate of the occlusion of the pixel. A higher number of iterations means that the ray passed closely by objects during its travel. We can use this as a metric of occlusion while shading to get a remarkably realistic approximation of &quot;true&quot; ambient occlusion.</p>
-<p><em>insert demo</em></p>
+<p>For an example, check out this wonderfully textured infinite scaffolding. This is generated from one box frame (just the edges of a box) repeated an infinite number of times in all directions. I also textured it by displacing the distance field with some trig functions, leading to the fun texture.</p>
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/3d_infinite_rep.html" title="2D Demo"></iframe>
+<blockquote>
+<p><em>Remember that you can click and drag to look around.</em> <a href="https://michael-crum.com/ThreeJS-Raymarcher/3d_infinite_rep.html">See demo full screen</a></p>
+</blockquote>
 <h3>Calculating Normals</h3>
 <p>Suppose we want to render a light in our scene. Using ray marching we can calculate the point <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span></eq> on the scene that a ray of light hits, but for a realistic effect we also need to know which way it's going to bounce. If we know what direction the surface is facing at point <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span></eq>, we can use simple geometry to determine the angle of reflection, but how do we calculate the direction of the surface?</p>
 <p>If you've gotten this far in the article you probably know that the &quot;surface direction&quot; I'm referring to is formally known as a normal vector, and is defined as a vector orthogonal to the scene at a point.</p>
@@ -211,6 +212,9 @@ See the code here: <a href="https://github.com/usedhondacivic/ThreeJS-Raymarcher
 <p><em>insert code snippet</em></p>
 <p><em>insert graphics demo</em></p>
 <p>You may have noticed that this method assumes nothing about the contents of the scene. Because of it's generality this lighting will work on any subject, no matter how complex.</p>
+<h3>Ambient Occlusion and Glow</h3>
+<p>Ambient occlusion refers to the effect that ambient light has on the shading of a scene. Parts of a scene that are more exposed (less occluded) tend to get brighter due to light bounced from other objects. Similarly, details and crevices are less exposed (more occluded) and therefore get less ambient lighting. Calculating the reflections of ambient light in the scene is extremely expensive using ray tracing methods, but ray marching offers a computationally &quot;free&quot; alternative. We are already keeping track of the number of iterations the ray takes to march to the object, and it turns out this number is a good estimate of the occlusion of the pixel. A higher number of iterations means that the ray passed closely by objects during its travel. We can use this as a metric of occlusion while shading to get a remarkably realistic approximation of &quot;true&quot; ambient occlusion.</p>
+<p><em>insert demo</em></p>
 <h3>Fractal Distance Fields</h3>
 <p>Many fractals have efficient approximations to their distance fields, allowing them to be rendered in real time. The derivation is beyond the scope of this article (see the references below for more info), but the results are too mesmerizing to not feature in this writeup.</p>
 <p><em>insert demo</em></p>

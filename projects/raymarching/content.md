@@ -5,9 +5,7 @@ See the code here: [https://github.com/usedhondacivic/ThreeJS-Raymarcher](https:
 
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb" title="Raymarching Demo"></iframe>
 
-> *Click and drag to rotate, scroll to zoom, right click to pan.*
-
-> [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb)
+> *Click and drag to rotate, scroll to zoom.* [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb)
 
 ## What is Ray Marching?
 
@@ -65,9 +63,9 @@ function subtract(x,y){
 
 You can see all three operations in the demo below.
 
-<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html" title="2D Demo"></iframe>
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_sdf_combine.html" title="2D Demo"></iframe>
 
-> [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/2d_demo_combining.html)
+> [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/2d_sdf_combine.html)
 
 Another popular and immensely satisfying method is to interpolate between SDFs. This gives the effect of melting the primitives together, and is called a smooth union.
 
@@ -88,7 +86,9 @@ This implementation is a polynomial interpolation, with the "roundness" of the u
 
 This also works in 3D of course, as shown below.
 
-*insert demo*
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/3d_interp.html" title="2D Demo"></iframe>
+
+> *Remember that you can click and drag to look around.* [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/3d_interp.html)
 
 ### Infinite Repetition
 
@@ -96,13 +96,11 @@ With a ray tracer, intersections with each primitive in the scene must be indepe
 
 Each step of the ray marching process calculates the distance to the scene from some point, lets call it <code class="language-clike">(x,y)</code>. In the language of SDF's, "repeating a shape" really means that the SDF of the shape is the same in two regions. A simple way of doing this is using the modulo operation. Replacing <code class="language-clike">(x,y)</code> with <code class="language-clike">(x % 5,y % 5)</code> causes the domain of the SDF to repeat every 5 units in the x and y direction, replicating the SDF infinitely. Modulo is computationally cheap, so these shapes come only at the cost of the increase of ray marching steps.
 
-*insert demo*
+For an example, check out this wonderfully textured infinite scaffolding. This is generated from one box frame (just the edges of a box) repeated an infinite number of times in all directions. I also textured it by displacing the distance field with some trig functions, leading to the fun texture.
 
-### Ambient Occlusion and Glow
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/3d_infinite_rep.html" title="2D Demo"></iframe>
 
-Ambient occlusion refers to the effect that ambient light has on the shading of a scene. Parts of a scene that are more exposed (less occluded) tend to get brighter due to light bounced from other objects. Similarly, details and crevices are less exposed (more occluded) and therefore get less ambient lighting. Calculating the reflections of ambient light in the scene is extremely expensive using ray tracing methods, but ray marching offers a computationally "free" alternative. We are already keeping track of the number of iterations the ray takes to march to the object, and it turns out this number is a good estimate of the occlusion of the pixel. A higher number of iterations means that the ray passed closely by objects during its travel. We can use this as a metric of occlusion while shading to get a remarkably realistic approximation of "true" ambient occlusion.
-
-*insert demo*
+> *Remember that you can click and drag to look around.* [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/3d_infinite_rep.html)
 
 ### Calculating Normals
 
@@ -117,6 +115,12 @@ You can also think of the normal vector as the direction you travel to increase 
 *insert graphics demo*
 
 You may have noticed that this method assumes nothing about the contents of the scene. Because of it's generality this lighting will work on any subject, no matter how complex.
+
+### Ambient Occlusion and Glow
+
+Ambient occlusion refers to the effect that ambient light has on the shading of a scene. Parts of a scene that are more exposed (less occluded) tend to get brighter due to light bounced from other objects. Similarly, details and crevices are less exposed (more occluded) and therefore get less ambient lighting. Calculating the reflections of ambient light in the scene is extremely expensive using ray tracing methods, but ray marching offers a computationally "free" alternative. We are already keeping track of the number of iterations the ray takes to march to the object, and it turns out this number is a good estimate of the occlusion of the pixel. A higher number of iterations means that the ray passed closely by objects during its travel. We can use this as a metric of occlusion while shading to get a remarkably realistic approximation of "true" ambient occlusion.
+
+*insert demo*
 
 ### Fractal Distance Fields
 
