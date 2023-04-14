@@ -108,11 +108,23 @@ Suppose we want to render a light in our scene. Using ray marching we can calcul
 
 If you've gotten this far in the article you probably know that the "surface direction" I'm referring to is formally known as a normal vector, and is defined as a vector orthogonal to the scene at a point.
 
-You can also think of the normal vector as the direction you travel to increase your distance from the surface as quickly as possible. This interpretation is very convenient when working with SDF's because it implies that the gradient of the SDF is normal to the scene. For those unfamiliar with multi-variable calculus, the gradient of a function is the multi-dimensional analog of the derivative. It is a vector quantity who's value in each dimension is the rate of change of the function with respect to that direction. We can use finite differences to cheaply calculate the gradient, then use that for our lighting calculations.
+You can also think of the normal vector as the direction you travel to increase your distance from the surface as quickly as possible. This interpretation is very convenient when working with SDF's because it implies that the gradient of the SDF is normal to the scene. For those unfamiliar with multi-variable calculus, the gradient of a function is the multi-dimensional analog of the derivative. It is a vector quantity who's value in each dimension is the rate of change of the function with respect to that direction. We can use [finite differences](https://en.wikipedia.org/wiki/Finite_difference_method) to cheaply calculate the gradient, then use that for our lighting calculations.
 
-*insert code snippet*
+```cpp
+vec3 estimateNormal(vec3 p) {
+    return normalize(vec3(
+        sceneSDF(vec3(p.x + EPSILON, p.y, p.z)) - sceneSDF(vec3(p.x - EPSILON, p.y, p.z)),
+        sceneSDF(vec3(p.x, p.y + EPSILON, p.z)) - sceneSDF(vec3(p.x, p.y - EPSILON, p.z)),
+        sceneSDF(vec3(p.x, p.y, p.z  + EPSILON)) - sceneSDF(vec3(p.x, p.y, p.z - EPSILON))
+    ));
+}
+```
 
-*insert graphics demo*
+<iframe src="https://michael-crum.com/ThreeJS-Raymarcher/3d_normals.html" title="2D Demo"></iframe>
+
+> *Remember that you can click and drag to look around.* [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/3d_normals.html)
+
+In this demo, the primitives are colored based on the normal vector at that point. X, Y, and Z control the red blue and green of each pixel respectively.
 
 You may have noticed that this method assumes nothing about the contents of the scene. Because of it's generality this lighting will work on any subject, no matter how complex.
 
