@@ -103,7 +103,7 @@ article img {
     width: auto;
     max-width: 100%;
     height: auto;
-    max-height: 400px;
+    max-height: 900px;
 }
 
 article h1 {
@@ -118,6 +118,7 @@ article em {
 article blockquote {
     border-left: 2px solid #fefff5;
     padding-left: 10px;
+    margin-left: 10px;
 }
 
 article a {
