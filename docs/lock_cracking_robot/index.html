@@ -36,16 +36,15 @@
     <script>
         document.addEventListener("scroll", (event) => {
             const frames = document.getElementsByTagName("iframe");
-            console.log(frames);
-            console.log(frames.length);
-
             for (var i = 0; i < frames.length; i++) {
                 frame = frames[i];
                 if (isInViewport(frame)) {
                     frame.style.visibility = 'visible';
+                    frame.sandbox = 'allow-scripts';
 
                 } else {
                     frame.style.visibility = 'hidden';
+                    frame.sandbox = '';
                 }
             }
         });
