@@ -32,19 +32,33 @@
     <!-- font -->
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
 
-    <!-- Matomo analytics-->
+    <!-- iFrame optimization -->
     <script>
-        var _paq = window._paq = window._paq || [];
-        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-        _paq.push(['trackPageView']);
-        _paq.push(['enableLinkTracking']);
-        (function () {
-            var u = "https://michaelcrum.matomo.cloud/";
-            _paq.push(['setTrackerUrl', u + 'matomo.php']);
-            _paq.push(['setSiteId', '1']);
-            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-            g.async = true; g.src = '//cdn.matomo.cloud/michaelcrum.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g, s);
-        })();
+        document.addEventListener("scroll", (event) => {
+            const frames = document.getElementsByTagName("iframe");
+            console.log(frames);
+            console.log(frames.length);
+
+            for (var i = 0; i < frames.length; i++) {
+                frame = frames[i];
+                if (isInViewport(frame)) {
+                    frame.style.visibility = 'visible';
+
+                } else {
+                    frame.style.visibility = 'hidden';
+                }
+            }
+        });
+
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.bottom >= 0 &&
+                rect.left >= 0 &&
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
     </script>
 </head>
 
@@ -310,7 +324,15 @@ plane.y = -1;
 scene.add(plane);
 </code></pre>
 <h3>The Actual Ray Marching</h3>
-<p>Executing the actual ray marching is relatively simple:</p>
+<p>Before we can ray march we need to determine what ray we actually want to march along. Imagine your screen is a window, and you are looking out into the scene. The ray from your eye</p>
+<pre><code class="language-cpp">// Returns a normalized ray pointing through the fragment into world space
+vec3 rayDirection(float fieldOfView, vec2 size, vec2 fragCoord) {
+    vec2 xy = fragCoord - size / 2.0;
+    float z = size.y / tan(radians(fieldOfView) / 2.0);
+    return normalize(vec3(xy, -z));
+}
+</code></pre>
+<p>Once we have the ray, executing the actual ray marching is relatively simple:</p>
 <pre><code class="language-cpp">struct rayInfo
 {
     float shortestDistance;
@@ -337,6 +359,7 @@ rayInfo getRayInfo(vec3 eye, vec3 marchingDirection, float start, float end) {
     return rayInfo(end, false, float(MAX_MARCHING_STEPS), minRadius);
 }
 </code></pre>
+<p>As you can see, the</p>
 <p>We can reintegrate the information about the camera's orientation into the</p>
 <p>THREE provides the camera's view matrix through a variable aptly named viewMatrix, and we can transform out ray using a matrix multiplication.</p>
 <pre><code class="language-cpp">vec3 viewDir = rayDirection(70.0, iResolution.xy, gl_FragCoord.xy);
