@@ -10,7 +10,7 @@ This page contains sarcastic and derogatory comments about Javascript developers
 
 Building a static website is wayyyy harder than it should be. That isn't to say its that difficult, there are [plenty](https://jamstack.org/generators/) of static site generators out there, but investing time into the hellscape of ever changing Javascript frameworks seems futile when something new is just going to pop up tomorrow. For what is essentially a glorified cut and paste, it seems like a lot of effort.
 
-For all the Javascript experts reading this and foaming at the mouth right now, firstly congrats on learning how to read. Secondly, I know that these approaches come with server side rending and client side route transitions and all the all the bells and whistles that make your ears perk up. And you're right, but for almost all hobbyist applications these features are way overkill. I want a website that features my projects, not one that takes precious time away from working on them. So simple is better, and why not make it into a learning experience along the way.
+For all the Javascript experts reading this and foaming at the mouth right now, firstly congrats on learning how to read. Secondly, I know that these more involved approaches come with server side rending and client side route transitions and all the all the bells and whistles that make your ears perk up. And you're right, but for almost all hobbyist applications these features are way overkill. I want a website that features my projects, not one that takes precious time away from working on them. So simple is better, and why not make it into a learning experience along the way.
 
 ## Building My Own Glorified Cut and Paste
 
