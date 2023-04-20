@@ -174,7 +174,7 @@ It turns out that the number of steps taken before reaching the object is a good
 
 ![An example of ambient occlusion](./assets/ambient.png)
 
-> *Ambient occlusion + diffuse lighting (right), just diffuse lighting (left)*
+> *Ambient occlusion + diffuse lighting (left), just diffuse lighting (right)*
 
 We can use the same strategy with rays that miss the shape entirely to generate a glowing aura, which is also shown in the photo above.
 

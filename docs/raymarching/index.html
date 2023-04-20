@@ -267,7 +267,7 @@ float sceneSDF(vec3 p) {
 <p>It turns out that the number of steps taken before reaching the object is a good estimate of the occlusion of the pixel. A higher number of iterations means that the ray passed closely by objects during its travel. We can use this as a metric of occlusion while shading to get a remarkably realistic approximation of &quot;true&quot; ambient occlusion.</p>
 <p><img src="./assets/ambient.webp" alt="An example of ambient occlusion"></p>
 <blockquote>
-<p><em>Ambient occlusion + diffuse lighting (right), just diffuse lighting (left)</em></p>
+<p><em>Ambient occlusion + diffuse lighting (left), just diffuse lighting (right)</em></p>
 </blockquote>
 <p>We can use the same strategy with rays that miss the shape entirely to generate a glowing aura, which is also shown in the photo above.</p>
 <h3>Fractal Distance Fields</h3>
