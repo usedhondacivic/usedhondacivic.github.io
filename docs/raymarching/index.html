@@ -146,7 +146,7 @@
         <br>
         <p>This write up is under construction, come back soon for more :)
 See the code here: <a href="https://github.com/usedhondacivic/ThreeJS-Raymarcher">https://github.com/usedhondacivic/ThreeJS-Raymarcher</a></p>
-<p><em>Warning: Some demos on this page are graphically demanding. I recommend enabling GPU acceleration for your web browser for the best experience.</em></p>
+<p><em>Warning: Some demos on this page are graphically demanding. I recommend <a href="https://www.amd.com/en/support/kb/faq/gpu-110">enabling GPU acceleration</a> for your web browser for the best experience.</em></p>
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/mandlebulb" title="Raymarching Demo"></iframe>
 <blockquote>
 <p><em>The Mandlebulb, a 3D generalization of the Mandblebrot set.</em></p>
@@ -284,12 +284,12 @@ float sceneSDF(vec3 p) {
 <h3>Shadertoy</h3>
 <p>A popular tool for experimenting with shaders is <a href="https://www.shadertoy.com/">Shadertoy</a>, a website that allows you to create, explore, and share shaders with minimal setup time. I highly recommend this route if you care primarily about building cool stuff quickly.</p>
 <h3>My Stack</h3>
-<p>I decided against using Shadertoy so I could gain a better understanding of the underlying technology and so I could embed my work in this writeup.</p>
+<p>I decided against using Shadertoy so I could gain a better understanding of the underlying technology.</p>
 <p>My first attempt was a purist C++ approach using OpenGL through the GLFW3 and GLAD libraries. This is the most performant solution but comes with the downside of having to recompile the code each time I tweaked the shader. This could be solved using some kind of live reload functionality, but I decided it wasn't worth the time to try and solve. Additionally, it would be difficult to display the results on this website. My work in this direction is linked in the &quot;More Resources&quot; section below if you are interested.</p>
 <p>After giving up on C++ I turned to the popular Javascript graphics library Three.js. Three has a bunch of awesome functionalities including WebGL support, and runs directly in the browser.</p>
 <h3>WebGL and Shaders</h3>
-<p>WebGL is a widely used API for interfacing with the GPU and the one I used for my experiments. It is a brother of OpenGL, but focused on browser based uses. I'll give a quick summary of the parts of WebGL that are important to us.</p>
-<p>The programs we use to interface with the GPU are called shaders, and come in two primary types. The first is a vertex shader. A vertex shader takes is given the vertices in a scene and does some computation based on them, most often converting them from 3D world space to 2D screen space. After the vertex shader has completed, the triangles are passed to a rasterizer. The rasterizer determines which pixels are inside the triangles defined by the vertices and generates a &quot;fragment&quot; for each one. These fragments are passed into the second type of shader: a fragment shader. The fragment shader decides the color of the pixel, and is where the ray marching algorithm is run.</p>
+<p>WebGL is a widely used API for interfacing with the GPU and the one I used for my experiments. It is a browser focused brother of OpenGL. I'll give a quick summary of the parts of WebGL that are important to us.</p>
+<p>Programs used to interface with the GPU are called shaders and come in two primary types. The first is a vertex shader. A vertex shader takes in the vertices of a scene and does some computation, most often converting them from 3D world space to 2D screen space. After the vertex shader has completed, the triangles are passed to the rasterizer. The rasterizer determines which pixels are inside the vertex triangles and generates a &quot;fragment&quot; for each one. These fragments are passed into the second type of shader: a fragment shader. The fragment shader decides the color of the pixel, and is where the ray marching algorithm is run.</p>
 <p>Shaders in WebGL are programmed using a language called OpenGL Shading Language (GLSL). GLSL is similar to C in syntax but comes with some interesting quirks and capabilities. The following assumes basic knowledge of GLSL, but luckily there are <a href="https://learnopengl.com/Getting-started/Shaders">some great tutorials</a> to help you learn quickly.</p>
 <h3>Pixel Shaders</h3>
 <p>A fragment shader that runs on every pixel of the screen is known as a pixel shader. To generate a fragment for each pixel on the screen (which can then be processed by the pixel shader), we need to tell the rasterizer that the entire camera viewport is covered by a plane. Reporting the location of vertices in the cameras viewport is the job of the vertex shader, so we'll start there.</p>
@@ -299,7 +299,7 @@ float sceneSDF(vec3 p) {
     gl_Position = vec4(position, 1.0);
 }
 </code></pre>
-<p>Simply returns the world coordinates of the vertex as clip space coordinates. By generating a rectangle of size (2, 2), centering it on the xy plane, and applying the vertex shader, I create a rectangle that permanently covers the entire screen. Here's the relevant THREE code:</p>
+<p>Simply returns the world coordinates of the vertex as clip space coordinates. Because the corners of the screen in clip space are at (+/- 1, +/-1), we just need to pass in those world coordinates to the vertex shader to cover the whole screen. A rectangle of size (2, 2) centered on the xy plane satisfies this requirement. Here's the relevant THREE code:</p>
 <pre><code class="language-js">var vertexShader = `
 void main()
 {
@@ -319,8 +319,13 @@ plane.x = -1;
 plane.y = -1;
 scene.add(plane);
 </code></pre>
+<p>Now that we have our pixel shader running have can write that operates on each pixel to do the ray marching.</p>
 <h3>The Actual Ray Marching</h3>
-<p>Before we can ray march we need to determine what ray we actually want to march along. Imagine your screen is a window, and you are looking out into the scene. The ray from your eye</p>
+<p>Imagine your screen is a window and you are looking out into the scene. An incoming ray of light will pass through one of the pixels in the window (your screen) and travel into your eye to form a color. By specifying how far away you are from the screen we can calculated the direction of the incoming ray for each pixel, which is necessary for our ray marching algorithm.</p>
+<p>Instead of specifying the distance from the screen to your head, is it traditional in computer graphics to decide on the field of view. This is the range of angles that simulated light can enter your eye from, but we can convert back into the former distance metric using the following equation:</p>
+<pre><code class="language-cpp">float z = size.y / tan(radians(fieldOfView) / 2.0);
+</code></pre>
+<p>We can use this quantity to compute the ray direction as follows:</p>
 <pre><code class="language-cpp">// Returns a normalized ray pointing through the fragment into world space
 vec3 rayDirection(float fieldOfView, vec2 size, vec2 fragCoord) {
     vec2 xy = fragCoord - size / 2.0;
@@ -328,7 +333,25 @@ vec3 rayDirection(float fieldOfView, vec2 size, vec2 fragCoord) {
     return normalize(vec3(xy, -z));
 }
 </code></pre>
-<p>Once we have the ray, executing the actual ray marching is relatively simple:</p>
+<p>This ray direction is in the coordinate space of the camera, which is problematic if we want to look around. Luckily, Three.js provides the camera's view matrix through a variable aptly named viewMatrix. We can use a simple matrix multiplication to convert our camera space ray into a world space.</p>
+<pre><code class="language-cpp">vec3 viewDir = rayDirection(70.0, iResolution.xy, gl_FragCoord.xy);
+vec3 eye = cameraPosition;
+vec3 worldDir = (transpose(viewMatrix) * vec4(viewDir, 0)).xyz;
+</code></pre>
+<p>Our next step is defining an SDF for our scene. SDF's for many shapes are available online, and they can be combined as detailed above to generate more complicated forms. For this example, I used a torus:</p>
+<pre><code class="language-cpp">// SDF FUNCTIONS
+float sdTorus( vec3 p, vec2 t )
+{
+  vec2 q = vec2(length(p.xz)-t.x,p.y);
+  return length(q)-t.y;
+}
+
+float sceneSDF(vec3 p) {
+    float d = sdTorus(p, vec2(1.0, 0.3));
+    return d;
+}
+</code></pre>
+<p>Once we have the ray and the scene SDF, executing the actual ray marching is relatively simple:</p>
 <pre><code class="language-cpp">struct rayInfo
 {
     float shortestDistance;
@@ -342,25 +365,44 @@ rayInfo getRayInfo(vec3 eye, vec3 marchingDirection, float start, float end) {
     float depth = start;
     float minRadius = 10000.0;
     for (int i = 0; i &lt; MAX_MARCHING_STEPS; i++) {
-        float dist = sceneSDF(eye + depth * marchingDirection);
-        if(dist &lt; minRadius){minRadius = dist;}
+        float dist = sceneSDF(eye + depth * marchingDirection); // Find the minimum distance to the scene
+        if(dist &lt; minRadius){minRadius = dist;} // If we have a new lowest distance, record it
         if (dist &lt; EPSILON) {
-			return rayInfo(depth, true, float(i), minRadius);
+			return rayInfo(depth, true, float(i), minRadius); // We hit the scene!
         }
-        depth += dist;
+        depth += dist; // We didn't hit the scene, move along the ray by the minimum distance to the nearest object
         if (depth &gt;= end) {
-            return rayInfo(end, false, float(i), minRadius);
+            return rayInfo(end, false, float(i), minRadius); // We went to far without hitting anything, assume we never will
         }
     }
-    return rayInfo(end, false, float(MAX_MARCHING_STEPS), minRadius);
+    return rayInfo(end, false, float(MAX_MARCHING_STEPS), minRadius); // It too many steps to find a collision, assume we never will
 }
 </code></pre>
-<p>As you can see, the</p>
-<p>We can reintegrate the information about the camera's orientation into the</p>
-<p>THREE provides the camera's view matrix through a variable aptly named viewMatrix, and we can transform out ray using a matrix multiplication.</p>
-<pre><code class="language-cpp">vec3 viewDir = rayDirection(70.0, iResolution.xy, gl_FragCoord.xy);
-vec3 eye = cameraPosition;
-vec3 worldDir = (transpose(viewMatrix) * vec4(viewDir, 0)).xyz;
+<p>We now have all the necessary parts to run our shader! I include some simple lights and ambient occlusion for coloring here, see the code listing below for more details on those.</p>
+<pre><code class="language-cpp">// Ray march along the ray and store the info returned
+rayInfo info = getRayInfo(eye, worldDir, MIN_DIST, MAX_DIST);
+float dist = info.shortestDistance;
+float count = info.count;
+float minRadius = info.minRadius;
+
+if (dist &gt; MAX_DIST - EPSILON) {
+    // Didn't hit anything, draw a black background
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    return;
+}
+
+// Calculate some lights
+vec3 collisionPoint = eye + dist * worldDir;
+float redLight = diffuseLight(collisionPoint, vec3(2.0, 2.0, 2.0)) * 1.5;
+float greenLight = diffuseLight(collisionPoint, vec3(-2.0, 2.0, 2.0)) * 1.5;
+float blueLight = diffuseLight(collisionPoint, vec3(2.0, 2.0, -2.0)) * 1.5;
+float whiteLight = diffuseLight(collisionPoint, vec3(-2.0, -2.0, -2.0)) * 1.5;
+
+// Cheap ambient occlusion approximation based on the number of raymarching steps before collision
+float ambientOcclusion = -pow(count, 2.0) / 3000.0;
+
+// Return the color of the pixel based on the lights, ambient occlusion, and a small amount of global lighting.
+gl_FragColor = vec4(redLight + whiteLight + ambientOcclusion + 0.1, greenLight + whiteLight + ambientOcclusion + 0.1,  blueLight  + whiteLight+ ambientOcclusion + 0.1, 1.0);
 </code></pre>
 <h3>Meat and Potatoes</h3>
 <p>Here is the full code for a simple ray marched torus with camera controls and some multicolored diffuse lights. As you can see, it's not as intimidating as the online literature often makes it seem:</p>
