@@ -46,14 +46,10 @@
             }
         });
 
-        function isInViewport(element) {
-            const rect = element.getBoundingClientRect();
-            return (
-                rect.bottom >= 0 &&
-                rect.left >= 0 &&
-                rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-            );
+        function isInViewport(elm) {
+            var rect = elm.getBoundingClientRect();
+            var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+            return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
         }
     </script>
 </head>
