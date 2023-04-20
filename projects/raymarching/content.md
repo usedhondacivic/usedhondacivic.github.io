@@ -1,4 +1,4 @@
-This write up is under construction, come back soon for more :)
+This write-up is under construction, come back soon for more :)
 See the code here: [https://github.com/usedhondacivic/ThreeJS-Raymarcher](https://github.com/usedhondacivic/ThreeJS-Raymarcher)
 
 *Warning: Some demos on this page are graphically demanding. I recommend [enabling GPU acceleration](https://www.amd.com/en/support/kb/faq/gpu-110) for your web browser for the best experience.*
@@ -11,17 +11,17 @@ See the code here: [https://github.com/usedhondacivic/ThreeJS-Raymarcher](https:
 
 ## What is Ray Marching?
 
-You might be familiar with ray tracing, ray marching’s better known cousin. Ray tracing is a rendering process that uses math to simulate light bouncing around a scene before entering the camera. By computing the path light takes to enter each pixel of the screen, we can determine the color of the pixel based on material properties and lighting. For a simple one file demo of ray tracing, check out [my Javascript implementation](https://michael-crum.com/Js-Raycaster-V1/). 
+You might be familiar with ray tracing, ray marching’s better-known cousin. Ray tracing is a rendering process that uses math to simulate light bouncing around a scene before entering the camera. By computing the path light takes to enter each pixel of the screen, we can determine the color of the pixel based on material properties and lighting. For a simple one-file demo of ray tracing, check out [my Javascript implementation](https://michael-crum.com/Js-Raycaster-V1/). 
 
 Ray tracing gives stunning results, but is exceptionally computationally expensive. The main issue lies in the time complexity of finding the ray-world intersection, which must be performed many times for each pixel. 
 
 Ray marching follows the same concept as ray tracing (following rays through space), but uses some computational cleverness to make the intersections easier to compute.
 
-I'll first walk through the theoretical basis for ray marching before finishing the article talking about my implementation.
+I'll first walk through the theoretical basis for ray marching before finishing the article by talking about my implementation.
 
 ### Signed Distance Fields (SDFs)
 
-If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object this value is > 0, inside it is < 0, and it is equal to 0 on the border.
+If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object this value is > 0, inside it is < 0, and on the border it is equal to 0.
 
 <img style="width: 100%; height: auto; max-height: none" alt="An example of signed distance fields" src="./assets/2d_sdf.png">
 
@@ -39,7 +39,7 @@ SDFs are remarkably efficient, even for many shapes that appear complicated at f
 
 ### Combining SDFs
 
-One useful feature of SDF's is how simple they are to combine. The simplest operation is a union, which represents the area inside of either of two shapes. We can find the union of two SDF's by taking the minimum of their two distance fields. This makes sense intuitively as we only care about the minimum distance to any object in the scene.
+One useful feature of SDFs is how simple they are to combine. The simplest operation is a union, which represents the area inside of either of two shapes. We can find the union of two SDFs by taking the minimum of their two distance fields. This makes sense intuitively as we only care about the minimum distance to any object in the scene.
 
 ```cpp
 float union(vec2 p, float d1, float d2){
@@ -55,7 +55,7 @@ float intersect(vec2 p, float d1, float d2){
 }
 ```
 
-Finally, we can subtract one shape from another. This comes courtesy of the "signed" part of the signed distance field. A SDF is positive outside the shape and negative inside of the shape. By negating the SDF of a shape we can turn it inside out. Taking the intersection of an inside-out shape with another primitive is equivalent to subtracting the first from the second.
+Finally, we can subtract one shape from another. This comes courtesy of the "signed" part of the signed distance field. An SDF is positive outside the shape and negative inside of the shape. By negating the SDF of a shape we can turn it inside out. Taking the intersection of an inside-out shape with another primitive is equivalent to subtracting the first from the second.
 
 ```cpp
 float subtract(vec2 p, float d1, float d2){
@@ -69,7 +69,7 @@ You can see all three operations in the demo below.
 
 > [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/2d_sdf_combine.html)
 
-Another popular and immensely satisfying method is to interpolate between SDFs. This gives the effect of melting the primitives together, and is called a smooth union.
+Another popular and immensely satisfying method is to interpolate between SDFs. This gives the effect of melting the primitives together and is called a smooth union.
 
 <iframe src="https://michael-crum.com/ThreeJS-Raymarcher/2d_interp.html" title="2D Demo"></iframe>
 
@@ -109,7 +109,7 @@ float sceneSDF(vec3 samplePoint) {
 
 With a ray tracer, intersections with each primitive in the scene must be independently calculated. This scales poorly with dense scenes (ie a field of blades of grass). With ray marching this problem can be trivialized using domain repetition.
 
-Each step of the ray marching process calculates the distance to the scene from some point <code class="language-clike">(x,y)</code>. In the language of SDF's, "repeating a shape" really means that the SDF of the shape is the same in two regions. One way of doing this is using the modulo operation. Replacing <code class="language-clike">(x,y)</code> with <code class="language-clike">(x % 5,y % 5)</code> causes the domain of the SDF to repeat every 5 units in the x and y direction, replicating the SDF infinitely without increasing the memory footprint of the scene.
+Each step of the ray marching process calculates the distance to the scene from some point <code class="language-cpp">(x,y)</code>. In the language of SDFs, "repeating a shape" really means that the SDF of the shape is the same in two regions. One way of doing this is using the modulo operation. Replacing <code class="language-clike">(x,y)</code> with <code class="language-clike">(x % 5,y % 5)</code> causes the domain of the SDF to repeat every 5 units in the x and y direction, replicating the SDF infinitely without increasing the memory footprint of the scene.
 
 As an example, check out this wonderfully textured infinite scaffolding. This is generated from one box frame (just the edges of a box) repeated an infinite number of times in all directions. I also textured it by displacing the distance field with some trig functions, leading to the fun texture.
 
@@ -146,7 +146,7 @@ Suppose we want to render a light in our scene. Using ray marching we can calcul
 
 If you've gotten this far in the article you probably know that the "surface direction" I'm referring to is formally known as a normal vector, and is defined as a vector orthogonal to the scene at a point.
 
-You can also think of the normal vector as the direction you travel to increase your distance from the surface as quickly as possible. This interpretation is very convenient when working with SDF's because it implies that the gradient of the SDF is normal to the scene. For those unfamiliar with multi-variable calculus, the gradient of a function is the multi-dimensional analog of the derivative. It is a vector quantity who's value in each dimension is the rate of change of the function with respect to that direction. We can use a [finite difference approximation](https://en.wikipedia.org/wiki/Finite_difference_method) to cheaply calculate the gradient, then use that for our lighting calculations.
+You can also think of the normal vector as the direction you travel to increase your distance from the surface as quickly as possible. This interpretation is very convenient when working with SDFs because it implies that the gradient of the SDF is normal to the scene. For those unfamiliar with multi-variable calculus, the gradient of a function is the multi-dimensional analog of the derivative. It is a vector quantity with its value in each dimension equal to the rate of change of the function in that direction. We can use a [finite difference approximation](https://en.wikipedia.org/wiki/Finite_difference_method) to cheaply calculate the gradient, then use that for our lighting calculations.n
 
 ```cpp
 vec3 estimateNormal(vec3 p) {
@@ -162,15 +162,15 @@ vec3 estimateNormal(vec3 p) {
 
 > *Remember that you can click and drag to look around.* [See demo full screen](https://michael-crum.com/ThreeJS-Raymarcher/3d_normals.html)
 
-In this demo, the primitives are colored based on the normal vector at that point. X, Y, and Z control the red blue and green of each pixel respectively.
+In this demo, the primitives are colored based on the normal vector at that point. X, Y, and Z control the red, blue, and green of each pixel respectively.
 
-You may have noticed that this method assumes nothing about the contents of the scene. Because of it's generality this strategy will work on any subject, no matter how complex.
+You may have noticed that this method assumes nothing about the contents of the scene. Because of its generality, this strategy will work on any subject, no matter how complex.
 
 ### Ambient Occlusion and Glow
 
-Ambient occlusion refers to the effect that ambient light has on the shading of a scene. Parts of a scene that are more exposed (less occluded) tend to get brighter due to light bounced from other objects. Similarly, details and crevices are less exposed (more occluded) and therefore get less ambient lighting. Calculating the reflections of ambient light in the scene is extremely expensive, but ray marching offers a computationally "free" alternative. 
+Ambient occlusion refers to the effect that ambient light has on the shading of a scene. Parts of a scene that are more exposed (less occluded) tend to get brighter due to light bouncing from other objects. Similarly, details and crevices are less exposed (more occluded) and therefore get less ambient lighting. Calculating the reflections of ambient light in the scene is extremely expensive, but ray marching offers a computationally "free" alternative. 
 
-It turns out the number of steps taken before reaching the object is a good estimate of the occlusion of the pixel. A higher number of iterations means that the ray passed closely by objects during its travel. We can use this as a metric of occlusion while shading to get a remarkably realistic approximation of "true" ambient occlusion.
+It turns out that the number of steps taken before reaching the object is a good estimate of the occlusion of the pixel. A higher number of iterations means that the ray passed closely by objects during its travel. We can use this as a metric of occlusion while shading to get a remarkably realistic approximation of "true" ambient occlusion.
 
 ![An example of ambient occlusion](./assets/ambient.png)
 
@@ -180,17 +180,17 @@ We can use the same strategy with rays that miss the shape entirely to generate 
 
 ### Fractal Distance Fields
 
-Many fractals have efficient approximations to their distance fields, allowing them to be rendered in real time. The derivation is beyond the scope of this article (see the references below for more info), but the results are too mesmerizing to not be featured. One example, the Mandlebulb can be found at the top of this page.
+Many fractals have efficient approximations of their distance fields, allowing them to be rendered in real-time. The derivation is beyond the scope of this article (see the references below for more info), but the results are too mesmerizing to not be featured. One example is the Mandlebulb, which can be found at the top of this page.
 
 *insert demo, I'm still working on this part*
 
-We can also generate our own fractals through clever use of domain repetition and transformations of SDFs.
+We can also generate fractals through clever use of domain repetition and transformations of SDFs.
 
 *insert demo, I'm still working on this part*
 
 ## My Implementation
 
-All that theory is cool, but how do we actually implement it? You may have noticed that each pixel on the screen is computed separately from every other pixel, so the most performant implementation would calculate them all concurrently. Luckily, modern hardware is highly optimized for exactly this operation. You have probably heard of the Graphics Processing Unit (GPU), a part of your computer who's sole job is to run huge parallel processing loads quickly. Using the GPU to aid rendering is known as hardware accelerated rendering and enables real-time rendering of complicated scenes.
+All that theory is cool, but how do we implement it? You may have noticed that each pixel on the screen is computed separately from every other pixel, so the most performant implementation would calculate them all concurrently. Luckily, modern hardware is highly optimized for exactly this operation. You have probably heard of the Graphics Processing Unit (GPU), a part of your computer with the sole job of running huge parallel processing loads. Using the GPU to aid rendering is known as hardware-accelerated rendering and enables the real-time rendering of complicated scenes.
 
 ### Shadertoy
 
@@ -200,23 +200,23 @@ A popular tool for experimenting with shaders is [Shadertoy](https://www.shadert
 
 I decided against using Shadertoy so I could gain a better understanding of the underlying technology.
 
-My first attempt was a purist C++ approach using OpenGL through the GLFW3 and GLAD libraries. This is the most performant solution but comes with the downside of having to recompile the code each time I tweaked the shader. This could be solved using some kind of live reload functionality, but I decided it wasn't worth the time to try and solve. Additionally, it would be difficult to display the results on this website. My work in this direction is linked in the "More Resources" section below if you are interested.
+My first attempt was a purist C++ approach using OpenGL through the GLFW3 and GLAD libraries. This is the most performant solution but comes with the downside of having to recompile the code each time I tweaked the shader. This could be solved using some kind of live reload functionality, but I decided it wasn't worth the time to try and solve it. Additionally, it would be difficult to display the results on this website. My work in this direction is linked in the "More Resources" section below if you are interested.
 
-After giving up on C++ I turned to the popular Javascript graphics library Three.js. Three has a bunch of awesome functionalities including WebGL support, and runs directly in the browser.
+After giving up on C++ I turned to the popular Javascript graphics library Three.js. Three has a bunch of awesome functionalities including WebGL support and runs directly in the browser.
 
 ### WebGL and Shaders
 
-WebGL is a widely used API for interfacing with the GPU and the one I used for my experiments. It is a browser focused brother of OpenGL. I'll give a quick summary of the parts of WebGL that are important to us.
+WebGL is a widely used API for interfacing with the GPU and the one I used for my experiments. It is a browser-focused brother of OpenGL. I'll give a quick summary of the parts of WebGL that are important to us.
 
-Programs used to interface with the GPU are called shaders and come in two primary types. The first is a vertex shader. A vertex shader takes in the vertices of a scene and does some computation, most often converting them from 3D world space to 2D screen space. After the vertex shader has completed, the triangles are passed to the rasterizer. The rasterizer determines which pixels are inside the vertex triangles and generates a "fragment" for each one. These fragments are passed into the second type of shader: a fragment shader. The fragment shader decides the color of the pixel, and is where the ray marching algorithm is run.
+Programs used to interface with the GPU are called shaders and come in two primary types. The first is a vertex shader. A vertex shader takes in the vertices of a scene and does some computation, most often converting them from 3D world space to 2D screen space. After the vertex shader has been completed, the triangles are passed to the rasterizer. The rasterizer determines which pixels are inside the vertex triangles and generates a "fragment" for each one. These fragments are passed into the second type of shader: a fragment shader. The fragment shader decides the color of the pixel and is where the ray marching algorithm is run.
 
 Shaders in WebGL are programmed using a language called OpenGL Shading Language (GLSL). GLSL is similar to C in syntax but comes with some interesting quirks and capabilities. The following assumes basic knowledge of GLSL, but luckily there are [some great tutorials](https://learnopengl.com/Getting-started/Shaders) to help you learn quickly.
 
 ### Pixel Shaders
 
-A fragment shader that runs on every pixel of the screen is known as a pixel shader. To generate a fragment for each pixel on the screen (which can then be processed by the pixel shader), we need to tell the rasterizer that the entire camera viewport is covered by a plane. Reporting the location of vertices in the cameras viewport is the job of the vertex shader, so we'll start there.
+A fragment shader that runs on every pixel of the screen is known as a pixel shader. To generate a fragment for each pixel on the screen (which can then be processed by the pixel shader), we need to tell the rasterizer that the entire camera viewport is covered by a plane. Reporting the location of vertices in the camera's viewport is the job of the vertex shader, so we'll start there.
 
-A vertex shader takes a point in world space and transforms it into coordinates in what graphics programmers call clip space. In simple terms, the clip space represents normalized position on the screen with values ranging from -1 to 1 in each axis. The following shader:
+A vertex shader takes a point in world space and transforms it into coordinates in what graphics programmers call clip space. In simple terms, the clip space represents normalized screen coordinates with values ranging from -1 to 1 on each axis. The following shader:
 
 ```cpp
 void main()
@@ -225,7 +225,7 @@ void main()
 }
 ```
 
-Simply returns the world coordinates of the vertex as clip space coordinates. Because the corners of the screen in clip space are at (+/- 1, +/-1), we just need to pass in those world coordinates to the vertex shader to cover the whole screen. A rectangle of size (2, 2) centered on the xy plane satisfies this requirement. Here's the relevant THREE code:
+Simply returns the world coordinates of the vertex as clip space coordinates. Because the corners of the screen in clip space are at (+/- 1, +/-1), we just need to pass those world coordinates to the vertex shader to cover the whole screen. A rectangle of size (2, 2) centered on the x-y plane satisfies this requirement. Here's the relevant THREE code:
 
 ```js
 var vertexShader = `
@@ -251,9 +251,9 @@ Now that we have our pixel shader running have can write that operates on each p
 
 ### The Actual Ray Marching
 
-Imagine your screen is a window and you are looking out into the scene. An incoming ray of light will pass through one of the pixels in the window (your screen) and travel into your eye to form a color. By specifying how far away you are from the screen we can calculated the direction of the incoming ray for each pixel, which is necessary for our ray marching algorithm.
+Imagine your screen is a window and you are looking out into the scene. An incoming ray of light will pass through one of the pixels in the window (your screen) and travel into your eye to form a color. By specifying how far away you are from the screen we can calculate the direction of the incoming ray for each pixel, which is necessary for our ray marching algorithm.
 
-Instead of specifying the distance from the screen to your head, is it traditional in computer graphics to decide on the field of view. This is the range of angles that simulated light can enter your eye from, but we can convert back into the former distance metric using the following equation:
+Instead of specifying the distance from the screen to your eye, is it traditional in computer graphics to decide on the field of view? This is the range of angles that simulated light can enter your eye from, but we can convert it back into the former distance metric using the following equation:
 
 ```cpp
 float z = size.y / tan(radians(fieldOfView) / 2.0);
@@ -270,7 +270,7 @@ vec3 rayDirection(float fieldOfView, vec2 size, vec2 fragCoord) {
 }
 ```
 
-This ray direction is in the coordinate space of the camera, which is problematic if we want to look around. Luckily, Three.js provides the camera's view matrix through a variable aptly named viewMatrix. We can use a simple matrix multiplication to convert our camera space ray into a world space.
+This ray direction is in the coordinate space of the camera, which is problematic if we want to look around. Luckily, Three.js provides the camera's view matrix through a variable aptly named viewMatrix. We can use matrix multiplication to convert our camera space ray into world space.
 
 ```cpp
 vec3 viewDir = rayDirection(70.0, iResolution.xy, gl_FragCoord.xy);
@@ -278,7 +278,7 @@ vec3 eye = cameraPosition;
 vec3 worldDir = (transpose(viewMatrix) * vec4(viewDir, 0)).xyz;
 ```
 
-Our next step is defining an SDF for our scene. SDF's for many shapes are available online, and they can be combined as detailed above to generate more complicated forms. For this example, I used a torus:
+Our next step is defining an SDF for our scene. SDFs for many shapes are available online, and they can be combined as detailed above to generate more complicated forms. For this example, I used a torus:
 
 ```cpp
 // SDF FUNCTIONS
@@ -313,11 +313,11 @@ rayInfo getRayInfo(vec3 eye, vec3 marchingDirection, float start, float end) {
         float dist = sceneSDF(eye + depth * marchingDirection); // Find the minimum distance to the scene
         if(dist < minRadius){minRadius = dist;} // If we have a new lowest distance, record it
         if (dist < EPSILON) {
-			return rayInfo(depth, true, float(i), minRadius); // We hit the scene!
+            return rayInfo(depth, true, float(i), minRadius); // We hit the scene!
         }
         depth += dist; // We didn't hit the scene, move along the ray by the minimum distance to the nearest object
         if (depth >= end) {
-            return rayInfo(end, false, float(i), minRadius); // We went to far without hitting anything, assume we never will
+            return rayInfo(end, false, float(i), minRadius); // We went too far without hitting anything, assume we never will
         }
     }
     return rayInfo(end, false, float(MAX_MARCHING_STEPS), minRadius); // It too many steps to find a collision, assume we never will
@@ -365,7 +365,7 @@ minimal_example.glsl:
 ```cpp
 #define PI 3.1415926538
 
-// Unifroms must be declared at the top of the file
+// Uniforms must be declared at the top of the file
 uniform vec2 iResolution;
 
 const int MAX_MARCHING_STEPS = 255; // Max number of ray marching steps
@@ -411,7 +411,7 @@ rayInfo getRayInfo(vec3 eye, vec3 marchingDirection, float start, float end) {
         float dist = sceneSDF(eye + depth * marchingDirection);
         if(dist < minRadius){minRadius = dist;}
         if (dist < EPSILON) {
-			return rayInfo(depth, true, float(i), minRadius);
+            return rayInfo(depth, true, float(i), minRadius);
         }
         depth += dist;
         if (depth >= end) {
@@ -430,7 +430,7 @@ vec3 estimateNormal(vec3 p) {
     ));
 }
 
-// Find the contribution of a diffuse light to the color of a point
+// Find the contribution of diffuse light to the color of a point
 float diffuseLight(vec3 p, vec3 lightPos){
     // https://timcoster.com/2020/02/11/raymarching-shader-pt1-glsl/
     vec3 l = normalize(lightPos-p); // Light Vector
@@ -446,7 +446,7 @@ float diffuseLight(vec3 p, vec3 lightPos){
 void main()
 {
     // Calculate the direction of the ray given the pixel coordinate and the camera's position.
-	vec3 viewDir = rayDirection(70.0, iResolution.xy, gl_FragCoord.xy);
+    vec3 viewDir = rayDirection(70.0, iResolution.xy, gl_FragCoord.xy);
     vec3 eye = cameraPosition;
     vec3 worldDir = (transpose(viewMatrix) * vec4(viewDir, 0)).xyz;
 
@@ -459,7 +459,7 @@ void main()
     if (dist > MAX_DIST - EPSILON) {
         // Didn't hit anything, draw a black background
         gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
-		return;
+        return;
     }
 
     // Calculate some lights
@@ -614,11 +614,11 @@ And that sums up my experiences learning about ray marching. I mean this article
 
 ## More Resources
 
-All of the code for my ray marching setup + the code for these demos are on my github: [https://github.com/usedhondacivic/ThreeJS-Raymarcher](https://github.com/usedhondacivic/ThreeJS-Raymarcher)
+All of the code for my ray marching setup + the code for these demos is on my github: [https://github.com/usedhondacivic/ThreeJS-Raymarcher](https://github.com/usedhondacivic/ThreeJS-Raymarcher)
 
 Here is the code for my C++ ray marcher implementation: [https://github.com/usedhondacivic/Cpp-raymarcher/blob/master/source/Main.cpp](https://github.com/usedhondacivic/Cpp-raymarcher/blob/master/source/Main.cpp)
 
-Inigo Quilez is one of the worlds foremost authorities on ray marching. His website is one of the most impressive collections of work I have seen, and is a must read for anyone interested in math or programming. Find it here: [https://iquilezles.org/](https://iquilezles.org/)
+Inigo Quilez is one of the world's foremost authorities on ray marching. His website is one of the most impressive collections of work I have seen and is a must-read for anyone interested in math or programming. Find it here: [https://iquilezles.org/](https://iquilezles.org/)
 
 I also enjoyed this tutorial from Jamie Wong, which builds into the concepts nicely: [https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/](https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/)
 
