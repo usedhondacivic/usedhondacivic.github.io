@@ -1,8 +1,8 @@
 *Paint light into ethereal floating images using a Raspberry Pi Pico MCU*
 
-![Three examples of the POV Display running](./assets/POV_banner-min.png)
+![Three examples of the POV Display running](./assets/figure1_POV_banner.png)
 
-*Created by: Michael Crum, Joseph Horwitz , Rabail Makhdoom*
+*Created by: Michael Crum, Joseph Horwitz, Rabail Makhdoom*
 
 ## Project Introduction
 
