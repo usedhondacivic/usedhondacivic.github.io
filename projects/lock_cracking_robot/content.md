@@ -1,10 +1,10 @@
 ## Introduction
 
-The CNC Combination Cracker (who I call Clicky) is a robot designed to efficiently find the combination to any master lock brand combination lock.
-These are the classic locks you probably associate with your high school locker. 
-First, place the lock in the lock holder and ensure the dial manipulator is seated on the dial.
-Rotate the dial so that the lock is at 0, then press the button on the microcontroller.
-Clicky will begin speedily trying combinations, and crack the combo!
+Master Lock combination locks are notoriously easy to crack, to the point that they have become a running joke in the lock picking community. Yet they are still one of the most popular locks ever made, making them a perfect target for an automated cracking tool.
+
+I designed a lock cracking robot for exactly that purpose. The robot exploits design flaws in the locks to reduce the number of combinations from 64,000 down to just 8, then tests them all in around 15 seconds.
+
+The robot is designed using a NEMA 17 stepper motor to rotate the dial, an analog servo to actuate the shackle, the FRDM-KL46Z microcontroller to run the show.
 
 <iframe width="100%" style="aspect-ratio: 9/5" src="https://www.youtube.com/embed/n434a4aqk5E" title="CNC Combo cracker: ECE 3140 Final project" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
@@ -14,27 +14,27 @@ Clicky will begin speedily trying combinations, and crack the combo!
 
 ### Hardware
 
-Clicky's body is made from clear laser cut acrylic, housing the electronics that make him work. A NEMA 17 stepper motor rotates the dial and an analog feedback servo is used to pull on the shackle and determine if the lock has been opened. All of the electronics are driven through a custom circuit board powered by a wall outlet.
+The robot's body is made from clear laser cut acrylic, housing the electronics that make it work. A NEMA 17 stepper motor rotates the dial and an analog feedback servo is used to pull on the shackle and determine if the lock has been opened. All of the electronics are driven through a custom circuit board powered by a wall outlet.
 
 ### Software
 
-I wrote custom stepper and analog servo drivers to control Clicky, as well a library for using the buttons and capacitive touch slider on the FRDM-KL46Z to control a LCD based UI. I also implemented the cracking algorithm, which requires the user to find and enter three binding points on the lock. Using exploits in the master lock's design, the number of combinations is dropped down to 8, which can be attempted in under 30 seconds.
+I wrote custom stepper and analog servo drivers to control the robot, as well a library for using the buttons and capacitive touch slider on the FRDM-KL46Z to control a LCD based UI. I also implemented the cracking algorithm, which requires the user to find and enter three binding points on the lock. Using exploits in the master lock's design, the number of combinations is dropped down to 8, which can be attempted in under 30 seconds.
 
 ## Technical Description
 
 ### Hardware
 
-The main drivers of Clicky are the NEMA 17 stepper motor and the analog feedback servo motor. 
+The main drivers of the robot are the NEMA 17 stepper motor and the analog feedback servo motor. 
 
 The quintessential requirement of combination cracking is turning the dial. For this job I chose a stepper motor. Stepper motors are easy to control, fast, and accurate. Steppers are controlled in discrete "steps", each constituting a consistent percentage of a rotation. For the stepper I chose, this was 200 steps per rotation. Given that a master lock has 40 positions, this gives a resolution of 5 steps per number on the lock.
 
 To open the shackle, and I needed a high torque motor that I could control positionally. A standard hobby servo meets these requirements perfectly, but I also needed to determine if the shackle did in fact open. An analog feedback servo offers an feedback signal reporting the actual position of the arm, allowing me to check if the servo was able to pull the shackle out of the lock.
 
-Once I decided on the components I wanted to use, I was time to build the body of the robot. I used a CAD program named OnShape to design the parts for Clicky. The parts were then either 3D printed in PLA or laser cut from 3/16" acrylic, and assembled using screws. The end result is a clean transparent look with red and pink highlights.
+Once I decided on the components I wanted to use, I was time to build the body of the robot. I used a CAD program named OnShape to design the parts. They were then either 3D printed in PLA or laser cut from 3/16" acrylic and assembled using screws. The end result is a clean transparent look with red and pink highlights.
 
 ![CAD for the robot](./assets/ca.png)
 
-Next, I needed to power and control the motors. Clicky uses a custom circuit board to provide a central source of power and control.
+Next, I needed to power and control the motors. A custom circuit board to provide a central source of power and control.
 
 ![The circuit board](./assets/circuitboard.png)
 
@@ -122,7 +122,7 @@ Adding the servo into the mix caused some issues. The first issue was with curre
 
 A second issue was the strength of the servo. I positioned the servo close to the stepper, with a fairly short arm to reach out and lift the shackle. I underestimated the amount of force required, so the shackle would sometimes not open. To remedy this, I added a spring to assist the servo in its upward motion.
 
-Finally I used stress testing to test the rest of the system. Cracking a master lock with no prior knowledge takes upwards of 64,000 attempts, which takes Clicky 36 hours straight. This served as the ultimate stress test, and I left it running for a day and a half. The system managed to open the lock after only 20 hours, and displayed the correct combination when finished. 
+Finally I used stress testing to test the rest of the system. Cracking a master lock with no prior knowledge takes upwards of 64,000 attempts, which takes 36 hours straight. This served as the ultimate stress test, and I left it running for a day and a half. The system managed to open the lock after only 20 hours, and displayed the correct combination when finished. 
 
 ## Further documentation
 
@@ -141,4 +141,3 @@ Thanks to the RPL for their laser cutting service
 [NEMA 17 Stepper Motor](https://www.omc-stepperonline.com/nema-17-bipolar-59ncm-84oz-in-2a-42x48mm-4-wires-w-1m-cable-connector-17hs19-2004s1)
 
 [Analog feedback servo](https://www.adafruit.com/product/1404)
-
