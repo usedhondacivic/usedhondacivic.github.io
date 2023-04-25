@@ -34,7 +34,13 @@
 
     <!-- iFrame optimization -->
     <script>
+        checkVisibility();
         document.addEventListener("scroll", (event) => {
+            checkVisibility();
+        });
+
+        function checkVisibility() {
+            console.log("hi");
             const frames = document.getElementsByTagName("iframe");
             for (var i = 0; i < frames.length; i++) {
                 frame = frames[i];
@@ -44,7 +50,7 @@
                     frame.style.visibility = "hidden";
                 }
             }
-        });
+        }
 
         function isInViewport(elm) {
             var rect = elm.getBoundingClientRect();
