@@ -1,0 +1,7 @@
+{
+    "title": "Teaching Cheap Robots Expensive Tricks",
+    "description": "Using an inexpensive toy car, some basic sensors, and a little software wizardry, I created a robot capable of mapping, localization, and path planning. Read about my experiences with sensor fusion, modeling dynamics, PID control, Bayesian estimation, wireless communication, and more... and it can also do stunts!",
+    "date": "5.4.2023",
+    "tech": "Artemis Nano Microcontroller, Time of Flight Sensors, IMU, BLE, C++, Python, Fusion360",
+    "lang": "cpp"
+}
