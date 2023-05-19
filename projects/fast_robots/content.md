@@ -8,7 +8,7 @@ In robotics, we often find ourselves attempting to do more with less. Computers,
 
 The platform I used for this robot is a cheap RC car from Amazon, designed for doing stunts. I'll first cover the physical and electrical modifications I made to the car, then get into the fun applications and the software algorithms that enabled them.
 
-Its worth noting that this article is a massively abbreviated version of my [full build log](https://michael-crum.com/FAST-ROBOTS-2023/intro/), and primarily serves as an entertaining overview. For all of the real technical details, you should check out the full build log (linked above) and [the source code](https://github.com/usedhondacivic/FAST-ROBOTS-2023).
+Note that this article is a massively abbreviated version of my [full build log](https://michael-crum.com/FAST-ROBOTS-2023/intro/), and primarily serves as an entertaining overview. For all of the real technical details, you should check out the full build log (linked above) and [the source code](https://github.com/usedhondacivic/FAST-ROBOTS-2023).
 
 ## Brain Surgery on a Car  
 
@@ -76,21 +76,67 @@ pose.rot.z = sensor_readings.gyro.z;
 
 As you can see from the graph, the accelerometer is noisy (blue and orange) and the gyro drifts (dark green and mint), yet the complimentary output rejects noise while staying centered on the accelerometer data (purple and red).
 
-
 ### PID Control
 
-### Wireless Communication and Logging
+Another common problem in robotics is making a robot move to a set point. If you want the car to rotate to a certain position, you can't simply say "move to x angle". The only control the microcontroller has over the motion of the car is the voltage it sends to the motor (technically the PWM duty cycle, but effectively the voltage). So what motor voltages should the controller send to get the resulting rotation?
 
+Lets first define some terms. The error (E) is equal to the set point (where we want to go) minus the measured value. So if we want the robot at 90 degrees and it's at 0 degrees, the error would be 90.
+
+A first attempt is using a proportional gain, meaning the output is the error multiplied by some constant gain (call it $p$):
+
+$$
+output = p \cdot E 
+$$
+
+So the further away we are from the set point, the more aggressively we attempt to correct. That seems reasonable, lets try it out:
+
+![Graph showing the P response]()
+
+As you can see, the P gain alone is not sufficient. The system either reaches a state where it oscillates around the set point, or is over damped and never reaches it.
+
+To fix these issues, lets add another term. This term increases in strength the longer the robot is away from the set point.
+
+$$
+output = p \cdot E + i \cdot \int_{0}^{t} E \cdot dt
+$$
+
+The longer we're not at the right place, the stronger the response. Again, this makes sense logically.
+
+![Graph of the PI response]()
+
+Now were getting somewhere. The position reaches the set point quickly and doesn't overshoot. But we can do even better.
+
+Lets add one more term, this time proportional to the rate of change of the error. To dampen oscillations, the derivative (or d) term counteracts rapid change in the error. This dampens oscillations, allowing for higher P and I gains and therefore better rise time. The equation now becomes:
+
+$$
+output = p \cdot E + i \cdot \int_{0}^{t} E \cdot dt - d \cdot \frac{dE}{dt}
+$$
+
+Note that the derivative term is often omitted in low cost systems like my own. Due to the noise in cheep sensors, the derivative of the measurement is often meaningless unless put through a low pass filter.
+
+![Graph of the combined PID output]()
+
+Together the p, i, and d terms form PID control, a common control scheme for robotic systems.
+
+### The Rest of the Setup
+
+I also wrote a boat loads of code to deal with readings sensors, transmitting data, executing routines, plotting data, ect. If you care about any of that read the [full build log](https://michael-crum.com/FAST-ROBOTS-2023/intro/) and the [source code](https://github.com/usedhondacivic/FAST-ROBOTS-2023).
 
 ## Mapping the Surroundings
 
 Ok now we're ready for the real juicy stuff. How about mapping out a room?
 
 ![The generated map of the room](./assets/room_post_tweek.png)
+> *The final generated map*
 
-## Localization and Navigation
+For this task I decided to use the spin and look method. That is, the robot is placed in a known position and spins while taking readings. I can then use some math to convert the straight line sensor readings into world coordinates for the walls. Lets start with the spinning part.
 
-Now that we have a map of our room, can we use it to figure out where the robot is? This is a common problem in robotics, known as localization.
+Using a PID controller described above, I can make the robot track a certain rotation speed. I aimed for a resolution of 2 degrees per readings, and the sensors take readings in about 150 ms.
+
+
+## Localization
+
+Now that we have a map of our room, can we use it to figure out where the robot is within it? This is a common problem in robotics, known as localization.
 
 ### The Bayes Filter
 
@@ -102,4 +148,4 @@ See a full listing of the code [here](https://github.com/usedhondacivic/FAST-ROB
 
 This article is a massively abbreviated version of my [full build log](https://michael-crum.com/FAST-ROBOTS-2023/intro/). Check that out if you want any of the specifics.
 
-This robot was developed as part of ECE 4160: Fast Robots at Cornell University. My work builds off of course starter code and also of the work from past students. You can find all of their pages [here](https://cei-lab.github.io/FastRobots-2023/StudentPages.html), and I am so grateful for their help. Special thanks to Professor Kirstin Petersen for running a fantastic class.
+This robot was developed as part of ECE 4160: Fast Robots at Cornell University. My work builds off of course starter code and the work from past students. You can find all of their pages [here](https://cei-lab.github.io/FastRobots-2023/StudentPages.html), and I am so grateful for their help. Special thanks to Professor Kirstin Petersen for running a fantastic class.
