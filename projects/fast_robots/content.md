@@ -1,6 +1,4 @@
-## WIP
-
-This write-up is under construction! Come back soon for more :)
+![A splash of project pictures]()
 
 ## Introduction
 
@@ -118,9 +116,99 @@ Note that the derivative term is often omitted in low cost systems like my own. 
 
 Together the p, i, and d terms form PID control, a common control scheme for robotic systems.
 
+Here's my PID controller implementation in C++, specifically for the Arduino environment I use to program the Artemis. It's written as a class so that multiple PID controllers can be created and updated concurrently.
+
+```cpp
+class PID_CONTROLLER {
+private:
+  double p;
+  double i;
+  double d;
+
+  double integrator = 0;
+  double integrator_cap = 1000;
+  double z_prev = NULL;
+  unsigned long last_time = NULL;
+
+  int sample_rate_ms = 1;  //1khz
+
+public:
+  double output = 0;
+
+  PID_CONTROLLER() {
+    p = 0;
+    i = 0;
+    d = 0;
+  }
+
+  PID_CONTROLLER(double _p, double _i, double _d) {
+    p = _p;
+    i = _i;
+    d = _d;
+
+    if (_i != 0) {
+      integrator_cap = 1 / i;
+    }
+  }
+
+  void step(double u, double z) {
+    unsigned long now = millis();
+    if (z_prev == NULL) {
+      z_prev = z;
+    }
+    if (last_time == NULL) {
+      last_time = millis();
+    }
+    int dt = now - last_time;
+    if (dt > sample_rate_ms) {
+      double err = u - z;
+
+      integrator += err;
+
+      integrator = max(-integrator_cap, min(integrator_cap, integrator));
+
+      double dz = z - z_prev;
+      double der = -dz / dt;
+
+      last_time = millis();
+      z_prev = z;
+
+      output = p * err + i * integrator + d * der;
+    }
+  }
+
+  void set_gains(double _p, double _i, double _d) {
+    p = _p;
+    i = _i;
+    d = _d;
+  }
+
+  void set_p_gain(double _p) {
+    p = _p;
+  }
+
+  void set_i_gain(double _i) {
+    i = _i;
+  }
+
+  void set_d_gain(double _d) {
+    d = _d;
+  }
+
+  void reset(){
+    z_prev = NULL;
+    last_time = NULL;
+    integrator = 0;
+    output = 0;
+  }
+};
+```
+
+I also implemented some fun things like integrator wind up limiting and derivative on measurement. I won't go into these techniques here, but a quick google search will yield some great explanations.
+
 ### The Rest of the Setup
 
-I also wrote a boat loads of code to deal with readings sensors, transmitting data, executing routines, plotting data, ect. If you care about any of that read the [full build log](https://michael-crum.com/FAST-ROBOTS-2023/intro/) and the [source code](https://github.com/usedhondacivic/FAST-ROBOTS-2023).
+I also wrote huge amounts of code to deal with readings sensors, transmitting data, executing routines, plotting data, ect. If you care about any of that read the [full build log](https://michael-crum.com/FAST-ROBOTS-2023/intro/) and the [source code](https://github.com/usedhondacivic/FAST-ROBOTS-2023).
 
 ## Mapping the Surroundings
 
@@ -129,16 +217,57 @@ Ok now we're ready for the real juicy stuff. How about mapping out a room?
 ![The generated map of the room](./assets/room_post_tweek.png)
 > *The final generated map*
 
-For this task I decided to use the spin and look method. That is, the robot is placed in a known position and spins while taking readings. I can then use some math to convert the straight line sensor readings into world coordinates for the walls. Lets start with the spinning part.
+I picked five locations that together combined allow the robot to see all parts of the room. At each location, the robot spins while concurrently taking readings from the ToF distance sensors. I can then use some math to convert the straight line sensor readings into world coordinates for the walls. Lets start with the spinning part.
 
-Using a PID controller described above, I can make the robot track a certain rotation speed. I aimed for a resolution of 2 degrees per readings, and the sensors take readings in about 150 ms.
-
+Using a PID controller described above, I can make the robot track an angular velocity. I aimed for a resolution of 2 degrees per readings, and the sensors take readings in about 150 ms. Simple math shows that an angular velocity of 10 degrees per second yields the desired resolution.
 
 ## Localization
 
-Now that we have a map of our room, can we use it to figure out where the robot is within it? This is a common problem in robotics, known as localization.
+Now that we have a map of our room, can we use it to figure out where the robot is within it? This is a common problem in robotics known as localization.
 
 ### The Bayes Filter
+
+Because we are unsure of the true position of the robot, it would be unwise to presume one location. Instead, modern robotics works with probabilities to generate both an informed guess at the true state and a metric of the certainty of that guess. The Bayes Filter is one such algorithm.
+
+For localization, our goal is to find the x position, y position, and rotation of the car. Together these quantities are called the "pose". Let $x_t$ represent the state at position $t$, which could be any pose in the room.
+
+$$
+x_t = \begin{bmatrix}
+x \\
+y \\
+\theta
+\end{bmatrix}
+$$
+
+The probability distribution over every possible pose (also known as the belief distribution) is denoted $bel(x_t)$. Initially $bel(x_t)$ is uniform because we have no knowledge about the location of the car.
+
+While executing code on the robot, we give it a series of commands. From these commands, we can make an educated guess about where the robot will end up. That is to say if the robot is in pose $x_{t-1}$ and we give it commands $u_t$, we denote the probability of the car arriving of pose $x_t$ as
+
+$$
+p(x_t | u_t, x_{t-1})
+$$
+
+We represent the probability the car is at $x_{t-1}$ as $bel(x_{t-1})$. Because the probability above and $bel(x_{t-1})$ are independent, the probability of both events is
+
+$$
+p(x_t | u_t, x_{t-1}) \cdot bel(x_{t-1})
+$$
+
+Because the car might arrive at $x_t$ from any other pose $x_{t-1}$ the total probability of arriving at $x_t$ is the sum of the probability from each location
+
+$$
+\overline{bel} (x_t) = \sum_{x_{t-1}} p(x_t | u_t, x_{t-1}) \cdot bel(x_{t-1})
+$$
+
+This is known as the prediction step. Because the robot doesn't always follow the commands it is given, the prediction step introduces more uncertainty into the distribution, with the upside of reshaping it to follow the expected direction of motion.
+
+To reduce the uncertainty we need to account for sensor measurements. Let $z_t$ represent the sensor readings since the last update. Using a simulation of the room we can predict the sensor readings from each state. Assuming the error in the readings is normally distributed, the probability of that state being correct $p(z_t|x_t)$ can be calculated from real sensor data. Integrating this result with the belief from the prediction step gives
+
+$$
+bel(x_t) = \eta \cdot p(z_t | x_t) \cdot \overline{bel} (x_t)
+$$
+
+### Python Implementation
 
 ## Using Kalman Filters for Optimized Drifting
 
