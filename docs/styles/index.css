@@ -101,6 +101,9 @@ section.entry a {
 
 section.entry aside {
     width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 section.entry aside img {
