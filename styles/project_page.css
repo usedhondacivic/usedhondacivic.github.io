@@ -97,6 +97,8 @@ article {
     width: 100%;
     overflow-wrap: anywhere;
     flex-shrink: 0.2;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 article img {
@@ -106,6 +108,7 @@ article img {
     max-width: 100%;
     height: auto;
     max-height: 900px;
+    display: block;
 }
 
 article h1 {

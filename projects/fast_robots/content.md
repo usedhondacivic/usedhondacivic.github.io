@@ -1,4 +1,8 @@
-![A splash of project pictures]()
+<div style="margin-top: 10px; margin-bottom: 10px; display: inline-block;">
+  <img style="width: 33%; height: auto; max-height: none; float: left;" alt="splash-1: " src="./assets/room_post_tweek.png">
+  <img style="width: 33%; height: auto; max-height: none; float: left;" alt="splash-2: " src="./assets/tof_guard.jpg">
+  <img style="width: 33%; height: auto; max-height: none; float: left;" alt="splash-3: " src="./assets/polar_5_-3.png">
+</div>
 
 ## Introduction
 
@@ -78,9 +82,9 @@ This graph shows the computed rotation around the X and Y axes. The acceleromete
 
 ### PID Control
 
-Another common problem in robotics is making an actuator go to a position (and stay there). As a motivating example, imagine you want to make the car turn exactly 90 degrees to the left.
+Another common problem in robotics is making an actuator go to a position and stay there. As a motivating example, imagine you want to make the car turn exactly 90 degrees to the left.
 
-The microcontroller only has authority over the PWM signals it sends to the motors. This _very_ roughly equates to velocity, but is influenced by a variety of factors (friction, load, battery voltage) that make the approximation unreliable. So what motor voltages should the controller send to get the resulting rotation?
+The microcontroller only has authority over the PWM signals it sends to the motors. This very roughly equates to velocity, but is influenced by a variety of factors (friction, load, battery voltage) that make the approximation unreliable. So what motor voltages should the controller send to get the resulting rotation?
 
 Lets first define some terms. The error (E) is equal to the set point (where we want to go) minus the measured value. If we want the robot at 90 degrees and it's at 0 degrees, the error would be 90.
 
@@ -90,13 +94,9 @@ $$
 output = p \cdot E 
 $$
 
-That seems reasonable, lets try it out:
+P gain alone, however, is often not sufficient. If the P gain is high the system may oscillate around the set point, but lowering the gain will cause the system to never reach the set point.
 
-![Graph showing the P response]()
-
-As you can see, the P gain alone is not sufficient. The system either reaches a state where it oscillates around the set point, or is over damped and never reaches it.
-
-Lets add another term. Adding the integral of the error works to "push" an over damped system towards the set-point. This term increases in strength the longer the robot is away from the set-point. This term is called the integral gain, and is denoted by $i$.
+To resolve this problem, lets add another term. Adding the integral of the error works to "push" an over damped system towards the set-point. This term increases in strength the longer the robot is away from the set-point. This term is called the integral gain, and is denoted by $i$.
 
 $$
 output = p \cdot E + i \cdot \int_{0}^{t} E \cdot dt
@@ -104,9 +104,7 @@ $$
 
 The longer we're in the wrong place the stronger the response. Again, this makes sense logically.
 
-![Graph of the PI response]()
-
-Now were getting somewhere. The position reaches the set point quickly and doesn't overshoot. But we can do even better.
+Using just P and I gains is enough for most applications, but theres one more improvement that can be made. 
 
 Lets add one more term, this time proportional to the rate of change of the error. The derivative (or $d$) term counteracts rapid change in the error, dampening oscillations. This allows for higher P and I gains and therefore better rise time. The equation now becomes:
 
@@ -115,8 +113,6 @@ output = p \cdot E + i \cdot \int_{0}^{t} E \cdot dt - d \cdot \frac{dE}{dt}
 $$
 
 Note that the derivative term is often omitted in low cost systems like my own. Due to the noise in cheep sensors the derivative of the measurement is often meaningless unless low passed.
-
-![Graph of the combined PID output]()
 
 Together the p, i, and d terms form PID control, a common control scheme for robotic systems.
 
@@ -275,9 +271,10 @@ Where R represents the robots coordinates in world space.
 
 The result is decent map of the room! Not bad for a little car.
 
-![The generated map of the room](./assets/room_post_tweek.png)
-
-![A top down picture of the room](./assets/(0_3)_real_rotated.webp)
+<div style="margin-top: 10px; margin-bottom: 10px; display: inline-block;">
+  <img style="width: 50%; height: auto; max-height: none; float: left;" alt="The generated map of the room" src="./assets/room_post_tweek.png">
+  <img style="width: 50%; height: auto; max-height: none; float: left;" alt="A top down picture of the room" src="./assets/(0_3)_real_rotated.webp">
+</div>
 
 > *The actual room vs the generated map*
 
@@ -459,7 +456,7 @@ def update_step():
 
 ### Results
 
-*da results*
+<img style="width: 100%; height: auto; max-height: none;" alt="Computed locations vs a birds eye view of the car's actual location" src="./assets/loc_results_combined.webp">
 
 ## Using Kalman Filters for Optimized Drifting
 
