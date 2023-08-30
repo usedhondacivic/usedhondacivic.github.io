@@ -1,18 +1,4 @@
-See the code here: [https://github.com/usedhondacivic/usedhondacivic.github.io](https://github.com/usedhondacivic/usedhondacivic.github.io)
-
-<img style="width: 100%; height: auto; max-height: none" src="./assets/header.png">
-
-## Warning
-
-This page contains sarcastic and derogatory comments about Javascript developers. I'm sorry, I don't mean it, but y'all make it way too easy. Email me if you want to schedule a fist fight.
-
-## Motivation
-
-Building a static website is wayyyy harder than it should be. That isn't to say its that difficult, there are [plenty](https://jamstack.org/generators/) of static site generators out there, but investing time into the hellscape of ever changing Javascript frameworks seems futile when something new is just going to pop up tomorrow. For what is essentially a glorified cut and paste, it seems like a lot of effort.
-
-For all the Javascript experts reading this and foaming at the mouth right now, firstly congrats on learning how to read. Secondly, I know that these more involved approaches come with server side rending and client side route transitions and all the all the bells and whistles that make your ears perk up. And you're right, but for almost all hobbyist applications these features are way overkill. I want a website that features my projects, not one that takes precious time away from working on them. So simple is better, and why not make it into a learning experience along the way.
-
-## Building My Own Glorified Cut and Paste
+ut and paste
 
 ### Structure
 
@@ -76,7 +62,7 @@ All of these elements are grouped into a folder, and placed under the /projects 
 
 ### Templates
 
-To keep the structure all nice and modular, I built templates for the home page, project page, various list entries. The list entries are what you see on the left and under the projects section on the home page. Using templates allows for the content to be completely decoupled from the structure of the website, and be reusable if I ever decide to redesign or relocate. Where the content goes is designated by HTML comments, as shown below:
+To keep the structure all nice and modular, I built templates for the home page, project page, and various list entries. The list entries are what you see on the left and under the projects section on the home page. Using templates allows for the content to be completely decoupled from the structure of the website, and be reusable if I ever decide to redesign or relocate. Where the content goes is designated by HTML comments, as shown below:
 
 ```html
 <article id="article">
@@ -105,7 +91,7 @@ var md = require('markdown-it');
 md.render("# This will generate an H1 tag");
 ```
 
-Given that I often stray into some complex math, I wanted to include support for Latex. Luckily, markdown-it has a pluggin for katex, a browser based Latex renderer. Installing it is simple:
+I often get in over my head with math, so I wanted to include support for Latex in the generator. Luckily, markdown-it has a pluggin for katex, a browser based Latex renderer. Installing it is simple:
 
 ```js
 const tm = require('markdown-it-texmath');
@@ -133,17 +119,17 @@ $$
 
 ### The Gory Details
 
-The details of actually crawling the posts and generating the HTML is honestly better explained in code. See the full listing below if you're interested, but it boils down to crawling the project folder and calling .replace() many times to fill in the relevant fields. As the pages are crawled, a sidebar and homepage entry is also generated and added to a list. Once all pages are generated, I add the relevant sidebars and copy them to the /docs folder.
+The details of actually crawling the posts and generating the HTML is better explained through the actual code. See the full listing below if you're interested, but it boils down to crawling the project folder and calling .replace() many times to fill in the relevant fields. As the pages are crawled, a sidebar and homepage entry is also generated and added to a list. Once all pages are generated, I add the relevant sidebars and copy them to the /docs folder.
 
 Here are the libraries I used for assistance:
 
 I used [glob](https://www.npmjs.com/package/glob) to crawl the /projects folder and handle processing of each post.
 
-For writing, copying, and deleting files I used [fs-extra](https://www.npmjs.com/package/fs-extra), a superset of the normal Node.js tools that allows for things like copying whole folders.
+For writing, copying, and deleting files I used [fs-extra](https://www.npmjs.com/package/fs-extra), a superset of the normal Node.js tools that allows you to do things like copying whole folders.
 
 ### Making it Pretty
 
-Because code is a huge part of my work, pretty syntax highlighting is a big deal. After shopping around a bit, I settled on [highlight.js](https://highlightjs.org/). Complete with hundred of themes and automatic language detection, its the whole package. And installing it was super easy:
+Because code is a big part of my work, pretty syntax highlighting is a must. After shopping around a bit, I settled on [highlight.js](https://highlightjs.org/). It comes with hundred of themes and automatic language detection, and installing it was super easy:
 
 ```html
 <!-- syntax highlighting-->
@@ -154,15 +140,7 @@ Because code is a huge part of my work, pretty syntax highlighting is a big deal
 
 ## Hosting
 
-Github Pages is the king of convenience, and so it was my go-to. On top of being already integrated into my source control, its free! I setup Pages serve from my /docs folder, and it was just that easy. It also offers configuration scripts for doing stuff like only deploying when a new release is created, but I opted to just serve directly from the main branch. I feel that mistakes and works in progress are an integral part of the design process, and make my site feel more genuine and homely.
-
-## Analytics
-
-This one is a source of moral debate for me, one that I haven't quite decided on. First and foremost, I'm a nosey and curious bastard. I want to know who's on my site and what they're doing, just because how could I not? The issues is that comes with technical and privacy concerns.
-
-The king of the analytics world is [Google Analytics](https://analytics.google.com/analytics/web/provision/#/provision), but is rife with [privacy concerns](https://secureprivacy.ai/blog/what-is-google-analytics-and-does-it-comply-with-gdpr#:~:text=Google%20Analytics%20and%20other%20modern,cannot%20be%20considered%20privacy%2Dfriendly.). It is also not GDPR compliant, which isn't an issue for my simple site but is never a good sign.
-
-What other options do little guys like me have though? The one I'm currently working with is [Matomo](https://matomo.org/), but given the hefty price-tag it's not a partnership thats likely to last. The service is open source however, so I could spin up my own server using a Raspberry Pi or AWS. That's a whole other project though, and it remains to be seen if my moral compass or my wallet has a stronger hold on my actions.
+Github Pages is the king of convenience. On top of being integrated into my source control, its also free! I setup Pages serve from the /docs folder in my repo and it just works. It also offers configuration scripts for doing stuff like only deploying when a new release is created, but I opted to just serve directly from the main branch. I feel that mistakes and works in progress are an integral part of the design process, and including them makes my site feel more genuine and homely.
 
 ## The Result
 
