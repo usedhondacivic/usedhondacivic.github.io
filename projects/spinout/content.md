@@ -128,4 +128,4 @@ The huge, jarring, game ruining issue is the lag. Running on LAN the game perfor
 
 ## Details for the Nerds
 
-This post glossed over most implementation details for the sake of brevity, but the code explains the gory details much better than a writeup could. The full source code is available on [my GitHub](), and if you have any questions I am always happy to chat :)
+This post glossed over most implementation details for the sake of brevity, but the code explains the gory details much better than a writeup could. The full source code is available on [my GitHub](https://github.com/usedhondacivic/Node-Drift-Car), and if you have any questions I am always happy to chat :)
