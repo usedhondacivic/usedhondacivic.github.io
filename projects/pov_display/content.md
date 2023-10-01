@@ -2,8 +2,6 @@
 
 ![Three examples of the POV Display running](./assets/figure1_POV_banner.png)
 
-*Created by: Michael Crum, Joseph Horwitz, Rabail Makhdoom*
-
 ## Project Introduction
 
 Holograms are a common fixture in science fiction, yet remain somewhat of a unicorn for the tech world. While building a “real” hologram might be out of reach for today's technology, we can still strap a horn to a metaphorical horse and make it feel pretty. Persistence of Vision (POV) Displays offer one method by utilizing a psychological trick to construct floating images out of light.
