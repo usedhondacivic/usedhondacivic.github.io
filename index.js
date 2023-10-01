@@ -78,7 +78,7 @@ glob("projects/*/*.md", function (er, files) {
             sidebar.push(sidebar_entry);
         }
         // Create home page entry
-        var homepage_entry = homepage_entry_template.replace("<!-- TITLE -->", info.title)
+        var homepage_entry = homepage_entry_template.replaceAll("<!-- TITLE -->", info.title)
             .replace("<!-- DATE -->", info.date)
             .replace("<!-- DESCRIPTION -->", info.description)
             .replace("<!-- TECH -->", info.tech ? "Technologies used: " + info.tech : "")
