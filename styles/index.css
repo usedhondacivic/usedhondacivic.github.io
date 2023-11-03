@@ -13,6 +13,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 30px;
 }
 
 a {
@@ -60,10 +61,21 @@ section#card aside p {
     margin-top: 5px;
 }
 
-section#card footer img {
+section#card footer a {
     width: 20px;
     height: 20px;
     margin: 0px 10px 0px 0px;
+    transition: 0.3s;
+    display: inline-block;
+}
+
+section#card footer img {
+    width: 100%;
+    height: 100%;
+}
+
+section#card footer a:hover {
+    scale: 1.5;
 }
 
 section#splash>footer {
@@ -82,8 +94,14 @@ section#splash>footer img {
 section.entry {
     display: flex;
     width: 60vw;
-    justify-content: space-between;
-    margin-bottom: 30px
+    background-color: #00000000;
+    transition: 0.3s;
+    border-radius: 10px;
+}
+
+section.entry:hover {
+    background-color: #00000080;
+    box-shadow: 0 0 25px 0px #ffffff40;
 }
 
 section.entry article {
@@ -95,8 +113,9 @@ section.entry em {
 }
 
 section.entry a {
-    text-decoration: underline;
-    color: #fefff5;
+    padding: 20px;
+    color: inherit;
+    display: flex;
 }
 
 section.entry aside {
@@ -156,7 +175,7 @@ header h2 {
         float: none !important;
     }
 
-    section.entry {
+    section.entry a {
         flex-direction: column;
         align-items: center;
         text-align: center;

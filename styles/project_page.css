@@ -26,6 +26,7 @@ aside h1 {
         cursive;
     font-size: 27px;
     margin-bottom: 0px;
+    display: inline-block;
 }
 
 aside h1 a {
@@ -50,6 +51,14 @@ nav a {
     height: 100%;
     display: flex;
     justify-content: right;
+    padding: 5px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    background-color: #00000080;
+    box-shadow: 0 0 15px 0px #ffffff40;
 }
 
 nav ul {
@@ -59,7 +68,6 @@ nav ul {
 
 nav li {
     display: flex;
-    margin-bottom: 20px;
     align-items: center;
 }
 
@@ -164,6 +172,30 @@ pre {
     flex-shrink: 100;
 }
 
+#back_button {
+    display: inline-block;
+    position: relative;
+    top: 10px;
+    right: 10px;
+    text-decoration: none;
+    font-size: 2em;
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+#back_button:hover {
+    opacity: 1.0;
+    scale: 1.5;
+    translate: -5px -5px;
+}
+
+#back_button img {
+    width: 100%;
+    height: 100%;
+}
+
 @media only screen and (max-width: 1000px) {
     body {
         flex-direction: column;
@@ -180,28 +212,29 @@ pre {
     }
 
     aside {
+        max-width: 80%;
         text-align: center;
-        margin-left: 0px;
     }
 
     nav li {
-        flex-direction: column;
-        float: none;
-        margin-bottom: 40px;
+        text-align: left;
     }
 
     nav a {
-        flex-direction: column;
-        float: none;
+        width: 100%;
+        justify-content: space-between;
+        padding: 20px;
     }
 
     nav img {
-        order: -1;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 10px;
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
+    }
+
+    #back_button {
+        position: absolute;
+        top: 35px;
+        left: 58px;
     }
 }
 
@@ -215,5 +248,10 @@ pre {
 
     h1 {
         margin-top: 15px !important;
+    }
+
+    aside {
+        max-width: 100%;
+        text-align: center;
     }
 }
