@@ -1,4 +1,3 @@
-This write-up is under construction, come back soon for more :)
 See the code here: [https://github.com/usedhondacivic/ThreeJS-Raymarcher](https://github.com/usedhondacivic/ThreeJS-Raymarcher)
 
 *Warning: Some demos on this page are graphically demanding. I recommend [enabling GPU acceleration](https://www.amd.com/en/support/kb/faq/gpu-110) for your web browser for the best experience.*
