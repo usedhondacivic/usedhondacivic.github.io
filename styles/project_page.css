@@ -243,7 +243,8 @@ pre {
         padding-left: 10px !important;
         padding-right: 10px !important;
         padding-top: 10px !important;
-        margin: 5px !important;
+        margin: 5px;
+        margin-top: 50px;
     }
 
     h1 {
@@ -253,5 +254,11 @@ pre {
     aside {
         max-width: 100%;
         text-align: center;
+    }
+
+    #back_button {
+        position: absolute;
+        top: 25px;
+        left: 15px;
     }
 }
