@@ -1,6 +1,8 @@
-*Paint light into ethereal floating images using a Raspberry Pi Pico MCU*
+*Paint light into ethereal floating images using a Raspberry Pi Pico MCU.*
 
 ![Three examples of the POV Display running](./assets/figure1_POV_banner.png)
+
+*This article was published as the first article of Circuit Cellar Magazine [issue #400](https://circuitcellar.com/inside-this-issue/)!*
 
 ## Project Introduction
 
