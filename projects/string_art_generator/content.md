@@ -61,14 +61,13 @@ $$\underset{c}{\text{argmin}}\,(\text{err}(\vec{a} + c) - \text{err}(\vec{a}))$$
 
 In this equation, $c$ represents a new nail to be connected to, and $\vec{a} + c$ represents the approximated image $\vec{a}$ with a line from the current nail to $c$ added to the image.
 
-
 Great! We can now use gradient descent to minimize the error, leading to a high quality image approximation! Right?
 
 ### Taking Fear Out of the Machine
 
 The implementation so far works poorly on real images. The first issue becomes obvious pretty quickly:
 
-*image showing low detail*
+![A string art piece with low detail](./assets/example_no_detail.png)
 
 None of the details get captured! This is a side effect of how we calculate error. Imagine running the algorithm on the following image, starting with a black background and using white string:
 
@@ -89,7 +88,9 @@ In a turn of phrase, this can be thought of as allowing the algorithm to run wih
 
 Now the results are getting better:
 
-*image of better results*
+![An example of better results](./assets/example_over_detail.png)
+
+However now we have the oposite problem - the algorithm is focusing too much on small details and obsuring the image as a whole.
 
 ### Reverse Robot Optometry
 
@@ -101,13 +102,16 @@ To fix this, we need to effectively blur the algorithms perception. A common app
 
 In my setup, I preprocess the image and resize it such that one pixel corresponds to the diameter of the thread I plan to use. This simplifies the string drawing routine for the simulated string so I can just fill any pixel it passes through with the strings color. To blur the algorithms perception, I again downscale the image by some factor $d$. Now a strings diameter is $1/d$ pixels, so fully coloring the pixels it passes through doesn't make sense. Instead, I add the color to the pixels with a transparency of $1/d$.
 
-*image showing before and after*
+<img alt="Line without blur" src="./assets/lines_no_blur.png" style="width: 40%; image-rendering: pixelated; -ms-interpolation-mode: nearest neightbour;"/>
+<img alt="Line with blur" src="./assets/lines_with_blur.png" style="width: 40%"/>
+
+> *Rendered strings without downscaling (top), vs rendered strings with downscaling (bottom). Notice the color mixing in the center of the bottom image.*
 
 This both simulates the bluring effect of human eyes and reduces computation time due to a lower effective image resolution.
 
 After this improvement, we're really getting somewhere.
 
-*Show new image*
+![An example with good detail](./assets/scull_good_detail.png)
 
 ### Performance
 
