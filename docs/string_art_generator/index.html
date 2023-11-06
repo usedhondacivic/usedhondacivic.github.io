@@ -173,6 +173,13 @@
 <p>This piece took 12 hours of labor for 3200 connections in total.</p>
 <p>There a many videos attempting to explain the string art algorithm in simple ways, but they all leave out crucial details required for an actually decent result. <a href="https://www.etsy.com/listing/1327763781/personalized-couple-string-art-portrait?gpla=1&amp;gao=1&amp;&amp;utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=shopping_us_-craft_supplies_and_tools&amp;utm_custom1=_k_Cj0KCQjwtJKqBhCaARIsAN_yS_mGeFugi4R-d-7-MYH1H85DCjKGxe5mnfCua8gPwnzKw2axQa2KG4MaAqgBEALw_wcB_k_&amp;utm_content=go_12665398257_121762925993_511610210343_pla-295462056867_c__1327763781_156087082&amp;utm_custom2=12665398257&amp;gad_source=1&amp;gclid=Cj0KCQjwtJKqBhCaARIsAN_yS_mGeFugi4R-d-7-MYH1H85DCjKGxe5mnfCua8gPwnzKw2axQa2KG4MaAqgBEALw_wcB">Some people even have good reason</a> to keep the algorithm obfuscated for monetary gain. However, I believe the math and logic behind the algorithm is just as beautiful as the end result. This article is meant to give some insight to those hoping to write their own implementation.</p>
 <p>Of course I had to add my own spice to the algorithm. Publicly available implementations all make a variety of limiting assumptions that reduce the creative freedom of the user. Commonly the size and shape of the frame is completely fixed (and a just boring circle), the color of the thread is fixed, and the number of colors is limited to one or two. Using principled software development, I was able to avoid all of these constraints and give the user ultimate creative control over their piece. Now, how does it actually work?</p>
+<h2>Gallery</h2>
+<p><img src="./assets/van_gogh.webp" alt="Van gogh">
+<img src="./assets/rainbow_eye.webp" alt="Rainbow Eye">
+<img src="./assets/einstien.webp" alt="Einstien">
+<img src="./assets/rainbow_scull.webp" alt="Rainbow Scull">
+<img src="./assets/mandlebulb.webp" alt="Mandlebulb">
+<img src="./assets/pearl_earring.webp" alt="Pearl Earring"></p>
 <h2>From String to Image</h2>
 <p>When developing a new algorithm, I like to avoid information paralysis by first breaking it down to it's core components. Thinking of the algorithm as a blank box, what are the desired inputs and outputs? Obviously we have an image, and we should also supply information about the frame (number of nails, shape, size, ect). On the other side of the algorithm we need some reprentation of the string that will allow us to actually construct the image in the real world. My choice was to number each nail <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1...</mn><mi mathvariant="normal">#</mi><mi>n</mi><mi>a</mi><mi>i</mi><mi>l</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">1 ... \#nails</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">1...#</span><span class="mord mathnormal">nai</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">s</span></span></span></span></eq> and output the &quot;instructions&quot; as an ordered list of nails.</p>
 <img src="./assets/flow_one.svg" alt="flow chart one" style="max-height:200px"/>
@@ -384,6 +391,7 @@ c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></spa
 -7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
 H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
 c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> can be evalutated for any thread color, we can use multiple threads with little modification to the algorithm. Simply run the algorithm for each string independently, and at each step use the string that has the best next move (as defined by the error function).</p>
+<p><img src="./assets/van_gogh.webp" alt="Van gogh"></p>
 <h3>Tying it all together</h3>
 <p>So far I've refrained from presenting any code in an effort to keep the algorithm language agnostic. Reading through code line by line is a huge pain, and is a poor way to communicate concepts. If you've gotten this far, though, you are probably interested in writing your own implementation. You should now be prepared to read though my code, <a href="https://github.com/usedhondacivic/string-art-gen">which is available here</a>.</p>
 <p>I've tried to add comments that map to the sections of this article, so reference back here if any part is confusing. If you need any further help, feel free to reach out to me at the contacts listed on my home page!</p>
@@ -471,9 +479,19 @@ let GUI = {
 <p>The reconstruction technique is know as the <a href="https://en.wikipedia.org/wiki/Radon_transform">Radon Transform</a>, and takes advantage of the <a href="https://en.wikipedia.org/wiki/Projection-slice_theorem">Fourier Slice Theorem</a>. The Fourier Slice Theorem shows that the Fourier Transform of the Radon transform of a reading forms a radial &quot;slice&quot; of the 2D FFT of the original image. After using the slices to recreate the 2D FFT, an inverse FFT results in reconstructed image.</p>
 <p>But how is this useful for string art? The quick answer is computation speed. Instead of computing the error function discretely for each string, we could sample the 2D FFT of the image, then use the inverse of the Fourier Slice Theorem to reconstruct the FFT of the candidate connections. The inverse FFT would then allow us to sample the errors of each connection.</p>
 <p>I'm unsure if this would actually speed up the processing speed, and I don't have time to try and implement a solution based on this concept. If you chose to try, I would recommend <a href="https://pubmed.ncbi.nlm.nih.gov/25080112/#:~:text=The%20GFST%20method%20can%20be,to%20Cartesian%20coordinates%20in%20the">checking out this paper</a> which presents a fan beam generalization of the reconstruction process, which is more relevant to the string problem.</p>
+<h2>Conclusion</h2>
+<p>Generative, algorithmic art is a wonderful area to explore. Selfishly I hope my journey can inspire and aid in the creation of other works, so that I can enjoy viewing them.</p>
 <h2>Resources</h2>
 <ul>
-<li><a href="https://www.peterwonka.net/Publications/pdfs/2018.EG.Birsak.StringArt.pdf">An in depth paper on the mathematics of string art</a></li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=WGccIFf6MF8">The Mathematics of String Art - Virtually Passed on Youtube</a></p>
+</li>
+<li>
+<p><a href="https://www.peterwonka.net/Publications/pdfs/2018.EG.Birsak.StringArt.pdf">String Art: Towards Computational Fabrication of String Images - Birsak Et Al</a></p>
+</li>
+<li>
+<p><a href="https://pubmed.ncbi.nlm.nih.gov/25080112/#:~:text=The%20GFST%20method%20can%20be,to%20Cartesian%20coordinates%20in%20the">Fan beam image reconstruction with generalized Fourier slice theorem</a></p>
+</li>
 </ul>
 
     </article>

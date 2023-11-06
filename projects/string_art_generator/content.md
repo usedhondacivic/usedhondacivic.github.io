@@ -16,6 +16,15 @@ There a many videos attempting to explain the string art algorithm in simple way
 
 Of course I had to add my own spice to the algorithm. Publicly available implementations all make a variety of limiting assumptions that reduce the creative freedom of the user. Commonly the size and shape of the frame is completely fixed (and a just boring circle), the color of the thread is fixed, and the number of colors is limited to one or two. Using principled software development, I was able to avoid all of these constraints and give the user ultimate creative control over their piece. Now, how does it actually work?
 
+## Gallery
+
+![Van gogh](./assets/van_gogh.png)
+![Rainbow Eye](./assets/rainbow_eye.png)
+![Einstien](./assets/einstien.png)
+![Rainbow Scull](./assets/rainbow_scull.png)
+![Mandlebulb](./assets/mandlebulb.png)
+![Pearl Earring](./assets/pearl_earring.png)
+
 ## From String to Image
 
 When developing a new algorithm, I like to avoid information paralysis by first breaking it down to it's core components. Thinking of the algorithm as a blank box, what are the desired inputs and outputs? Obviously we have an image, and we should also supply information about the frame (number of nails, shape, size, ect). On the other side of the algorithm we need some reprentation of the string that will allow us to actually construct the image in the real world. My choice was to number each nail $1 ... \#nails$ and output the "instructions" as an ordered list of nails.
@@ -136,6 +145,8 @@ There is a lot to be said about the validity of this approximation. The human ey
 
 Now that $(\vec{a} + c)_x$ can be evalutated for any thread color, we can use multiple threads with little modification to the algorithm. Simply run the algorithm for each string independently, and at each step use the string that has the best next move (as defined by the error function).
 
+![Van gogh](./assets/van_gogh.png)
+
 ### Tying it all together
 
 So far I've refrained from presenting any code in an effort to keep the algorithm language agnostic. Reading through code line by line is a huge pain, and is a poor way to communicate concepts. If you've gotten this far, though, you are probably interested in writing your own implementation. You should now be prepared to read though my code, [which is available here](https://github.com/usedhondacivic/string-art-gen).
@@ -249,6 +260,14 @@ But how is this useful for string art? The quick answer is computation speed. In
 
 I'm unsure if this would actually speed up the processing speed, and I don't have time to try and implement a solution based on this concept. If you chose to try, I would recommend [checking out this paper](https://pubmed.ncbi.nlm.nih.gov/25080112/#:~:text=The%20GFST%20method%20can%20be,to%20Cartesian%20coordinates%20in%20the) which presents a fan beam generalization of the reconstruction process, which is more relevant to the string problem.
 
+## Conclusion
+
+Generative, algorithmic art is a wonderful area to explore. Selfishly I hope my journey can inspire and aid in the creation of other works, so that I can enjoy viewing them.
+
 ## Resources
 
-* [An in depth paper on the mathematics of string art](https://www.peterwonka.net/Publications/pdfs/2018.EG.Birsak.StringArt.pdf)
+* [The Mathematics of String Art - Virtually Passed on Youtube](https://www.youtube.com/watch?v=WGccIFf6MF8)
+
+* [String Art: Towards Computational Fabrication of String Images - Birsak Et Al](https://www.peterwonka.net/Publications/pdfs/2018.EG.Birsak.StringArt.pdf)
+
+* [Fan beam image reconstruction with generalized Fourier slice theorem](https://pubmed.ncbi.nlm.nih.gov/25080112/#:~:text=The%20GFST%20method%20can%20be,to%20Cartesian%20coordinates%20in%20the)
