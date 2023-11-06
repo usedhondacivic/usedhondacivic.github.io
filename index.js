@@ -38,7 +38,7 @@ function resize_and_relocate(src_dir, target_dir) {
             let file_split = path_name.split("/");
             let file_name = file_split[file_split.length - 1];
             if (file_name == "assets") return;
-            if (file_name.split(".")[1] === "svg") {
+            if (file_name.split(".")[1] === "svg" || file_name.split(".")[1] === "gif") {
                 fs.copyFileSync(path_name, target_dir + "/" + file_name);
             }
             sharp(path_name).toFile(target_dir + "/" + file_name.split(".")[0] + ".webp");
