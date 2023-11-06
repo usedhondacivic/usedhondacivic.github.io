@@ -4,6 +4,15 @@ See the code here: [https://github.com/usedhondacivic/string-art-gen](https://gi
 
 *Use the full tool at [https://michael-crum.com/string-art-gen/](https://michael-crum.com/string-art-gen/)*
 
+## Gallery
+
+![Van gogh](./assets/van_gogh.png)
+![Rainbow Eye](./assets/rainbow_eye.png)
+![Einstien](./assets/einstien.png)
+![Rainbow Scull](./assets/rainbow_scull.png)
+![Mandlebulb](./assets/mandlebulb.png)
+![Pearl Earring](./assets/pearl_earring.png)
+
 ## What is String Art?
 
 String art, the process of creating images using a continous string wrapped around a frame of nails, was pioneered by engineer and artist [Petros Vrellis](https://www.instagram.com/pvrellis/?hl=en). The process seems like magic, creating order from a fundamentally chaotic tangle of string. The problem's unique mix of elegant engineering with physical beauty spoke to me, so I decided to create my own open source implementation. Heres the final product of a two string, black and white piece.
@@ -15,15 +24,6 @@ This piece took 12 hours of labor for 3200 connections in total.
 There a many videos attempting to explain the string art algorithm in simple ways, but they all leave out crucial details required for an actually decent result. [Some people even have good reason](https://www.etsy.com/listing/1327763781/personalized-couple-string-art-portrait?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_-craft_supplies_and_tools&utm_custom1=_k_Cj0KCQjwtJKqBhCaARIsAN_yS_mGeFugi4R-d-7-MYH1H85DCjKGxe5mnfCua8gPwnzKw2axQa2KG4MaAqgBEALw_wcB_k_&utm_content=go_12665398257_121762925993_511610210343_pla-295462056867_c__1327763781_156087082&utm_custom2=12665398257&gad_source=1&gclid=Cj0KCQjwtJKqBhCaARIsAN_yS_mGeFugi4R-d-7-MYH1H85DCjKGxe5mnfCua8gPwnzKw2axQa2KG4MaAqgBEALw_wcB) to keep the algorithm obfuscated for monetary gain. However, I believe the math and logic behind the algorithm is just as beautiful as the end result. This article is meant to give some insight to those hoping to write their own implementation.
 
 Of course I had to add my own spice to the algorithm. Publicly available implementations all make a variety of limiting assumptions that reduce the creative freedom of the user. Commonly the size and shape of the frame is completely fixed (and a just boring circle), the color of the thread is fixed, and the number of colors is limited to one or two. Using principled software development, I was able to avoid all of these constraints and give the user ultimate creative control over their piece. Now, how does it actually work?
-
-## Gallery
-
-![Van gogh](./assets/van_gogh.png)
-![Rainbow Eye](./assets/rainbow_eye.png)
-![Einstien](./assets/einstien.png)
-![Rainbow Scull](./assets/rainbow_scull.png)
-![Mandlebulb](./assets/mandlebulb.png)
-![Pearl Earring](./assets/pearl_earring.png)
 
 ## From String to Image
 
