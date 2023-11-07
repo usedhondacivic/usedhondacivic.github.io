@@ -181,7 +181,7 @@
 <h2>Parts List</h2>
 <ul>
 <li><a href="https://www.adafruit.com/product/5690">ATtiny1616 breakout board</a> (or similar ATtiny chip)</li>
-<li><a href="">Serial to Serial cable</a> (for flashing the chip)</li>
+<li><a href="">USB to Serial cable</a> (for flashing the chip)</li>
 <li>1k <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Ω</span></span></span></span></eq> resistor</li>
 <li>Prototyping breadboard</li>
 </ul>
@@ -202,9 +202,159 @@
 <h2>Installing the Toolchain</h2>
 <p>If you're looking for some quick results, the current setup is enough to use the Arduino IDE (or platform IO) to program the chip. <a href="https://learn.adafruit.com/adafruit-attiny817-seesaw/advanced-reprogramming-with-updi">See the instructions for Arduino here</a>. However, I'm here to urge you to not go over to the dark side! If you are ok with the bloat associated with the Arduino framework, you almost certainly would be better off using a higher spec'd chip to begin with. To squeeze all the possible performance out of the ATtiny, you really need to program it bare metal.</p>
 <p>The following steps are what I used to get my setup working. I am running <code>Ubuntu 22.04.3 LTS</code> on my system, so if you're running Windows or Mac you might need to use a different tutorial for this step (<a href="https://hub.docker.com/_/ubuntu">or use Docker</a>).</p>
-<h2>Writing a Makefile</h2>
-<h2>Hello World!</h2>
-<h2>Further Reading</h2>
+<p>The basic setup uses <code>gcc-avr</code> to compile and build the executable for the code, then passes the file to <code>avrdude</code> to flash the microcontroller.</p>
+<p>If your lucky (and using a more common chip like the ATtiny85), then all you need to do is run</p>
+<pre><code class="language-bash">sudo apt-get update
+sudo apt-get install gcc-avr binutils-avr avr-libc gdb-avr avrdude
+</code></pre>
+<p>However, if you're programming the ATtiny1616 you're going to run into problems. The first is with <code>avrdude</code>. At the time of writing, <code>apt-get</code> will install an ancient <code>avrdude</code> version that isn't compatible with SerialUPDI. Instead, we need to compile and install from source. First run</p>
+<pre><code class="language-bash">sudo apt-get remove avrdude
+</code></pre>
+<p>then follow <a href="https://github.com/avrdudes/avrdude/wiki/Building-AVRDUDE-for-Linux">the instructions from the <code>avrdude</code> Github</a>.</p>
+<p>The second problem is with <code>gcc-avr</code>. The version installed with <code>apt-get</code> is 5.3, but the configuration files for the ATtiny1616 aren't included until version 8.0. If you try to compile targeting the ATtiny1616 using 5.3 you'll get the error:</p>
+<pre><code>usr/lib/gcc/avr/5.4.0/../../../avr/bin/ld: cannot find crtattiny1616.o: No such file or directory
+</code></pre>
+<p>Again, we need to build from source. This compilation is much beefier than <code>avrdude</code>, but luckily <a href="https://blog.zakkemble.net/avr-gcc-builds/">Zak Kemble provides builds on his website</a>. He also provides a script to build from source if you don't trust binaries from the internet.</p>
+<p>After navigating to the directory you want to store the tool in (maybe <code>/opt/</code>), download the relevant file using</p>
+<pre><code>wget https://github.com/ZakKemble/avr-gcc-build/releases/download/v12.1.0-1/avr-gcc-12.1.0-x64-linux.tar.bz2
+</code></pre>
+<p>Alternatively you could download using the website and move the file. Next, we have to extract the archive using</p>
+<pre><code class="language-bash">tar -xf avr-gcc-12.1.0-x64-linux.tar.bz2
+</code></pre>
+<p>and add the executables to PATH with</p>
+<pre><code class="language-bash">export PATH=~/avr-gcc-12.1.0-x64-linux/bin:$PATH
+</code></pre>
+<h2>Pinging Your Chip</h2>
+<p>To test your setup, now is a good time to see if you can communicate with your microcontroller. Try running the following command:</p>
+<pre><code class="language-bash">sudo avrdude -c serialupdi -p t1616 -P &quot;/dev/ttyUSB0&quot; -b 57600 -v -v -v
+</code></pre>
+<p>The options are as follows:</p>
+<ul>
+<li><code>-c</code>: What programmer you are using. Run <code>avrdude -c ?</code> to see all options.</li>
+<li><code>-p</code>: The name of your chip. Run <code>avrdude -p ?</code> to see all options.</li>
+<li><code>-P</code>: Port used for programming. Run <code>avrdude -P ?s</code> to see all options.</li>
+<li><code>-b</code>: Baud rate. I'm running on a lower baud rate because SerialUPDI can get unstable when run faster.</li>
+<li><code>-v</code>: Verbose. Chain multiple times to get more details printed.</li>
+</ul>
+<p>After a successful run, you should get the following output:</p>
+<pre><code></code></pre>
+<p>If you see this message it means your programmer is communicating, but it can't connect to the board:</p>
+<pre><code></code></pre>
+<p>If your programmer isn't detected at all, you'll get this message:</p>
+<pre><code class="language-bash">avrdude: opening serial port ...
+avrdude ser_open() [ser_posix.c:400] OS error: cannot open port /dev/ttyUSB0: No such file or directory
+avrdude: serial port open failed!
+avrdude main() [main.c:1280] error: unable to open port /dev/ttyUSB0 for programmer serialupdi
+</code></pre>
+<p>Make sure you've selected the right serial adaptor with the <code>-P</code> flag.</p>
+<h2>Starter Project</h2>
+<p>Now that the toolchain is properly installed, we can create a first project. It will do the unthinkable: blink an LED.</p>
+<p>To run the project, we'll need two files. Make a project directory and create the files &quot;main.cpp&quot; and &quot;makefile&quot; under that directory.</p>
+<h3>Writing a Makefile</h3>
+<p>The compilation and upload process consists of many steps, and typing them out each time is cumbersome and prone to error. Instead, we can use a makefile to run the process for us. I based my makefile off <a href="https://www.youtube.com/watch?v=iKqLbbyPydI">this video by The Mac Layer</a>, but added comments and fuse writing functionality.</p>
+<p>makefile:</p>
+<pre><code class="language-make"># Define variable that may change between projects
+FILENAME = main
+PORT = /dev/ttyUSB0
+DEVICE = attiny1616
+PROGRAMMER = serialupdi
+
+# Clock speed my be provided for delays to be timed properly 
+CLOCK = 20000000
+
+# Baud rate for programming
+BAUD = 115200
+
+# Compile with options:
+# - All warnings (-Wall)
+# - Optimized for size (-0s)
+# - Targeted to our mcu (-mmcu)
+# - F_CPU defined as our clock speed (-DF_CPU)
+COMPILE = avr-gcc -Wall -Os -mmcu=$(DEVICE) -DF_CPU=$(CLOCK)
+
+default: compile upload clean
+
+# Compile step
+# file.cpp -&gt; file.o -&gt; file.elf -&gt; file.hex
+# Then print out the size of the binary
+compile:
+	$(COMPILE) -c $(FILENAME).cpp -o $(FILENAME).o
+	$(COMPILE) -o $(FILENAME).elf $(FILENAME).o
+	avr-objcopy -j .text -j .data -O ihex $(FILENAME).elf $(FILENAME).hex
+	avr-size $(FILENAME).elf
+
+# Upload step
+# Flash the .hex file onto the chip
+upload:
+	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$(FILENAME).hex:i
+
+# Remove intermediate files
+clean:
+	rm $(FILENAME).o
+	rm $(FILENAME).elf
+	rm $(FILENAME).hex
+
+# Fuses are non-volitile settings that can be set by avrdude and persist between resets
+# Setting fuse2 to 0x7e enables 20Mhz clock
+# See page 34 of https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny1614-16-17-DataSheet-DS40002204A.pdf
+fuse:
+	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U fuse2:w:0x7e:m
+</code></pre>
+<h3>Hello World!</h3>
+<p>Before we can flash the microcontroller, we need some code! Heres a quick program to blink an LED, adapted from <a href="https://www.instructables.com/Honey-I-Shrunk-the-Arduino-Moving-from-Arduino-t/">this tutorial</a> to work on the ATtiny1616. The breakout board I'm using has an active low LED on pin 12, which this lovely <a href="https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny1614-16-17-DataSheet-DS40002204A.pdf">excerpt of the datasheet</a> reveals is mapped to pin 0 of PORTC.</p>
+<p><img src="./assets/multiplexing.webp" alt="Pin muxing chart from the chip datasheet"></p>
+<p>You'll have to change the pin if you use a different chip / breakout board.</p>
+<p>main.cpp:</p>
+<pre><code class="language-cpp">#include &lt;avr/io.h&gt;
+// F_CPU frequency is defined in the makefile
+#include &lt;util/delay.h&gt;
+
+// LED is on pin 0 of PORTC
+#define LED 0
+#define DELAY_MS 500
+
+int main()
+{
+    uint8_t high = 0;
+    uint16_t ms = 0;
+
+    // Use MCLKCTRLB to disable the clock divider to get a 20 MHz clock
+    // MCLKCTRLB is under CCP (configuration change protection), so we
+    // have to write 0xD8 to the CCP register before we change it.
+    CCP = 0xD8;
+    CLKCTRL_MCLKCTRLB &amp;= ~(1);
+
+    // setup LED pin for output in port C's direction register and set LED pin LOW
+    PORTC_DIR |= (1 &lt;&lt; LED);
+    PORTC_OUT &amp;= ~(1 &lt;&lt; LED);
+
+    while (1)
+    {
+        high = !high;
+
+        if (high)
+        {
+            // set LED pin HIGH
+            PORTC_OUT |= (1 &lt;&lt; LED);
+        }
+        else
+        {
+            // set LED pin LOW
+            PORTC_OUT &amp;= ~(1 &lt;&lt; LED);
+        }
+
+        // delay for 500 ms
+        for (ms = DELAY_MS; ms &gt; 0; ms -= 10)
+        {
+            _delay_ms(10);
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+<h2>Conclusion</h2>
+<p>And thats it! Welcome to the brutal (but rewarding) world of AVR programming.</p>
 
     </article>
     <div id="right_pad"></div>
