@@ -103,11 +103,20 @@ The options are as follows:
 After a successful run, you should get the following output:
 
 ```
+avrdude: AVR device initialized and ready to accept instructions
+avrdude: device signature = 0x1e9421 (probably t1616)
+
+avrdude done.  Thank you.
 ```
 
 If you see this message it means your programmer is communicating, but it can't connect to the board:
 
 ```
+avrdude serialupdi_initialize() [serialupdi.c:574] error: UPDI link initialization failed
+avrdude main() [main.c:1401] error: initialization failed, rc=-1
+        - double check the connections and try again
+        - use -b to set lower baud rate, e.g. -b 28800
+        - use -F to override this check
 ```
 
 If your programmer isn't detected at all, you'll get this message:
