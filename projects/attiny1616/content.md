@@ -225,24 +225,10 @@ int main()
 
     while (1)
     {
-        high = !high;
+        // Toggle pin 0
+        PORTC_OUT ^= PIN0_bm;
 
-        if (high)
-        {
-            // set LED pin HIGH
-            PORTC_OUT |= (1 << LED);
-        }
-        else
-        {
-            // set LED pin LOW
-            PORTC_OUT &= ~(1 << LED);
-        }
-
-        // delay for 500 ms
-        for (ms = DELAY_MS; ms > 0; ms -= 10)
-        {
-            _delay_ms(10);
-        }
+        _delay_ms(500);
     }
 
     return 0;
