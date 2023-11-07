@@ -1,0 +1,7 @@
+{
+    "title": "Zero to Bare Metal AVR Programming with the ATtiny1616",
+    "description": "The ATtiny microchip line is a wildly popular choice for low cost microcontrollers. Despite this, online documentation is full of gaps and misinformation about how to actually program the chips. This article attempts to fill that gap, providing a step by step guide to programming the ATtiny1616 microchip over UPDI.",
+    "date": "11.07.2023",
+    "tech": "C++, avrdude, gcc-avr, UPDI",
+    "bits": "true"
+}

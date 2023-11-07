@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Zero to Bare Metal AVR Programming with the ATtiny1616 | Michael Crum | Portfolio</title>
+
+    <!-- seo -->
+    <meta name="author" content="Michael Crum">
+    <meta name="description" content="The ATtiny microchip line is a wildly popular choice for low cost microcontrollers. Despite this, online documentation is full of gaps and misinformation about how to actually program the chips. This article attempts to fill that gap, providing a step by step guide to programming the ATtiny1616 microchip over UPDI.">
+    <meta name="keywords" content="portfolio,developer,robotics,personal">
+
+    <!-- display -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- icon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../global_assets/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../global_assets/icons/favicon-16x16.png" />
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="../styles/project_page.css">
+    <link rel="stylesheet" href="../styles/highlight/styles/base16/bright.min.css">
+    <link rel="stylesheet" href="../styles/katex/katex.min.css">
+
+    <!-- syntax highlighting-->
+    <script src="../styles/highlight/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <!-- latex support-->
+    <script defer src="../styles/katex/katex.min.js"></script>
+
+    <!-- font -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+
+    <!-- iFrame optimization -->
+    <script>
+        checkVisibility();
+        document.addEventListener("scroll", (event) => {
+            checkVisibility();
+        });
+
+        function checkVisibility() {
+            const frames = document.getElementsByTagName("iframe");
+            for (var i = 0; i < frames.length; i++) {
+                frame = frames[i];
+                if (isInViewport(frame)) {
+                    frame.style.visibility = "visible";
+                } else {
+                    frame.style.visibility = "hidden";
+                }
+            }
+        }
+
+        function isInViewport(elm) {
+            var rect = elm.getBoundingClientRect();
+            var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+            return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="left_pad"></div>
+    <aside>
+        <a id="back_button" href="../"><img src="../global_assets/icons/back-arrow.svg" alt="back" title="back"></a>
+        <h1><a href="..">Michael Crum</a></h1>
+        <h3><em>More Projects:</em></h3>
+        <nav>
+            <ul>
+                <li>
+    <a href="../string_art_generator">
+        <img src="../string_art_generator/assets/snapshot.webp" alt="Generalized String Art Generator">
+        <div>
+            <p>Generalized String Art Generator</p>
+            <em> 11.01.2023</em>
+        </div>
+    </a>
+</li>
+<li>
+    <a href="../fast_robots">
+        <img src="../fast_robots/assets/snapshot.webp" alt="Teaching Cheap Robots Expensive Tricks">
+        <div>
+            <p>Teaching Cheap Robots Expensive Tricks</p>
+            <em> 5.20.2023</em>
+        </div>
+    </a>
+</li>
+<li>
+    <a href="../raymarching">
+        <img src="../raymarching/assets/snapshot.webp" alt="An Introduction to Ray Marching">
+        <div>
+            <p>An Introduction to Ray Marching</p>
+            <em> 3.23.2023</em>
+        </div>
+    </a>
+</li>
+<li>
+    <a href="../pov_display">
+        <img src="../pov_display/assets/snapshot.webp" alt="Holographic POV Display">
+        <div>
+            <p>Holographic POV Display</p>
+            <em> 12.16.2022</em>
+        </div>
+    </a>
+</li>
+<li>
+    <a href="../lock_cracking_robot">
+        <img src="../lock_cracking_robot/assets/snapshot.webp" alt="CNC Lock Cracking Robot">
+        <div>
+            <p>CNC Lock Cracking Robot</p>
+            <em> 4.12.2022</em>
+        </div>
+    </a>
+</li>
+<li>
+    <a href="../spinout">
+        <img src="../spinout/assets/snapshot.webp" alt="Spinout: A Fully Custom Multiplayer Online Racing Game">
+        <div>
+            <p>Spinout: A Fully Custom Multiplayer Online Racing Game</p>
+            <em> 11.23.2021</em>
+        </div>
+    </a>
+</li>
+<li>
+    <a href="../frc-2020">
+        <img src="../frc-2020/assets/snapshot.webp" alt="FRC - Infinite Recharge">
+        <div>
+            <p>FRC - Infinite Recharge</p>
+            <em> 3.6.2020</em>
+        </div>
+    </a>
+</li>
+<li>
+    <a href="../processing_arcade">
+        <img src="../processing_arcade/assets/snapshot.webp" alt="Processing Arcade: A Collection of Javascript Games">
+        <div>
+            <p>Processing Arcade: A Collection of Javascript Games</p>
+            <em> 8.13.2016</em>
+        </div>
+    </a>
+</li>
+            </ul>
+        </nav>
+        <h3><em>More Bits:</em></h3>
+        <nav>
+            <ul>
+                <li>
+    <a href="../attiny1616">
+        <img src="../attiny1616/assets/snapshot.webp" alt="Zero to Bare Metal AVR Programming with the ATtiny1616">
+        <div>
+            <p>Zero to Bare Metal AVR Programming with the ATtiny1616</p>
+            <em> 11.07.2023</em>
+        </div>
+    </a>
+</li>
+<li>
+    <a href="../static_page_gen">
+        <img src="../static_page_gen/assets/snapshot.webp" alt="Building a 100 Line Static Site Generator">
+        <div>
+            <p>Building a 100 Line Static Site Generator</p>
+            <em> 3.30.2023</em>
+        </div>
+    </a>
+</li>
+            </ul>
+        </nav>
+    </aside>
+    <article id="article">
+        <h1>
+            Zero to Bare Metal AVR Programming with the ATtiny1616
+        </h1>
+        <em class="date">
+            11.07.2023
+        </em>
+        <br>
+        <h2>Context: AVR and ATTiny</h2>
+<p>The AVR family of chips are built on the 8-bit RISC AVR Architecture. AVR became especially popular when it was selected as the main driver of the Arduino boards. The first circulated Arduino board, the Diecimila, used the ATmega168, and the ubiquitous Arduino Uno is based on the ATmega328P.</p>
+<p>The ATtiny line is the baby of the AVR family. The chips are characterized by lower performance, memory, and pin options, but in return offer an absolutely miniscule footprint and price point. Because of this, they are often used in space and power constrained systems.</p>
+<p>Unfortunately, easy programmability was one of the conveniences sacrificed for size. There is no bootloader, and the chip is far from plug and play. Instead, the chip must be programmed using the single wire UPDI protocol.</p>
+<p>For my experiments, I've been using the <a href="https://www.adafruit.com/product/5690">ATtiny1616 breakout board from Adafruit</a>. It has extremely minimal additional hardware, which is perfect for learning the basics of the chip. Aside from the processor itself, there are a couple of other parts you need to get started with one of these boards.</p>
+<h2>Parts List</h2>
+<ul>
+<li><a href="https://www.adafruit.com/product/5690">ATtiny1616 breakout board</a> (or similar ATtiny chip)</li>
+<li><a href="">Serial to Serial cable</a> (for flashing the chip)</li>
+<li>1k <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Ω</span></span></span></span></eq> resistor</li>
+<li>Prototyping breadboard</li>
+</ul>
+<h2>Programmers, Hacks, and UPDI</h2>
+<p>Unlike fully featured boards like the Arduino Uno, most ATtiny breakout boards won't come with the hardware needed to flash new code. Instead you must use an <a href="https://github.com/wagiminator/AVR-Programmer">AVR Programmer</a> to handle communication with the chip. The better programmers can cost a pretty penny, so a number of workarounds have been created.</p>
+<p>The first is using a separate microcontroller as the programmer. By flashing an Arduino with <a href="https://github.com/ElTangas/jtag2updi">jtag2udpi</a>, the Arduino itself could then be used as a programmer for other AVR chips.</p>
+<p>I didn't have an Arduino laying around, so I turned to a second option: <a href="https://github.com/SpenceKonde/AVR-Guidance/blob/master/UPDI/jtag2updi.md#jtag2updi-never-heard-of-him">SerialUPDI</a>. SerialUPDI uses a standard <a href="https://www.adafruit.com/product/954">USB to Serial cable</a> and a single 1k <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Ω</span></span></span></span></eq> resistor to program over UPDI directly from your computer. This option is dirt cheap and minimizes external components, so its the approach I recommend.</p>
+<p>On different parts of the internet, you'll see the resistor value as 4.7k <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Ω</span></span></span></span></eq> all the way to 10k <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Ω</span></span></span></span></eq>. Don't be fooled! I spent many hours trying to get a 4.7k resistor to work, only to swap to a 1k resistor and immediately have my problems solved. Wire up your board is shown below:</p>
+<p><img src="./assets/updi_circuit_layout.webp" alt="The circuit layout for UPDI programming over Serial"></p>
+<p>Quoting directly from <a href="https://learn.adafruit.com/adafruit-attiny817-seesaw/advanced-reprogramming-with-updi">the Adafruit page</a>:</p>
+<ul>
+<li>USB to Serial cable power to ATtiny VIN (red wire)</li>
+<li>USB to Serial cable ground to ATtiny G (black wire)</li>
+<li>USB to Serial cable RX to 1K resistor (white wire)</li>
+<li>USB to Serial cable TX to 1K resistor (green wire)</li>
+<li>1K resistor to ATtiny UPDI pin (white wire)</li>
+</ul>
+<h2>Installing the Toolchain</h2>
+<p>If you're looking for some quick results, the current setup is enough to use the Arduino IDE (or platform IO) to program the chip. <a href="https://learn.adafruit.com/adafruit-attiny817-seesaw/advanced-reprogramming-with-updi">See the instructions for Arduino here</a>. However, I'm here to urge you to not go over to the dark side! If you are ok with the bloat associated with the Arduino framework, you almost certainly would be better off using a higher spec'd chip to begin with. To squeeze all the possible performance out of the ATtiny, you really need to program it bare metal.</p>
+<p>The following steps are what I used to get my setup working. I am running <code>Ubuntu 22.04.3 LTS</code> on my system, so if you're running Windows or Mac you might need to use a different tutorial for this step (<a href="https://hub.docker.com/_/ubuntu">or use Docker</a>).</p>
+<h2>Writing a Makefile</h2>
+<h2>Hello World!</h2>
+<h2>Further Reading</h2>
+
+    </article>
+    <div id="right_pad"></div>
+</body>
+
+</html>
