@@ -169,7 +169,7 @@ default: compile upload clean
 compile:
 	$(COMPILE) -c $(FILENAME).cpp -o $(FILENAME).o
 	$(COMPILE) -o $(FILENAME).elf $(FILENAME).o
-	avr-objcopy -j .text -j .data -O ihex $(FILENAME).elf $(FILENAME).hex
+	avr-objcopy -O ihex $(FILENAME).elf $(FILENAME).hex
 	avr-size $(FILENAME).elf
 
 # Upload step

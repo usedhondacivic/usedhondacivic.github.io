@@ -131,7 +131,7 @@ $$\underset{c}{\text{argmin}}\,(\sum_{x \in c} \text{min}(0, o_x - (\vec{a} + c)
 
 In code, this change will simply be changing the loop to run over only pixels that intersect the new string rather than all pixels in the image. To calculate the relevant pixels I used [Bresenhams line algorithm](https://www.middle-engine.com/blog/posts/2020/07/28/bresenhams-line-algorithm), which is a common fixture of computer graphics.
 
-### Lets get colorful
+### Lets Get Colorful
 
 So far, I haven't adressed the notion of color whatsoever. By taking a mathematical approach to the problem, we've stumbled across an algorithm that can be generalized to any number of colors and number of strings.
 
@@ -165,7 +165,7 @@ I've tried to add comments that map to the sections of this article, so referenc
 
 Few, that was a lot of work to design that algorithm. It would be a shame if no one ever used it. So how do you make people actually want to engage with your tool?
 
-### How to make a tool people will actually use
+### How to Make a Tool People Will Actually Use
 
 The simple truth is that no one will ever download and run your python program or C++ excecutable, no matter how cool it is. An easily accessable web tool that produces a worse product will always win out, simply because the average user is both non-technical and in a rush to get a result.
 
@@ -246,7 +246,7 @@ let GUI = {
 
 No React, no bootstrap, no huge dependency list, and it does exactly what it needs to do and nothing more. Software bloat is the quickest way to make you hate your own project and never finish it, so fight the urge to pickup the shiniest library whenever the going gets tough.
 
-## Further research: Computed Tomography and Fast Fourier Transforms
+## Further Research: Computed Tomography and Fast Fourier Transforms
 
 This project took me down an interesting rabit hole worth some further exploration. I want to briefly cover it here, in hopes someone will take a crack at them down the line.
 
