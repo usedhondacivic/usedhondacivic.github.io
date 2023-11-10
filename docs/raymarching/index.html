@@ -186,7 +186,7 @@
 <p>Ray marching follows the same concept as ray tracing (following rays through space), but uses some computational cleverness to make the intersections easier to compute.</p>
 <p>I'll first walk through the theoretical basis for ray marching before finishing the article by talking about my implementation.</p>
 <h3>Signed Distance Fields (SDFs)</h3>
-<p>If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object this value is &gt; 0, inside it is &lt; 0, and on the border it is equal to 0.</p>
+<p>If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object, this value is &gt; 0, inside it is &lt; 0, and on the border it is equal to 0.</p>
 <img style="width: 100%; height: auto; max-height: none" alt="An example of signed distance fields" src="./assets/2d_sdf.webp">
 <blockquote>
 <p><em>An example of signed distance fields for various shapes</em></p>
@@ -313,7 +313,7 @@ float sceneSDF(vec3 p) {
 <p>A popular tool for experimenting with shaders is <a href="https://www.shadertoy.com/">Shadertoy</a>, a website that allows you to create, explore, and share shaders with minimal setup time. I highly recommend this route if you care primarily about building cool stuff quickly.</p>
 <h3>My Stack</h3>
 <p>I decided against using Shadertoy so I could gain a better understanding of the underlying technology.</p>
-<p>My first attempt was a purist C++ approach using OpenGL through the GLFW3 and GLAD libraries. This is the most performant solution but comes with the downside of having to recompile the code each time I tweaked the shader. This could be solved using some kind of live reload functionality, but I decided it wasn't worth the time to try and solve it. Additionally, it would be difficult to display the results on this website. My work in this direction is linked in the &quot;More Resources&quot; section below if you are interested.</p>
+<p>My first attempt was a purist C++ approach using OpenGL through the GLFW3 and GLAD libraries. This is the most performant solution but comes with the downside of having to recompile the code very time I tweak the shader. This could be solved using some kind of live reload functionality, but I decided it wasn't worth the time to try and solve it. Additionally, it would be difficult to display the results on this website. My work in this direction is linked in the &quot;More Resources&quot; section below if you are interested.</p>
 <p>After giving up on C++ I turned to the popular Javascript graphics library Three.js. Three has a bunch of awesome functionalities including WebGL support and runs directly in the browser.</p>
 <h3>WebGL and Shaders</h3>
 <p>WebGL is a widely used API for interfacing with the GPU and the one I used for my experiments. It is a browser-focused brother of OpenGL. I'll give a quick summary of the parts of WebGL that are important to us.</p>

@@ -6,7 +6,7 @@
 
 ## Introduction
 
-Roboticists are constantly attempting to do more with less. Computers, actuators, and sensors are never as fast, strong, or accurate as you would like. Working within these restrictions necessitate clever design, leading to interesting and elegant solutions. This semester I explored these requirements in the extreme, squeezing every bit of performance I could out of a toy car.
+Roboticists are constantly attempting to do more with less. Computers, actuators, and sensors are never as fast, strong, or accurate as you would like. Working within these restrictions necessitates clever design, leading to interesting and elegant solutions. This semester I explored these requirements in the extreme, squeezing every bit of performance I could out of a toy car.
 
 I'll first cover the physical and electrical modifications I made to the car, then get into the fun applications and the software algorithms that enabled them.
 
@@ -14,13 +14,13 @@ Note that this article is a massively abbreviated version of my [full build log]
 
 ## Brain Surgery on a Car  
 
-Electrically a toy car is very simple. My car uses one motor per side, connected to a microcontroller for converting data from a remote control into speed commands. For complicated processing and communication, the integrated controller is completely inadequate. I replaced it with the beefier [SparkFun Artemis Nano](https://www.sparkfun.com/products/15443) microcontroller, boasting a 48Mhz clock, 1MB flash, 384k RAM, and built in Bluetooth. The Artemis provides plenty of clock cycles and greatly simplifies my communication solution.
+Electrically a toy car is very simple. My car uses one motor per side, connected to a microcontroller for converting data from a remote control into speed commands. For complicated processing and communication, the integrated controller is completely inadequate. I replaced it with the beefier [SparkFun Artemis Nano](https://www.sparkfun.com/products/15443) microcontroller, boasting a 48Mhz clock, 1MB flash, 384k RAM, and built-in Bluetooth. The Artemis provides plenty of clock cycles and greatly simplifies my communication solution.
 
-To control the motors, I used two [dual channel motor drivers](https://www.digikey.com/en/products/detail/pololu-corporation/2130/10450426), using two channels per motor to get 2.4 A peak current output. For sensing, I chose a [9 Degree of Freedom IMU](https://www.mouser.com/ProductDetail/SparkFun/SEN-15335?qs=uwxL4vQweFMcls1MYZT00A%3D%3D) and two [Time of Flight sensors](https://www.pololu.com/product/3415) rated for 4 meters of range.
+To control the motors, I used two [dual-channel motor drivers](https://www.digikey.com/en/products/detail/pololu-corporation/2130/10450426), using two channels per motor to get 2.4 A peak current output. For sensing, I chose a [9 Degree of Freedom IMU](https://www.mouser.com/ProductDetail/SparkFun/SEN-15335?qs=uwxL4vQweFMcls1MYZT00A%3D%3D) and two [Time of Flight sensors](https://www.pololu.com/product/3415) rated for 4 meters of range.
 
-The sensor peripherals communicate over I2C with the SparkFun QWIIC connector system. QWIIC is a standardized connector specifically for I2C, making prototyping plug and play.
+The sensor peripherals communicate over I2C with the SparkFun QWIIC connector system. QWIIC is a standardized connector specifically for I2C, making prototyping plug-and-play.
 
-After cutting out the included control hardware, I soldered the motor leads into my motor drivers and wired the peripherals into the artemis. Two 3.7V 850mAh LiPo batteries provide power, one dedicated to the motors and the other to the control electronics. Isolating the power source minimizes electromagnetic interference between the motors and sensors, a common issue when using brushed (or really any) motors.
+After cutting out the included control hardware, I soldered the motor leads into my motor drivers and wired the peripherals into the Artemis. Two 3.7V 850mAh LiPo batteries provide power, one dedicated to the motors and the other to the control electronics. Isolating the power source minimizes electromagnetic interference between the motors and sensors, a common issue when using brushed (or really any) motors.
 
 ![The car's electronics installed](./assets/car_electronics.jpg)
 
@@ -38,7 +38,7 @@ The upgraded car is a durable and highly capable robotics platform for well unde
 
 The Artemis Nano is compatible with the Arduino Core's wide variety of libraries and drivers. The ToF sensors and IMU have drivers from their vendors, and the motor drivers are easily controlled over PWM. Similarly, the Bluetooth Low Energy (BLE) module on the Artemis is supported by an Arduino Core library.
 
-The Artemis is a wonderful little powerhouse, but for computationally expensive tasks it's just not fast enough. For the really heavy lifting, I chose to offload data to my laptop over BLE, compute the relevant values using Python, then send them back. For Python-side BLE communication I used the Bleak module. I also utilized the Python usual suspects for computation and graphing, namely Numpy and Matplotlib.
+The Artemis is a wonderful little powerhouse, but for computationally expensive tasks it's just not fast enough. For the really heavy lifting, I chose to offload data to my laptop over BLE, compute the relevant values using Python, and then send them back. For Python-side BLE communication I used the Bleak module. I also utilized Python's usual suspects for computation and graphing, namely Numpy and Matplotlib.
 
 ## Software Basis
 
@@ -46,17 +46,17 @@ Before getting into the cool applications, I want to cover some software techniq
 
 ### Sensor Fusion
 
-On the best of days data from cheap sensors is noisy and unreliable. On a bad day, like being placed directly next to two brushed motors, they can become downright unusable.
+On the best of days, data from cheap sensors is noisy and unreliable. On a bad day, like being placed directly next to two brushed motors, they can become downright unusable.
 
-To combat the noise associated with individual readings, roboticist use a technique called sensor fusion. Sensor fusion combines two or more readings to generate a more accurate final signal. A classic example (and the one I implemented) is combining accelerometer and gyroscope readings to get a measure of rotation.
+To combat the noise associated with individual readings, roboticists use a technique called sensor fusion. Sensor fusion combines two or more readings to generate a more accurate final signal. A classic example (and the one I implemented) is combining accelerometer and gyroscope readings to get a measure of rotation.
 
-First off, how do you measure rotation with an accelerometer? Earths gravitational field causes a downward acceleration of $9.81 m/s^2$ on all objects, which is also measured by the accelerometer. By determining the direction of gravitational acceleration relative to the accelerometer you can find the accelerometers pitch and yaw.
+First off, how do you measure rotation with an accelerometer? Earth's gravitational field causes a downward acceleration of $9.81 m/s^2$ on all objects, which is also measured by the accelerometer. By determining the direction of gravitational acceleration relative to the accelerometer you can find the accelerometer's pitch and yaw.
 
-Accelerometers are plagued by high frequency noise leading to unreliable single point readings. However, the readings are relative to the global reference frame (the direction of gravity) and therefore will be centered on the true value on average.
+Accelerometers are plagued by high-frequency noise leading to unreliable single point readings. However, the readings are relative to the global reference frame (the direction of gravity) and therefore will be centered on the true value on average.
 
- On the other end of the spectrum, gyroscopes have almost no noise but drift slowly over time. We can think of this as extremely low frequency noise, $f=0$. What we really want is our signal to have the 'center' from the accelerometer data combined with the low noise from the gyroscope.
+ On the other end of the spectrum, gyroscopes have almost no noise but drift slowly over time. We can think of this as extremely low-frequency noise, $f=0$. What we want is for our signal to have the 'center' from the accelerometer data combined with the low noise from the gyroscope.
 
-The filter that gives this effect is called a complementary filter. The basic operating principle is applying a high-pass filter to the gyroscope (allowing for sudden changes but filtering out drift over time) and a low-pass filter to the accelerometer (maintaining the true center relative to gravity while removing high frequency noise) and summing them.
+The filter that gives this effect is called a complementary filter. The basic operating principle is applying a high-pass filter to the gyroscope (allowing for sudden changes but filtering out drift over time) and a low-pass filter to the accelerometer (maintaining the true center relative to gravity while removing high-frequency noise) and summing them.
 
 Below is the code for implementing such a filter:
 
@@ -84,11 +84,11 @@ This graph shows the computed rotation around the X and Y axes. The acceleromete
 
 Another common problem in robotics is making an actuator go to a position and stay there. As a motivating example, imagine you want to make the car turn exactly 90 degrees to the left.
 
-The microcontroller only has authority over the PWM signals it sends to the motors. This very roughly equates to velocity, but is influenced by a variety of factors (friction, load, battery voltage) that make the approximation unreliable. So what motor voltages should the controller send to get the resulting rotation?
+The microcontroller only has authority over the PWM signals it sends to the motors. This very roughly equates to velocity but is influenced by a variety of factors (friction, load, battery voltage) that make the approximation unreliable. So what motor voltages should the controller send to get the resulting rotation?
 
-Lets first define some terms. The error (E) is equal to the set point (where we want to go) minus the measured value. If we want the robot at 90 degrees and it's at 0 degrees, the error would be 90.
+Let's first define some terms. The error (E) is equal to the set point (where we want to go) minus the measured value. If we want the robot at 90 degrees and it's at 0 degrees, the error would be 90.
 
-A first attempt approach is to make make the output proportional to the error. That way the further away the robot is from the set point, the more aggressively it to correct. This is known as a proportional gain, meaning the output is the error multiplied by some constant gain (call it $p$):
+A first-attempt approach is to make the output proportional to the error. That way the further away the robot is from the set point, the more aggressively it attempts to correct. This is known as a proportional gain, meaning the output is the error multiplied by some constant gain (call it $p$):
 
 $$
 output = p \cdot E 
@@ -96,7 +96,7 @@ $$
 
 P gain alone, however, is often not sufficient. If the P gain is high the system may oscillate around the set point, but lowering the gain will cause the system to never reach the set point.
 
-To resolve this problem, lets add another term. Adding the integral of the error works to "push" an over damped system towards the set-point. This term increases in strength the longer the robot is away from the set-point. This term is called the integral gain, and is denoted by $i$.
+To resolve this problem, let's add another term. Adding the integral of the error works to "push" an over-damped system toward the set point. This term increases in strength the longer the robot is away from the set point. This term is called the integral gain and is denoted by $i$.
 
 $$
 output = p \cdot E + i \cdot \int_{0}^{t} E \cdot dt
@@ -104,15 +104,15 @@ $$
 
 The longer we're in the wrong place the stronger the response. Again, this makes sense logically.
 
-Using just P and I gains is enough for most applications, but theres one more improvement that can be made. 
+Using just P and I gains is enough for most applications, but there's one more improvement that can be made. 
 
-Lets add one more term, this time proportional to the rate of change of the error. The derivative (or $d$) term counteracts rapid change in the error, dampening oscillations. This allows for higher P and I gains and therefore better rise time. The equation now becomes:
+Let's add one more term, this time proportional to the rate of change of the error. The derivative (or $d$) term counteracts rapid change in the error, dampening oscillations. This allows for higher P and I gains and therefore better rise time. The equation now becomes:
 
 $$
 output = p \cdot E + i \cdot \int_{0}^{t} E \cdot dt - d \cdot \frac{dE}{dt}
 $$
 
-Note that the derivative term is often omitted in low cost systems like my own. Due to the noise in cheep sensors the derivative of the measurement is often meaningless unless low passed.
+Note that the derivative term is often omitted in low-cost systems like my own. Due to the noise in cheap sensors, the derivative of the measurement is often meaningless unless low passed.
 
 Together the p, i, and d terms form PID control, a common control scheme for robotic systems.
 
@@ -204,15 +204,15 @@ public:
 };
 ```
 
-I also implemented some bells and whistles like integrator wind up control and derivative on measurement. I won't go into these techniques here, but a quick google search will yield some great explanations.
+I also implemented some bells and whistles like integrator wind-up control and derivative on measurement. I won't go into these techniques here, but a quick Google search will yield some great explanations.
 
 ### The Rest of the Setup
 
-The code to deal with readings sensors, transmitting data, executing routines, plotting data, ect is long and not all that interesting. If you care about those details, read the [full build log](https://michael-crum.com/FAST-ROBOTS-2023/intro/) and the [source code](https://github.com/usedhondacivic/FAST-ROBOTS-2023).
+The code to deal with reading sensors, transmitting data, executing routines, plotting data, etc. is long and not all that interesting. If you care about those details, read the [full build log](https://michael-crum.com/FAST-ROBOTS-2023/intro/) and the [source code](https://github.com/usedhondacivic/FAST-ROBOTS-2023).
 
 ## Mapping the Surroundings
 
-Ok now we're ready for the juicy stuff. How about mapping out a room?
+Ok, now we're ready for the juicy stuff. How about mapping out a room?
 
 Using a PID controller as described above, I made the robot track an angular velocity of 10 degrees / s. Given the sensor's delay of 150 ms per reading, this results in 2 degrees per reading.
 
@@ -232,7 +232,7 @@ Obstacles prevent the robot from seeing the entire room in one reading. Instead,
 
 The recorded TOF readings are relative to the sensor's reference frame and must be transformed into the world frame. This is simple to achieve with some linear algebra.
 
-To get from the sensor frame to the robot frame requires a rotation (the 20 degree skew) and a translation (the TOF are mounted to the front of center). Then we can go from the robot's frame to the inertial (world) frame through a second rotation and translation.
+Getting from the sensor frame to the robot frame requires a rotation (the 20-degree skew) and a translation (the TOFs are mounted to the front of the center). Then we can go from the robot's frame to the inertial (world) frame through a second rotation and translation.
 
 The sensor frame into the robot frame is calculated:
 
@@ -267,9 +267,9 @@ y_{robot} \\
 \end{bmatrix}
 $$
 
-Where R represents the robots coordinates in world space.
+Where R represents the robot's coordinates in world space.
 
-The result is decent map of the room! Not bad for a little car.
+The result is a decent map of the room! Not bad for a little car.
 
 <div style="margin-top: 10px; margin-bottom: 10px; display: inline-block;">
   <img style="width: 50%; height: auto; max-height: none; float: left;" alt="The generated map of the room" src="./assets/room_post_tweek.png">
@@ -284,11 +284,11 @@ Now that we have a map of our room, can we use it to figure out where the robot 
 
 ### The Bayes Filter
 
-Because the robot is unsure of its actual position, it would be unwise to presume one location. Instead, modern robotics uses probabilities to generate both an informed guess at the true state. As a side effect, a measure of uncertainty in the guess is also generated. By understanding its possible states and their associated likelihood, the robot can make informed decisions about its next move.
+Because the robot is unsure of its actual position, it would be unwise to presume one location. Instead, modern robotics uses probabilities to generate both an informed guess of the true state. As a side effect, a measure of uncertainty in the guess is also generated. By understanding its possible states and their associated likelihood, the robot can make informed decisions about its next move.
 
-One such algorithm is known as the Bayes Filter, and is the basis for most modern probabilistic approaches. Quick warning: the following section is notation heavy and requires a working understanding of statistics. Feel free to jump to the next section if you just care about the implementation.
+One such algorithm is known as the Bayes Filter and is the basis for most modern probabilistic approaches. Quick warning: the following section is notation-heavy and requires a working understanding of statistics. Feel free to jump to the next section if you just care about the implementation.
 
-Lets define the problem more rigorously. For localization, our goal is to find the x position, y position, and rotation of the car. Together these quantities are called the "pose". Let $x_t$ represent the state at position $t$, which could be any pose in the room.
+Let's define the problem more rigorously. For localization, our goal is to find the x position, y position, and rotation of the car. Together these quantities are called the "pose". Let $x_t$ represent the state at position $t$, which could be any pose in the room.
 
 $$
 x_t = \begin{bmatrix}
@@ -300,7 +300,7 @@ $$
 
 Every possible pose $x_t$ has an associated likelihood that it is the true pose of the robot. The distribution of likelihood across the possible poses is known as the probability distribution or belief distribution and is denoted $bel(x_t)$. Initially $bel(x_t)$ is uniform (the same for all $x_t$) because we have no knowledge about the location of the car (it's equally likely to be anywhere).
 
-While executing code on the robot, we give it a series of commands. From these commands, we can make an educated guess about where the robot will end up. That is to say if the robot is in pose $x_{t-1}$ and we give it commands $u_t$, we can denote the probability of the car arriving of pose $x_t$ as
+While executing code on the robot, we give it a series of commands. From these commands, we can make an educated guess about where the robot will end up. That is to say, if the robot is in pose $x_{t-1}$ and we give it commands $u_t$, we can denote the probability of the car arriving at pose $x_t$ as
 
 $$
 p(x_t | u_t, x_{t-1})
@@ -330,17 +330,17 @@ The normalization factor $\eta$ adjusts the distribution to sum to 1, which is r
 
 This math shows that the probability distribution of the robot's pose can be calculated using only:
 
-1. a model of the robots motion in response to command $u_t$
+1. a model of the robot's motion in response to command $u_t$
 2. a model of the sensor's error
 3. the distribution from the last iteration of the filter
 
-This is a huge result, allowing the robot to convert individual sensor readings into high level understanding of its location.
+This is a huge result, allowing the robot to convert individual sensor readings into a high-level understanding of its location.
 
 ### Python Implementation
 
 Because it iterates over the entire state space, the Bayes Filter is computationally expensive. Instead of attempting to run it on the Artemis, my code transfers the sensor readings to my laptop to do the heavy lifting.
 
-The python code listed bellow is specific to my setup and codebase, and requires heavy modifications to work on another system. Use it as an a example of how you might translate the theory from the previous section into code.
+The Python code listed below is specific to my setup and codebase and requires heavy modifications to work on another system. Use it as an example of how you might translate the theory from the previous section into code.
 
 The compute_control function takes the movement over a time step and converts it into the control command that would have caused the motion:
 
@@ -368,7 +368,7 @@ def compute_control(cur_pose, prev_pose):
     return delta_rot_1, delta_trans, delta_rot_2
 ```
 
-This is useful because the robot never directly records its commands. I can instead observe the robots behavior and infer the commands after the fact.
+This is useful because the robot never directly records its commands. I can instead observe the robot's behavior and infer the commands after the fact.
 
 These commands are used in the odometry model to predict the probability that the robot has reached a given state based on where it was previously and what it was commanded to do.
 
@@ -442,7 +442,7 @@ def sensor_model(obs, cur_pose):
     return prob_array
 ```
 
-Finally the update step integrates the sensor data into the prediction from odometry. 
+Finally, the update step integrates the sensor data into the prediction from odometry. 
 
 ```python
 def update_step():
@@ -456,15 +456,15 @@ def update_step():
 
 ### Results
 
-<img style="width: 100%; height: auto; max-height: none;" alt="Computed locations vs a birds eye view of the car's actual location" src="./assets/loc_results_combined.webp">
+<img style="width: 100%; height: auto; max-height: none;" alt="Computed locations vs a birds-eye view of the car's actual location" src="./assets/loc_results_combined.webp">
 
 ## Using Kalman Filters for Optimized Drifting
 
-I'm still working on writing up this section! In the meantime, read [my lab report on the topic](https://michael-crum.com/FAST-ROBOTS-2023/lab_7/). It has all the juicy details but none of the proof reading and editing ;)
+I'm still working on writing up this section! In the meantime, read [my lab report on the topic](https://michael-crum.com/FAST-ROBOTS-2023/lab_7/). It has all the juicy details but none of the proofreading and editing ;)
 
 ## Resources and Special Thanks
 
-See [my github](https://github.com/usedhondacivic/FAST-ROBOTS-2023) for the full code.
+See [my GitHub](https://github.com/usedhondacivic/FAST-ROBOTS-2023) for the full code.
 
 This article is a massively abbreviated version of my [full build log](https://michael-crum.com/FAST-ROBOTS-2023/intro/). Check that out if you want more details on the build.
 

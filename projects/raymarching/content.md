@@ -20,7 +20,7 @@ I'll first walk through the theoretical basis for ray marching before finishing 
 
 ### Signed Distance Fields (SDFs)
 
-If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object this value is > 0, inside it is < 0, and on the border it is equal to 0.
+If computing exact ray-world intersections is too costly, what are our options? Ray marching uses an iterative approach based on Signed Distance Fields (SDFs). Instead of computing an exact intersection, the ray marching algorithm queries the lowest distance between a point and any location on an object. Outside of the object, this value is > 0, inside it is < 0, and on the border it is equal to 0.
 
 <img style="width: 100%; height: auto; max-height: none" alt="An example of signed distance fields" src="./assets/2d_sdf.png">
 
@@ -199,7 +199,7 @@ A popular tool for experimenting with shaders is [Shadertoy](https://www.shadert
 
 I decided against using Shadertoy so I could gain a better understanding of the underlying technology.
 
-My first attempt was a purist C++ approach using OpenGL through the GLFW3 and GLAD libraries. This is the most performant solution but comes with the downside of having to recompile the code each time I tweaked the shader. This could be solved using some kind of live reload functionality, but I decided it wasn't worth the time to try and solve it. Additionally, it would be difficult to display the results on this website. My work in this direction is linked in the "More Resources" section below if you are interested.
+My first attempt was a purist C++ approach using OpenGL through the GLFW3 and GLAD libraries. This is the most performant solution but comes with the downside of having to recompile the code very time I tweak the shader. This could be solved using some kind of live reload functionality, but I decided it wasn't worth the time to try and solve it. Additionally, it would be difficult to display the results on this website. My work in this direction is linked in the "More Resources" section below if you are interested.
 
 After giving up on C++ I turned to the popular Javascript graphics library Three.js. Three has a bunch of awesome functionalities including WebGL support and runs directly in the browser.
 

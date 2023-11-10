@@ -174,9 +174,9 @@
         </em>
         <br>
         <h2>Context: AVR and ATTiny</h2>
-<p>The AVR family of chips are built on the 8-bit RISC AVR Architecture. AVR became especially popular when it was selected as the main driver of the Arduino boards. The first circulated Arduino board, the Diecimila, used the ATmega168, and the ubiquitous Arduino Uno is based on the ATmega328P.</p>
-<p>The ATtiny line is the baby of the AVR family. The chips are characterized by lower performance, memory, and pin options, but in return offer an absolutely miniscule footprint and price point. Because of this, they are often used in space and power constrained systems.</p>
-<p>Unfortunately, easy programmability was one of the conveniences sacrificed for size. There is no bootloader, and the chip is far from plug and play. Instead, the chip must be programmed using the single wire UPDI protocol.</p>
+<p>The AVR family of chips is built on the 8-bit RISC AVR Architecture. AVR became especially popular when it was selected as the main driver of the Arduino boards. The first circulated Arduino board, the Diecimila, used the ATmega168, and the ubiquitous Arduino Uno is based on the ATmega328P.</p>
+<p>The ATtiny line is the baby of the AVR family. The chips are characterized by lower performance, memory, and pin options, but in return offer an absolutely minuscule footprint and price point. Because of this, they are often used in space and power-constrained systems.</p>
+<p>Unfortunately, easy programmability was one of the conveniences sacrificed for size. There is no bootloader, and the chip is far from plug-and-play. Instead, the chip must be programmed using the single-wire UPDI protocol.</p>
 <p>For my experiments, I've been using the <a href="https://www.adafruit.com/product/5690">ATtiny1616 breakout board from Adafruit</a>. It has extremely minimal additional hardware, which is perfect for learning the basics of the chip. Aside from the processor itself, there are a couple of other parts you need to get started with one of these boards.</p>
 <h2>Parts List</h2>
 <ul>
@@ -186,9 +186,9 @@
 <li>Prototyping breadboard</li>
 </ul>
 <h2>Programmers, Hacks, and UPDI</h2>
-<p>Unlike fully featured boards like the Arduino Uno, most ATtiny breakout boards won't come with the hardware needed to flash new code. Instead you must use an <a href="https://github.com/wagiminator/AVR-Programmer">AVR Programmer</a> to handle communication with the chip. The better programmers can cost a pretty penny, so a number of workarounds have been created.</p>
+<p>Unlike fully featured boards like the Arduino Uno, most ATtiny breakout boards won't come with the hardware needed to flash new code. Instead, you must use an <a href="https://github.com/wagiminator/AVR-Programmer">AVR Programmer</a> to handle communication with the chip. The better programmers can cost a pretty penny, so a number of workarounds have been created.</p>
 <p>The first is using a separate microcontroller as the programmer. By flashing an Arduino with <a href="https://github.com/ElTangas/jtag2updi">jtag2udpi</a>, the Arduino itself could then be used as a programmer for other AVR chips.</p>
-<p>I didn't have an Arduino laying around, so I turned to a second option: <a href="https://github.com/SpenceKonde/AVR-Guidance/blob/master/UPDI/jtag2updi.md#jtag2updi-never-heard-of-him">SerialUPDI</a>. SerialUPDI uses a standard <a href="https://www.adafruit.com/product/954">USB to Serial cable</a> and a single 1k <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Ω</span></span></span></span></eq> resistor to program over UPDI directly from your computer. This option is dirt cheap and minimizes external components, so its the approach I recommend.</p>
+<p>I didn't have an Arduino lying around, so I turned to a second option: <a href="https://github.com/SpenceKonde/AVR-Guidance/blob/master/UPDI/jtag2updi.md#jtag2updi-never-heard-of-him">SerialUPDI</a>. SerialUPDI uses a standard <a href="https://www.adafruit.com/product/954">USB to Serial cable</a> and a single 1k <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Ω</span></span></span></span></eq> resistor to program over UPDI directly from your computer. This option is dirt cheap and minimizes external components, so it's the approach I recommend.</p>
 <p>On different parts of the internet, you'll see the resistor value as 4.7k <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Ω</span></span></span></span></eq> all the way to 10k <eq><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Ω</span></span></span></span></eq>. Don't be fooled! I spent many hours trying to get a 4.7k resistor to work, only to swap to a 1k resistor and immediately have my problems solved. Wire up your board is shown below:</p>
 <p><img src="./assets/updi_circuit_layout.webp" alt="The circuit layout for UPDI programming over Serial"></p>
 <p>Quoting directly from <a href="https://learn.adafruit.com/adafruit-attiny817-seesaw/advanced-reprogramming-with-updi">the Adafruit page</a>:</p>
@@ -200,10 +200,10 @@
 <li>1K resistor to ATtiny UPDI pin (white wire)</li>
 </ul>
 <h2>Installing the Toolchain</h2>
-<p>If you're looking for some quick results, the current setup is enough to use the Arduino IDE (or platform IO) to program the chip. <a href="https://learn.adafruit.com/adafruit-attiny817-seesaw/advanced-reprogramming-with-updi">See the instructions for Arduino here</a>. However, I'm here to urge you to not go over to the dark side! If you are ok with the bloat associated with the Arduino framework, you almost certainly would be better off using a higher spec'd chip to begin with. To squeeze all the possible performance out of the ATtiny, you really need to program it bare metal.</p>
+<p>If you're looking for some quick results, the current setup is enough to use the Arduino IDE (or platform IO) to program the chip. <a href="https://learn.adafruit.com/adafruit-attiny817-seesaw/advanced-reprogramming-with-updi">See the instructions for Arduino here</a>. However, I'm here to urge you to not go over to the dark side! If you are okay with the bloat associated with the Arduino framework, you almost certainly would be better off using a higher-spec chip to begin with. To squeeze all the possible performance out of the ATtiny, you really need to program it bare metal.</p>
 <p>The following steps are what I used to get my setup working. I am running <code>Ubuntu 22.04.3 LTS</code> on my system, so if you're running Windows or Mac you might need to use a different tutorial for this step (<a href="https://hub.docker.com/_/ubuntu">or use Docker</a>).</p>
 <p>The basic setup uses <code>gcc-avr</code> to compile and build the executable for the code, then passes the file to <code>avrdude</code> to flash the microcontroller.</p>
-<p>If your lucky (and using a more common chip like the ATtiny85), then all you need to do is run</p>
+<p>If you're lucky (and using a more common chip like the ATtiny85), then all you need to do is run</p>
 <pre><code class="language-bash">sudo apt-get update
 sudo apt-get install gcc-avr binutils-avr avr-libc gdb-avr avrdude
 </code></pre>
@@ -218,14 +218,14 @@ sudo apt-get install gcc-avr binutils-avr avr-libc gdb-avr avrdude
 <p>After navigating to the directory you want to store the tool in (maybe <code>/opt/</code>), download the relevant file using</p>
 <pre><code>wget https://github.com/ZakKemble/avr-gcc-build/releases/download/v12.1.0-1/avr-gcc-12.1.0-x64-linux.tar.bz2
 </code></pre>
-<p>Alternatively you could download using the website and move the file. Next, we have to extract the archive using</p>
+<p>Alternatively, you could download using the website and move the file. Next, we have to extract the archive using</p>
 <pre><code class="language-bash">tar -xf avr-gcc-12.1.0-x64-linux.tar.bz2
 </code></pre>
 <p>and add the executables to PATH with</p>
 <pre><code class="language-bash">export PATH=~/avr-gcc-12.1.0-x64-linux/bin:$PATH
 </code></pre>
 <h2>Pinging Your Chip</h2>
-<p>To test your setup, now is a good time to see if you can communicate with your microcontroller. Try running the following command:</p>
+<p>Now is a good time to see if you can communicate with your microcontroller. Try running the following command:</p>
 <pre><code class="language-bash">sudo avrdude -c serialupdi -p t1616 -P &quot;/dev/ttyUSB0&quot; -b 57600 -v -v -v
 </code></pre>
 <p>The options are as follows:</p>
@@ -233,7 +233,7 @@ sudo apt-get install gcc-avr binutils-avr avr-libc gdb-avr avrdude
 <li><code>-c</code>: What programmer you are using. Run <code>avrdude -c ?</code> to see all options.</li>
 <li><code>-p</code>: The name of your chip. Run <code>avrdude -p ?</code> to see all options.</li>
 <li><code>-P</code>: Port used for programming. Run <code>avrdude -P ?s</code> to see all options.</li>
-<li><code>-b</code>: Baud rate. I'm running on a lower baud rate because SerialUPDI can get unstable when run faster.</li>
+<li><code>-b</code>: Baud rate. I'm running on a lower baud rate because SerialUPDI can get unstable when running faster.</li>
 <li><code>-v</code>: Verbose. Chain multiple times to get more details printed.</li>
 </ul>
 <p>After a successful run, you should get the following output:</p>
@@ -245,7 +245,7 @@ avrdude done.  Thank you.
 <p>If you see this message it means your programmer is communicating, but it can't connect to the board:</p>
 <pre><code>avrdude serialupdi_initialize() [serialupdi.c:574] error: UPDI link initialization failed
 avrdude main() [main.c:1401] error: initialization failed, rc=-1
-        - double check the connections and try again
+        - double-check the connections and try again
         - use -b to set lower baud rate, e.g. -b 28800
         - use -F to override this check
 </code></pre>
@@ -262,13 +262,13 @@ avrdude main() [main.c:1280] error: unable to open port /dev/ttyUSB0 for program
 <h3>Writing a Makefile</h3>
 <p>The compilation and upload process consists of many steps, and typing them out each time is cumbersome and prone to error. Instead, we can use a makefile to run the process for us. I based my makefile off <a href="https://www.youtube.com/watch?v=iKqLbbyPydI">this video by The Mac Layer</a>, but added comments and fuse writing functionality.</p>
 <p>makefile:</p>
-<pre><code class="language-make"># Define variable that may change between projects
+<pre><code class="language-make"># Define variables that may change between projects
 FILENAME = main
 PORT = /dev/ttyUSB0
 DEVICE = attiny1616
 PROGRAMMER = serialupdi
 
-# Clock speed my be provided for delays to be timed properly 
+# Clock speed must be provided for delays to be timed properly 
 CLOCK = 20000000
 
 # Baud rate for programming
@@ -287,32 +287,32 @@ default: compile upload clean
 # file.cpp -&gt; file.o -&gt; file.elf -&gt; file.hex
 # Then print out the size of the binary
 compile:
-	$(COMPILE) -c $(FILENAME).cpp -o $(FILENAME).o
-	$(COMPILE) -o $(FILENAME).elf $(FILENAME).o
-	avr-objcopy -O ihex $(FILENAME).elf $(FILENAME).hex
-	avr-size $(FILENAME).elf
+    $(COMPILE) -c $(FILENAME).cpp -o $(FILENAME).o
+    $(COMPILE) -o $(FILENAME).elf $(FILENAME).o
+    avr-objcopy -O ihex $(FILENAME).elf $(FILENAME).hex
+    avr-size $(FILENAME).elf
 
 # Upload step
 # Flash the .hex file onto the chip
 upload:
-	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$(FILENAME).hex:i
+    avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$(FILENAME).hex:i
 
 # Remove intermediate files
 clean:
-	rm $(FILENAME).o
-	rm $(FILENAME).elf
-	rm $(FILENAME).hex
+    rm $(FILENAME).o
+    rm $(FILENAME).elf
+    rm $(FILENAME).hex
 
-# Fuses are non-volitile settings that can be set by avrdude and persist between resets
+# Fuses are non-volatile settings that can be set by avrdude and persist between resets
 # Setting fuse2 to 0x7e enables 20Mhz clock
 # See page 34 of https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny1614-16-17-DataSheet-DS40002204A.pdf
 fuse:
-	avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U fuse2:w:0x7e:m
+    avrdude -v -p $(DEVICE) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U fuse2:w:0x7e:m
 </code></pre>
 <h3>Hello World!</h3>
-<p>Before we can flash the microcontroller, we need some code! Heres a quick program to blink an LED, adapted from <a href="https://www.instructables.com/Honey-I-Shrunk-the-Arduino-Moving-from-Arduino-t/">this tutorial</a> to work on the ATtiny1616. The breakout board I'm using has an active low LED on pin 15, which this lovely <a href="https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny1614-16-17-DataSheet-DS40002204A.pdf">excerpt of the datasheet</a> reveals is mapped to pin 0 of PORTC.</p>
+<p>Before we can flash the microcontroller, we need some code! Here's a quick program to blink an LED, adapted from <a href="https://www.instructables.com/Honey-I-Shrunk-the-Arduino-Moving-from-Arduino-t/">this tutorial</a> to work on the ATtiny1616. The breakout board I'm using has an active low LED on pin 15, which this lovely <a href="https://ww1.microchip.com/downloads/en/DeviceDoc/ATtiny1614-16-17-DataSheet-DS40002204A.pdf">excerpt of the datasheet</a> reveals is mapped to pin 0 of PORTC.</p>
 <p><img src="./assets/multiplexing.webp" alt="Pin muxing chart from the chip datasheet"></p>
-<p>You'll have to change the pin if you use a different chip / breakout board.</p>
+<p>You'll have to change the pin if you use a different chip/breakout board.</p>
 <p>main.cpp:</p>
 <pre><code class="language-cpp">#include &lt;avr/io.h&gt;
 // F_CPU frequency is defined in the makefile
@@ -349,7 +349,7 @@ int main()
 }
 </code></pre>
 <h2>UART</h2>
-<p>Blinking an LED is great, but for more complicated projects we need some other way to get feedback from the chip. Enter UART, a two wire serial communication protocol. Heres a quick driver I wrote that maps <code>stdout</code> to UART, allowing it to function with <code>printf</code>. On my dev board, UART is available on pins 6 and 7.</p>
+<p>Blinking an LED is great, but for more complicated projects we need some other way to get feedback from the chip. Enter UART, a two-wire serial communication protocol. Here's a quick driver I wrote that maps <code>stdout</code> to UART, allowing it to function with <code>printf</code>. On my dev board, UART is available on pins 6 and 7.</p>
 <p>uart.h:</p>
 <pre><code>#pragma once
 
@@ -357,10 +357,10 @@ int main()
 
 #undef FDEV_SETUP_STREAM
 #define FDEV_SETUP_STREAM(p, g, f)                                             \
-	{                                                                          \
-		.buf = NULL, .unget = 0, .flags = f, .size = 0, .len = 0, .put = p,    \
-		.get = g, .udata = 0                                                   \
-	}
+    {                                                                          \
+        .buf = NULL, .unget = 0, .flags = f, .size = 0, .len = 0, .put = p,    \
+        .get = g, .udata = 0                                                   \
+    }
 
 void USART0_init(void);
 </code></pre>
@@ -373,7 +373,7 @@ void USART0_init(void);
  */
 
 #define USART0_BAUD_RATE(BAUD_RATE)                                            \
-	((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
+    ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
 
 #include &lt;avr/io.h&gt;
 #include &lt;stdio.h&gt;
@@ -388,27 +388,27 @@ FILE USART_stream =
 
 void USART0_init(void)
 {
-	PORTB.DIR &amp;= ~PIN3_bm;
-	PORTB.DIR |= PIN2_bm;
+    PORTB.DIR &amp;= ~PIN3_bm;
+    PORTB.DIR |= PIN2_bm;
 
-	USART0.BAUD = (uint16_t)USART0_BAUD_RATE(115200);
-	USART0.CTRLB |= USART_TXEN_bm;
+    USART0.BAUD = (uint16_t)USART0_BAUD_RATE(115200);
+    USART0.CTRLB |= USART_TXEN_bm;
 
-	stdout = &amp;USART_stream;
+    stdout = &amp;USART_stream;
 }
 
 int USART0_printChar(char character, FILE *stream)
 {
-	while (!(USART0.STATUS &amp; USART_DREIF_bm)) {
-		;
-	}
-	USART0.TXDATAL = character;
-	return 0;
+    while (!(USART0.STATUS &amp; USART_DREIF_bm)) {
+        ;
+    }
+    USART0.TXDATAL = character;
+    return 0;
 }
 
 </code></pre>
 <h2>Conclusion</h2>
-<p>And thats it! Welcome to the brutal (but rewarding) world of AVR programming.</p>
+<p>And that's it! Welcome to the brutal (but rewarding) world of AVR programming.</p>
 
     </article>
     <div id="right_pad"></div>
