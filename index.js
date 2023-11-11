@@ -21,7 +21,10 @@ const content_template = fs.readFileSync(path.resolve(__dirname, 'templates/cont
 fsExtra.emptyDirSync(path.resolve(__dirname, 'docs'));
 
 // Copy over styles
-fsExtra.copySync(path.resolve(__dirname, 'styles'), path.resolve(__dirname, 'docs/styles'))
+fsExtra.copySync(path.resolve(__dirname, 'styles'), path.resolve(__dirname, 'docs/styles'));
+
+// Copy over fonts
+fsExtra.copySync(path.resolve(__dirname, 'fonts'), path.resolve(__dirname, 'docs/fonts'))
 
 var pages = new Object();
 var info_arr = [];
