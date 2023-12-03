@@ -207,3 +207,4 @@ Special thanks to Cornell’s Professor Hunter Adams and Professor Bruce Land fo
 
 Interested in building your own display? All of our code and design files can be found on my github:
 [https://github.com/usedhondacivic/ECE-4760-POV-Display](https://github.com/usedhondacivic/ECE-4760-POV-Display)
+
