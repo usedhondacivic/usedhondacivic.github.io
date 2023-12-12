@@ -10,7 +10,6 @@ var md = require('markdown-it')({ html: true }).use(tm, {
     katexOptions: { macros: { "\\RR": "\\mathbb{R}" } }
 });
 
-
 // Grab the templates
 const index_template = fs.readFileSync(path.resolve(__dirname, 'templates/index.html'), 'utf8');
 const homepage_entry_template = fs.readFileSync(path.resolve(__dirname, 'templates/homepage_entry.html'), 'utf8');
@@ -113,3 +112,4 @@ glob("projects/*/*.md", function (er, files) {
     // Write CNAME to the docs folder
     fs.writeFileSync(path.resolve(__dirname, "docs/CNAME"), "michael-crum.com");
 })
+
