@@ -1,50 +1,78 @@
-build: homepage sidebar articles
-
 SRC=projects
 BUILD=docs
 
-SRCS = $(wildcard $(SRC)/*/content.md)
-TARGETS = $(subst content.md,index.html,$(subst $(SRC),$(BUILD),$(SRCS)))
+SRC_PROJECT_PATHS = $(wildcard $(SRC)/*)
+TARGET_PROJECT_PATHS = $(subst $(SRC),$(BUILD),$(SRC_PROJECT_PATHS))
+PROJECT_PAGES = $(TARGET_PROJECT_PATHS:=/index.html)
 
-SRC_ASSETS = $(wildcard $(SRC)/*/assets/*)
-TARGET_ASSETS = $(subst $(SRC),$(BUILD),$(SRC_ASSETS))
-CONVERT_ASSET_TARGETS = $(filter %.png %.jpg %.jpeg %.webp, $(TARGET_ASSETS))
-COPY_ASSET_TARGETS = $(filter %.svg %.gif, $(TARGET_ASSETS))
+all: setup pages assets
 
-test:
-	echo "$(TARGETS)"
+setup: node_modules/ 
+	npm install
 
-all: docs/index.html $(TARGETS) 
+pages: docs/index.html $(PROJECT_PAGES)
 	
-docs/index.html: docs/home_list.txt $(CONVERT_ASSET_TARGETS) $(COPY_ASSET_TARGETS)
+docs/index.html: docs/home_list.txt docs/home_list.txt
+	@echo "Generating home page..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
 	@node generators/generate_home.js
 
-$(TARGETS): $(SRCS) docs/sidebar.txt $(CONVERT_ASSET_TARGETS) $(COPY_ASSET_TARGETS)
+$(BUILD)/%/index.html: $(SRC)/%/content.md docs/sidebar.txt 
+	@echo "Generating project page $<..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
-	@node generators/generate_articles.js -in "$^" -out "$@" 
+	@node generators/generate_articles.js -i "$^" -o "$@" 
 
 docs/sidebar.txt: $(wildcard projects/*/info.json) 
+	@echo "Generating sidebar..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
-	@echo $^
-	@node generators/generate_sidebar.js -in "$^"
+	@node generators/generate_sidebar.js -i "$^"
 
 docs/home_list.txt: $(wildcard projects/*/info.json)
+	@echo "Generating home project listing..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
 	@node generators/generate_home_list.js
 
-$(CONVERT_ASSET_TARGETS): $(SRC_ASSETS)
+ALL_SRC_ASSETS = $(wildcard $(SRC)/*/assets/*)
+ALL_TARGET_ASSETS = $(subst $(SRC),$(BUILD),$(ALL_SRC_ASSETS))
+CONVERT_ASSET_TARGETS = $(addsuffix .webp,$(basename $(filter %.png %.jpg %.jpeg, $(ALL_TARGET_ASSETS))))
+COPY_ASSET_TARGETS = $(filter %.svg %.gif %.webp, $(ALL_TARGET_ASSETS))
+
+assets: $(CONVERT_ASSET_TARGETS) $(COPY_ASSET_TARGETS)
+
+define convert_image
+	@echo "Optimizing asset $^..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
-	@node generators/image_conversion.js -in "$^" -out "$@" 
+	@node generators/image_conversion.js -i "$^" -o "$@" 
+endef
 
-$(COPY_ASSET_TARGETS): $(SRC_ASSETS)
+$(BUILD)/%.webp: $(SRC)/%.png
+	$(convert_image)
+
+$(BUILD)/%.webp: $(SRC)/%.jpg
+	$(convert_image)
+	
+$(BUILD)/%.webp: $(SRC)/%.jpeg
+	$(convert_image)
+
+define move_image
+	@echo "Transfering asset $^..."
 	@mkdir -p "$(@D)"
-	@cp -f $< "$@"
+	@cp -f "$<" "$@"
+endef
+
+$(BUILD)/%.webp: $(SRC)/%.webp
+	$(move_image)
+
+$(BUILD)/%.svg: $(SRC)/%.svg
+	$(move_image)
+
+$(BUILD)/%.gif: $(SRC)/%.gif
+	$(move_image)
 
 clean:
-	rm docs/sidebar.txt docs/home_list.txt
+	@rm docs/sidebar.txt docs/home_list.txt

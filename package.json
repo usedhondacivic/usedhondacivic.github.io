@@ -9,12 +9,14 @@
   "author": "Michael Crum",
   "license": "MIT",
   "dependencies": {
+    "fluent-ffmpeg": "^2.1.2",
     "fs": "0.0.1-security",
     "fs-extra": "^11.1.0",
     "glob": "^8.0.3",
     "katex": "^0.16.4",
     "markdown-it": "^13.0.1",
     "markdown-it-texmath": "^1.0.0",
-    "sharp": "^0.31.3"
+    "minimist": "^1.2.8",
+    "sharp": "^0.33.0"
   }
 }
