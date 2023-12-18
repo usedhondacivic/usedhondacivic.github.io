@@ -34,7 +34,7 @@ docs/home_list.txt: $(wildcard projects/*/info.json)
 	@echo "Generating home project listing..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
-	@node generators/generate_home_list.js
+	@node generators/generate_home_list.js -i "$^"
 
 ALL_SRC_ASSETS = $(wildcard $(SRC)/*/assets/*)
 ALL_TARGET_ASSETS = $(subst $(SRC),$(BUILD),$(ALL_SRC_ASSETS))
