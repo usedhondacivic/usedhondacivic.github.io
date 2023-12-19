@@ -5,36 +5,40 @@ SRC_PROJECT_PATHS = $(wildcard $(SRC)/*)
 TARGET_PROJECT_PATHS = $(subst $(SRC),$(BUILD),$(SRC_PROJECT_PATHS))
 PROJECT_PAGES = $(TARGET_PROJECT_PATHS:=/index.html)
 
+STYLES=styles
+FONTS=fonts
+GLOBAL_ASSETS=global_assets
+
 all: setup pages assets
 
-setup: node_modules/ 
-	npm install
+setup: 
+	@echo "Copying styles, fonts, global assets ect..."
+	@mkdir -p "$(BUILD)/$(STYLES)"
+	@cp -r -f "$(STYLES)" "$(BUILD)"
+	@mkdir -p "$(BUILD)/$(FONTS)"
+	@cp -r -f "$(FONTS)" "$(BUILD)"
+	@mkdir -p "$(BUILD)/$(GLOBAL_ASSETS)"
+	@cp -r -f "$(GLOBAL_ASSETS)" "$(BUILD)"
 
 pages: docs/index.html $(PROJECT_PAGES)
 	
-docs/index.html: docs/home_list.txt docs/home_list.txt
+docs/index.html: $(wildcard projects/*/info.json) 
 	@echo "Generating home page..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
-	@node generators/generate_home.js
+	@node generators/generate_home.js -i "$^"
 
-$(BUILD)/%/index.html: $(SRC)/%/content.md docs/sidebar.txt 
+$(BUILD)/%/index.html: $(SRC)/%/content.md docs/sidebar.html $(SRC)/%/info.json
 	@echo "Generating project page $<..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
-	@node generators/generate_articles.js -i "$^" -o "$@" 
+	@node generators/generate_article.js -i "$^" -o "$@" 
 
-docs/sidebar.txt: $(wildcard projects/*/info.json) 
+docs/sidebar.html docs/sidebar_bits.html: $(wildcard projects/*/info.json) 
 	@echo "Generating sidebar..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
 	@node generators/generate_sidebar.js -i "$^"
-
-docs/home_list.txt: $(wildcard projects/*/info.json)
-	@echo "Generating home project listing..."
-	@mkdir -p "$(@D)"
-	@touch "$@"
-	@node generators/generate_home_list.js -i "$^"
 
 ALL_SRC_ASSETS = $(wildcard $(SRC)/*/assets/*)
 ALL_TARGET_ASSETS = $(subst $(SRC),$(BUILD),$(ALL_SRC_ASSETS))
@@ -75,4 +79,4 @@ $(BUILD)/%.gif: $(SRC)/%.gif
 	$(move_image)
 
 clean:
-	@rm docs/sidebar.txt docs/home_list.txt
+	@rm docs/sidebar.html
