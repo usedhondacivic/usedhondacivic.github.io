@@ -10,6 +10,7 @@ FONTS=fonts
 GLOBAL_ASSETS=global_assets
 
 all: setup pages assets
+	@echo "All done :)"
 
 setup: 
 	@echo "Copying styles, fonts, global assets ect..."
@@ -26,9 +27,9 @@ docs/index.html: $(wildcard projects/*/info.json)
 	@echo "Generating home page..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
-	@node generators/generate_home.js -i "$^"
+	@node generators/generate_home.js -i "$^" -o "$@"
 
-$(BUILD)/%/index.html: $(SRC)/%/content.md docs/sidebar.html $(SRC)/%/info.json
+$(BUILD)/%/index.html: $(SRC)/%/content.md docs/sidebar.html docs/sidebar_bits.html $(SRC)/%/info.json
 	@echo "Generating project page $<..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
@@ -38,7 +39,7 @@ docs/sidebar.html docs/sidebar_bits.html: $(wildcard projects/*/info.json)
 	@echo "Generating sidebar..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
-	@node generators/generate_sidebar.js -i "$^"
+	@node generators/generate_sidebar.js -i "$^" -o "$@"
 
 ALL_SRC_ASSETS = $(wildcard $(SRC)/*/assets/*)
 ALL_TARGET_ASSETS = $(subst $(SRC),$(BUILD),$(ALL_SRC_ASSETS))

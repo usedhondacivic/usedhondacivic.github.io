@@ -39,5 +39,5 @@ sources.map((filename) => {
 // Write the home page to the docs folder
 var content = index_template.replace("<!-- PROJECTS -->", homepage_entries.join("\n"))
 	.replace("<!-- BITS -->", homepage_entries_bits.join("\n"));
-fs.writeFileSync(path.resolve(__dirname, "../docs/index.html"), content);
+fs.writeFileSync(path.resolve(__dirname, '../' + argv.o), content);
 

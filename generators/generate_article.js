@@ -16,8 +16,8 @@ const content_template = fs.readFileSync(path.resolve(__dirname, '../templates/c
 var contents_md = fs.readFileSync(path.resolve(__dirname, '../' + inputs[0]), 'utf8');
 contents_md = contents_md.replaceAll(".png", ".webp").replaceAll(".jpg", ".webp").replaceAll(".jpeg", ".webp");
 const sidebar = fs.readFileSync(path.resolve(__dirname, '../' + inputs[1]), 'utf8');
-const sidebar_bits = fs.readFileSync(path.resolve(__dirname, '../' + inputs[1]), 'utf8');
-const info = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../' + inputs[2])));
+const sidebar_bits = fs.readFileSync(path.resolve(__dirname, '../' + inputs[2]), 'utf8');
+const info = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../' + inputs[3])));
 
 // Populate the content of a project page
 var contents_html = md.render(contents_md);
