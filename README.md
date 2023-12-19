@@ -1,6 +1,6 @@
 # Michael Crum's Portfolio Website
 
-Uses GNU Make paired with Node.js as a static website generator.
+Uses GNU Make paired with Node.js to create a static website generator.
 
 Articles are stored in `/projects`, which is crawled by make. 
 Component generators in `/generators` insert project data into the templates in `/templates`. Image assets are converted to `.webp` using ffmpeg for optimization. Everything is saved under `/docs`, where GitHub Pages is convigured to serve the website.
