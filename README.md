@@ -1,10 +1,13 @@
 # Michael Crum's Portfolio Website
 
-Uses a custom built html generator, found in index.js. Posts from the /posts directory are crawled, 
-and the markdown for each entry is populated into the templates from the /templates folder.
-The end result is written to the /docs folder, which is served by github pages.
+Uses GNU Make paired with Node.js as a static website generator.
 
-The system was designed for simplicity and maintainability, avoiding the head-ache inducing hellscape that is javascript frameworks.
+Articles are stored in `/projects`, which is crawled by make. 
+Component generators in `/generators` insert project data into the templates in `/templates`. Image assets are converted to `.webp` using ffmpeg for optimization. Everything is saved under `/docs`, where GitHub Pages is convigured to serve the website.
+
+Run `npm install && make` to build the website. Subsequent calls to `make` will only rebuild files that have been edited since the last build.
+
+The system was designed for simplicity and maintainability, aiming to avoid the head-ache inducing hellscape that is javascript frameworks.
 
 Check it out at [michael-crum.com](https://michael-crum.com)
 
