@@ -12,7 +12,7 @@ GLOBAL_ASSETS=global_assets
 all: setup pages assets
 	@echo "All done :)"
 
-setup: 
+setup: $(wildcard STYLES/*) $(wildcard FONTS/*) $(wildcard GLOBAL_ASSETS/*)
 	@echo "Copying styles, fonts, global assets ect..."
 	@mkdir -p "$(BUILD)/$(STYLES)"
 	@cp -r -f "$(STYLES)" "$(BUILD)"
@@ -20,6 +20,7 @@ setup:
 	@cp -r -f "$(FONTS)" "$(BUILD)"
 	@mkdir -p "$(BUILD)/$(GLOBAL_ASSETS)"
 	@cp -r -f "$(GLOBAL_ASSETS)" "$(BUILD)"
+	@echo michael-crum.com >> "$(BUILD)/CNAME"
 
 pages: docs/index.html $(PROJECT_PAGES)
 	

@@ -2,9 +2,7 @@ See the code here: [https://github.com/usedhondacivic/usedhondacivic.github.io](
 
 <img style="width: 100%; height: auto; max-height: none" src="./assets/header.png">
 
-## Warning
-
-This page contains sarcastic and derogatory comments about Javascript developers. I'm sorry, I don't mean it, but y'all make it way too easy. Email me if you want to schedule a fist fight.
+*Note: this article was written before I made major updates to the site generator. I will be updating the writeup to reflect the changes soon.*
 
 ## Motivation
 

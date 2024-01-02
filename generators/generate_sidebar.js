@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const fsExtra = require('fs-extra');
 const tm = require('markdown-it-texmath');
 
 var argv = require('minimist')(process.argv.slice(2));

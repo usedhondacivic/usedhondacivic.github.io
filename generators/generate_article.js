@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const fsExtra = require('fs-extra');
 const tm = require('markdown-it-texmath');
 var md = require('markdown-it')({ html: true }).use(tm, {
     engine: require('katex'),
