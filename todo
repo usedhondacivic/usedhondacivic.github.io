@@ -1,9 +1,5 @@
 Finish ray marching
 Finish spinout
-Edit Static Site gen
+Update Static Site gen to GNU make version
 
-String art gen article
-
-Latex + github actions resume bit 
 Write latex + github actions resume generator bit
-Write boids bit
