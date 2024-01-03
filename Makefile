@@ -31,7 +31,7 @@ docs/index.html: $(wildcard projects/*/info.json) templates/index.html templates
 	@node generators/generate_home.js -i "$^" -o "$@"
 
 $(BUILD)/%/index.html: $(SRC)/%/content.md docs/sidebar.html docs/sidebar_bits.html $(SRC)/%/info.json templates/content.html 
-	echo "Generating project page $<..."
+	@echo "Generating project page $<..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
 	@node generators/generate_article.js -i "$^" -o "$@" 
