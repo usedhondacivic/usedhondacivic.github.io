@@ -3,7 +3,7 @@ const path = require('path');
 const tm = require('markdown-it-texmath');
 
 var argv = require('minimist')(process.argv.slice(2));
-const sources = argv.i.split(" ");
+const sources = argv.i.split(" ").filter(name => {name.split(".")[1] === "json"});
 const output = argv.o;
 
 const bits = output.includes("bits");

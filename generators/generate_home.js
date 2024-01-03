@@ -11,7 +11,7 @@ var argv = require('minimist')(process.argv.slice(2));
 const homepage_entry_template = fs.readFileSync(path.resolve(__dirname, '../templates/homepage_entry.html'), 'utf8');
 const index_template = fs.readFileSync(path.resolve(__dirname, '../templates/index.html'), 'utf8');
 
-var sources = argv.i.split(" ");
+var sources = argv.i.split(" ").filter(name => {name.split(".")[1] === "json"});
 var homepage_entries_bits = [];
 var homepage_entries = [];
 

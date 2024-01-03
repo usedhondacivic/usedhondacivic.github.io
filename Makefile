@@ -24,19 +24,19 @@ setup: $(wildcard STYLES/*) $(wildcard FONTS/*) $(wildcard GLOBAL_ASSETS/*)
 
 pages: docs/index.html $(PROJECT_PAGES)
 	
-docs/index.html: $(wildcard projects/*/info.json) 
+docs/index.html: $(wildcard projects/*/info.json) templates/index.html templates/homepage_entry.html
 	@echo "Generating home page..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
 	@node generators/generate_home.js -i "$^" -o "$@"
 
-$(BUILD)/%/index.html: $(SRC)/%/content.md docs/sidebar.html docs/sidebar_bits.html $(SRC)/%/info.json
-	@echo "Generating project page $<..."
+$(BUILD)/%/index.html: $(SRC)/%/content.md docs/sidebar.html docs/sidebar_bits.html $(SRC)/%/info.json templates/content.html 
+	echo "Generating project page $<..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
 	@node generators/generate_article.js -i "$^" -o "$@" 
 
-docs/sidebar.html docs/sidebar_bits.html: $(wildcard projects/*/info.json) 
+docs/sidebar.html docs/sidebar_bits.html: templates/sidebar_entry.html $(wildcard projects/*/info.json)
 	@echo "Generating sidebar..."
 	@mkdir -p "$(@D)"
 	@touch "$@"
@@ -81,4 +81,4 @@ $(BUILD)/%.gif: $(SRC)/%.gif
 	$(move_image)
 
 clean:
-	@rm docs/sidebar.html
+	@rm -r docs
