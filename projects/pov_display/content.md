@@ -2,7 +2,7 @@
 
 ![Three examples of the POV Display running](./assets/figure1_POV_banner.png)
 
-*This article was published as the first article of Circuit Cellar Magazine [issue #400](https://circuitcellar.com/inside-this-issue/)!*
+*This article was published as the first article of Circuit Cellar Magazine [issue #400](https://circuitcellar.com/inside-circuit-cellar-2023/)!*
 
 ## Project Introduction
 
