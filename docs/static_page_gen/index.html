@@ -2,72 +2,75 @@
 <html lang="en">
 
 <head>
-    <title>Building a 100 Line Static Site Generator | Michael Crum | Portfolio</title>
+	<title>Building a 100 Line Static Site Generator | Michael Crum | Portfolio</title>
 
-    <!-- seo -->
-    <meta name="author" content="Michael Crum">
-    <meta name="description" content="Webpage generating frameworks are, to put it kindly, a huge pain. Instead of learning how to use someone else's package, I decided to spend a weekend writing my own! The system was designed for simplicity and maintainability, and is just over 100 lines of code. Oh, and it generated the website you're on right now!">
-    <meta name="keywords" content="portfolio,developer,robotics,personal">
+	<!-- seo -->
+	<meta name="author" content="Michael Crum">
+	<meta name="description" content="Webpage generating frameworks are, to put it kindly, a huge pain. Instead of learning how to use someone else's package, I decided to spend a weekend writing my own! The system was designed for simplicity and maintainability, and is just over 100 lines of code. Oh, and it generated the website you're on right now!">
+	<meta name="keywords" content="portfolio,developer,robotics,personal">
 
-    <!-- display -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+	<!-- display -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
 
-    <!-- icon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="../global_assets/icons/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../global_assets/icons/favicon-16x16.png" />
+	<!-- icon -->
+	<link rel="icon" type="image/png" sizes="32x32" href="../global_assets/icons/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="../global_assets/icons/favicon-16x16.png" />
 
-    <!-- stylesheets -->
-    <link rel="stylesheet" href="../styles/project_page.css">
-    <link rel="stylesheet" href="../styles/highlight/styles/base16/bright.min.css">
-    <link rel="stylesheet" href="../styles/katex/katex.min.css">
+	<!-- stylesheets -->
+	<link rel="stylesheet" href="../styles/project_page.css">
+	<link rel="stylesheet" href="../styles/highlight/styles/base16/bright.min.css">
+	<link rel="stylesheet" href="../styles/katex/katex.min.css">
 
-    <!-- syntax highlighting-->
-    <script src="../styles/highlight/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
+	<!-- syntax highlighting-->
+	<script src="../styles/highlight/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 
-    <!-- latex support-->
-    <script defer src="../styles/katex/katex.min.js"></script>
+	<!-- latex support-->
+	<script defer src="../styles/katex/katex.min.js"></script>
 
-    <!-- font -->
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
 
-    <!-- iFrame optimization -->
-    <script>
-        checkVisibility();
-        document.addEventListener("scroll", (event) => {
-            checkVisibility();
-        });
+	<!-- analytics -->
+	<script data-goatcounter="https://michael-crum.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
-        function checkVisibility() {
-            const frames = document.getElementsByTagName("iframe");
-            for (var i = 0; i < frames.length; i++) {
-                frame = frames[i];
-                if (isInViewport(frame)) {
-                    frame.style.visibility = "visible";
-                } else {
-                    frame.style.visibility = "hidden";
-                }
-            }
-        }
+	<!-- iFrame optimization -->
+	<script>
+		checkVisibility();
+		document.addEventListener("scroll", (event) => {
+			checkVisibility();
+		});
 
-        function isInViewport(elm) {
-            var rect = elm.getBoundingClientRect();
-            var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-            return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
-        }
-    </script>
+		function checkVisibility() {
+			const frames = document.getElementsByTagName("iframe");
+			for (var i = 0; i < frames.length; i++) {
+				frame = frames[i];
+				if (isInViewport(frame)) {
+					frame.style.visibility = "visible";
+				} else {
+					frame.style.visibility = "hidden";
+				}
+			}
+		}
+
+		function isInViewport(elm) {
+			var rect = elm.getBoundingClientRect();
+			var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+			return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+		}
+	</script>
 </head>
 
 <body>
-    <div id="left_pad"></div>
-    <aside>
-        <a id="back_button" href="../"><img src="../global_assets/icons/back-arrow.svg" alt="back" title="back"></a>
-        <h1><a href="..">Michael Crum</a></h1>
-        <h3><em>More Projects:</em></h3>
-        <nav>
-            <ul>
-                <li>
+	<div id="left_pad"></div>
+	<aside>
+		<a id="back_button" href="../"><img src="../global_assets/icons/back-arrow.svg" alt="back" title="back"></a>
+		<h1><a href="..">Michael Crum</a></h1>
+		<h3><em>More Projects:</em></h3>
+		<nav>
+			<ul>
+				<li>
     <a href="../string_art_generator">
         <img src="../string_art_generator/assets/snapshot.webp" alt="Generalized String Art Generator">
         <div>
@@ -139,12 +142,12 @@
         </div>
     </a>
 </li>
-            </ul>
-        </nav>
-        <h3><em>More Bits:</em></h3>
-        <nav>
-            <ul>
-                <li>
+			</ul>
+		</nav>
+		<h3><em>More Bits:</em></h3>
+		<nav>
+			<ul>
+				<li>
     <a href="../attiny1616">
         <img src="../attiny1616/assets/snapshot.webp" alt="Zero to Bare Metal AVR Programming with the ATtiny1616">
         <div>
@@ -162,18 +165,18 @@
         </div>
     </a>
 </li>
-            </ul>
-        </nav>
-    </aside>
-    <article id="article">
-        <h1>
-            Building a 100 Line Static Site Generator
-        </h1>
-        <em class="date">
-            3.30.2023
-        </em>
-        <br>
-        <p>See the code here: <a href="https://github.com/usedhondacivic/usedhondacivic.github.io">https://github.com/usedhondacivic/usedhondacivic.github.io</a></p>
+			</ul>
+		</nav>
+	</aside>
+	<article id="article">
+		<h1>
+			Building a 100 Line Static Site Generator
+		</h1>
+		<em class="date">
+			3.30.2023
+		</em>
+		<br>
+		<p>See the code here: <a href="https://github.com/usedhondacivic/usedhondacivic.github.io">https://github.com/usedhondacivic/usedhondacivic.github.io</a></p>
 <img style="width: 100%; height: auto; max-height: none" src="./assets/header.webp">
 <p><em>Note: this article was written before I made major updates to the site generator. I will be updating the writeup to reflect the changes soon.</em></p>
 <h2>Motivation</h2>
@@ -392,8 +395,8 @@ glob(&quot;projects/*/*.md&quot;, function (er, files) {
 })
 </code></pre>
 
-    </article>
-    <div id="right_pad"></div>
+	</article>
+	<div id="right_pad"></div>
 </body>
 
 </html>

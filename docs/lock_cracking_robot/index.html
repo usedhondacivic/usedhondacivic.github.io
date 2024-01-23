@@ -2,72 +2,75 @@
 <html lang="en">
 
 <head>
-    <title>CNC Lock Cracking Robot | Michael Crum | Portfolio</title>
+	<title>CNC Lock Cracking Robot | Michael Crum | Portfolio</title>
 
-    <!-- seo -->
-    <meta name="author" content="Michael Crum">
-    <meta name="description" content="A robot designed to efficiently find the combination to any master lock brand combination lock. Programmed bare-metal on the FRDM-KL46Z board using C and assembly. Electronics control board custom made, interfacing with the FRDM-KL46Z through purpose built drivers. Fabricated using a PRUSA I3 MK3S 3D printer and an Epilog Fusion M2 laser cuter.">
-    <meta name="keywords" content="portfolio,developer,robotics,personal">
+	<!-- seo -->
+	<meta name="author" content="Michael Crum">
+	<meta name="description" content="A robot designed to efficiently find the combination to any master lock brand combination lock. Programmed bare-metal on the FRDM-KL46Z board using C and assembly. Electronics control board custom made, interfacing with the FRDM-KL46Z through purpose built drivers. Fabricated using a PRUSA I3 MK3S 3D printer and an Epilog Fusion M2 laser cuter.">
+	<meta name="keywords" content="portfolio,developer,robotics,personal">
 
-    <!-- display -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+	<!-- display -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
 
-    <!-- icon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="../global_assets/icons/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../global_assets/icons/favicon-16x16.png" />
+	<!-- icon -->
+	<link rel="icon" type="image/png" sizes="32x32" href="../global_assets/icons/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="../global_assets/icons/favicon-16x16.png" />
 
-    <!-- stylesheets -->
-    <link rel="stylesheet" href="../styles/project_page.css">
-    <link rel="stylesheet" href="../styles/highlight/styles/base16/bright.min.css">
-    <link rel="stylesheet" href="../styles/katex/katex.min.css">
+	<!-- stylesheets -->
+	<link rel="stylesheet" href="../styles/project_page.css">
+	<link rel="stylesheet" href="../styles/highlight/styles/base16/bright.min.css">
+	<link rel="stylesheet" href="../styles/katex/katex.min.css">
 
-    <!-- syntax highlighting-->
-    <script src="../styles/highlight/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
+	<!-- syntax highlighting-->
+	<script src="../styles/highlight/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 
-    <!-- latex support-->
-    <script defer src="../styles/katex/katex.min.js"></script>
+	<!-- latex support-->
+	<script defer src="../styles/katex/katex.min.js"></script>
 
-    <!-- font -->
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
 
-    <!-- iFrame optimization -->
-    <script>
-        checkVisibility();
-        document.addEventListener("scroll", (event) => {
-            checkVisibility();
-        });
+	<!-- analytics -->
+	<script data-goatcounter="https://michael-crum.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
-        function checkVisibility() {
-            const frames = document.getElementsByTagName("iframe");
-            for (var i = 0; i < frames.length; i++) {
-                frame = frames[i];
-                if (isInViewport(frame)) {
-                    frame.style.visibility = "visible";
-                } else {
-                    frame.style.visibility = "hidden";
-                }
-            }
-        }
+	<!-- iFrame optimization -->
+	<script>
+		checkVisibility();
+		document.addEventListener("scroll", (event) => {
+			checkVisibility();
+		});
 
-        function isInViewport(elm) {
-            var rect = elm.getBoundingClientRect();
-            var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-            return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
-        }
-    </script>
+		function checkVisibility() {
+			const frames = document.getElementsByTagName("iframe");
+			for (var i = 0; i < frames.length; i++) {
+				frame = frames[i];
+				if (isInViewport(frame)) {
+					frame.style.visibility = "visible";
+				} else {
+					frame.style.visibility = "hidden";
+				}
+			}
+		}
+
+		function isInViewport(elm) {
+			var rect = elm.getBoundingClientRect();
+			var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+			return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+		}
+	</script>
 </head>
 
 <body>
-    <div id="left_pad"></div>
-    <aside>
-        <a id="back_button" href="../"><img src="../global_assets/icons/back-arrow.svg" alt="back" title="back"></a>
-        <h1><a href="..">Michael Crum</a></h1>
-        <h3><em>More Projects:</em></h3>
-        <nav>
-            <ul>
-                <li>
+	<div id="left_pad"></div>
+	<aside>
+		<a id="back_button" href="../"><img src="../global_assets/icons/back-arrow.svg" alt="back" title="back"></a>
+		<h1><a href="..">Michael Crum</a></h1>
+		<h3><em>More Projects:</em></h3>
+		<nav>
+			<ul>
+				<li>
     <a href="../string_art_generator">
         <img src="../string_art_generator/assets/snapshot.webp" alt="Generalized String Art Generator">
         <div>
@@ -139,12 +142,12 @@
         </div>
     </a>
 </li>
-            </ul>
-        </nav>
-        <h3><em>More Bits:</em></h3>
-        <nav>
-            <ul>
-                <li>
+			</ul>
+		</nav>
+		<h3><em>More Bits:</em></h3>
+		<nav>
+			<ul>
+				<li>
     <a href="../attiny1616">
         <img src="../attiny1616/assets/snapshot.webp" alt="Zero to Bare Metal AVR Programming with the ATtiny1616">
         <div>
@@ -162,18 +165,18 @@
         </div>
     </a>
 </li>
-            </ul>
-        </nav>
-    </aside>
-    <article id="article">
-        <h1>
-            CNC Lock Cracking Robot
-        </h1>
-        <em class="date">
-            4.12.2022
-        </em>
-        <br>
-        <h2>Introduction</h2>
+			</ul>
+		</nav>
+	</aside>
+	<article id="article">
+		<h1>
+			CNC Lock Cracking Robot
+		</h1>
+		<em class="date">
+			4.12.2022
+		</em>
+		<br>
+		<h2>Introduction</h2>
 <p>Master Lock combination locks are notoriously easy to crack, to the point that they have become a running joke in the lock picking community. Yet they are still one of the most popular locks ever made, making them a perfect target for an automated cracking tool.</p>
 <p>I designed a lock cracking robot for exactly that purpose. The robot exploits design flaws in the locks to reduce the number of combinations from 64,000 down to just 8, then tests them all in around 15 seconds.</p>
 <p>The robot is designed using a NEMA 17 stepper motor to rotate the dial, an analog servo to actuate the shackle, the FRDM-KL46Z microcontroller to run the show.</p>
@@ -260,8 +263,8 @@
 <p><a href="https://www.omc-stepperonline.com/nema-17-bipolar-59ncm-84oz-in-2a-42x48mm-4-wires-w-1m-cable-connector-17hs19-2004s1">NEMA 17 Stepper Motor</a></p>
 <p><a href="https://www.adafruit.com/product/1404">Analog feedback servo</a></p>
 
-    </article>
-    <div id="right_pad"></div>
+	</article>
+	<div id="right_pad"></div>
 </body>
 
 </html>

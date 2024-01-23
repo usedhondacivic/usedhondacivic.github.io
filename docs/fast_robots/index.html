@@ -2,72 +2,75 @@
 <html lang="en">
 
 <head>
-    <title>Teaching Cheap Robots Expensive Tricks | Michael Crum | Portfolio</title>
+	<title>Teaching Cheap Robots Expensive Tricks | Michael Crum | Portfolio</title>
 
-    <!-- seo -->
-    <meta name="author" content="Michael Crum">
-    <meta name="description" content="Using an inexpensive toy car, some basic sensors, and a little software wizardry, I created a robot capable of mapping, localization, and path planning. Read about my experiences with sensor fusion, modeling dynamics, PID control, Bayesian estimation, wireless communication, and more... and it can also do stunts!">
-    <meta name="keywords" content="portfolio,developer,robotics,personal">
+	<!-- seo -->
+	<meta name="author" content="Michael Crum">
+	<meta name="description" content="Using an inexpensive toy car, some basic sensors, and a little software wizardry, I created a robot capable of mapping, localization, and path planning. Read about my experiences with sensor fusion, modeling dynamics, PID control, Bayesian estimation, wireless communication, and more... and it can also do stunts!">
+	<meta name="keywords" content="portfolio,developer,robotics,personal">
 
-    <!-- display -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+	<!-- display -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
 
-    <!-- icon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="../global_assets/icons/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../global_assets/icons/favicon-16x16.png" />
+	<!-- icon -->
+	<link rel="icon" type="image/png" sizes="32x32" href="../global_assets/icons/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="../global_assets/icons/favicon-16x16.png" />
 
-    <!-- stylesheets -->
-    <link rel="stylesheet" href="../styles/project_page.css">
-    <link rel="stylesheet" href="../styles/highlight/styles/base16/bright.min.css">
-    <link rel="stylesheet" href="../styles/katex/katex.min.css">
+	<!-- stylesheets -->
+	<link rel="stylesheet" href="../styles/project_page.css">
+	<link rel="stylesheet" href="../styles/highlight/styles/base16/bright.min.css">
+	<link rel="stylesheet" href="../styles/katex/katex.min.css">
 
-    <!-- syntax highlighting-->
-    <script src="../styles/highlight/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
+	<!-- syntax highlighting-->
+	<script src="../styles/highlight/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 
-    <!-- latex support-->
-    <script defer src="../styles/katex/katex.min.js"></script>
+	<!-- latex support-->
+	<script defer src="../styles/katex/katex.min.js"></script>
 
-    <!-- font -->
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+	<!-- font -->
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
 
-    <!-- iFrame optimization -->
-    <script>
-        checkVisibility();
-        document.addEventListener("scroll", (event) => {
-            checkVisibility();
-        });
+	<!-- analytics -->
+	<script data-goatcounter="https://michael-crum.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
-        function checkVisibility() {
-            const frames = document.getElementsByTagName("iframe");
-            for (var i = 0; i < frames.length; i++) {
-                frame = frames[i];
-                if (isInViewport(frame)) {
-                    frame.style.visibility = "visible";
-                } else {
-                    frame.style.visibility = "hidden";
-                }
-            }
-        }
+	<!-- iFrame optimization -->
+	<script>
+		checkVisibility();
+		document.addEventListener("scroll", (event) => {
+			checkVisibility();
+		});
 
-        function isInViewport(elm) {
-            var rect = elm.getBoundingClientRect();
-            var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-            return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
-        }
-    </script>
+		function checkVisibility() {
+			const frames = document.getElementsByTagName("iframe");
+			for (var i = 0; i < frames.length; i++) {
+				frame = frames[i];
+				if (isInViewport(frame)) {
+					frame.style.visibility = "visible";
+				} else {
+					frame.style.visibility = "hidden";
+				}
+			}
+		}
+
+		function isInViewport(elm) {
+			var rect = elm.getBoundingClientRect();
+			var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+			return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+		}
+	</script>
 </head>
 
 <body>
-    <div id="left_pad"></div>
-    <aside>
-        <a id="back_button" href="../"><img src="../global_assets/icons/back-arrow.svg" alt="back" title="back"></a>
-        <h1><a href="..">Michael Crum</a></h1>
-        <h3><em>More Projects:</em></h3>
-        <nav>
-            <ul>
-                <li>
+	<div id="left_pad"></div>
+	<aside>
+		<a id="back_button" href="../"><img src="../global_assets/icons/back-arrow.svg" alt="back" title="back"></a>
+		<h1><a href="..">Michael Crum</a></h1>
+		<h3><em>More Projects:</em></h3>
+		<nav>
+			<ul>
+				<li>
     <a href="../string_art_generator">
         <img src="../string_art_generator/assets/snapshot.webp" alt="Generalized String Art Generator">
         <div>
@@ -139,12 +142,12 @@
         </div>
     </a>
 </li>
-            </ul>
-        </nav>
-        <h3><em>More Bits:</em></h3>
-        <nav>
-            <ul>
-                <li>
+			</ul>
+		</nav>
+		<h3><em>More Bits:</em></h3>
+		<nav>
+			<ul>
+				<li>
     <a href="../attiny1616">
         <img src="../attiny1616/assets/snapshot.webp" alt="Zero to Bare Metal AVR Programming with the ATtiny1616">
         <div>
@@ -162,18 +165,18 @@
         </div>
     </a>
 </li>
-            </ul>
-        </nav>
-    </aside>
-    <article id="article">
-        <h1>
-            Teaching Cheap Robots Expensive Tricks
-        </h1>
-        <em class="date">
-            5.20.2023
-        </em>
-        <br>
-        <div style="margin-top: 10px; margin-bottom: 10px; display: inline-block;">
+			</ul>
+		</nav>
+	</aside>
+	<article id="article">
+		<h1>
+			Teaching Cheap Robots Expensive Tricks
+		</h1>
+		<em class="date">
+			5.20.2023
+		</em>
+		<br>
+		<div style="margin-top: 10px; margin-bottom: 10px; display: inline-block;">
   <img style="width: 33%; height: auto; max-height: none; float: left;" alt="splash-1: " src="./assets/room_post_tweek.webp">
   <img style="width: 33%; height: auto; max-height: none; float: left;" alt="splash-2: " src="./assets/tof_guard.webp">
   <img style="width: 33%; height: auto; max-height: none; float: left;" alt="splash-3: " src="./assets/polar_5_-3.webp">
@@ -534,8 +537,8 @@ bel(x_t) = \eta \cdot p(z_t | x_t) \cdot \overline{bel} (x_t)
 <p>This article is a massively abbreviated version of my <a href="https://michael-crum.com/FAST-ROBOTS-2023/intro/">full build log</a>. Check that out if you want more details on the build.</p>
 <p>This robot was developed as part of ECE 4160: Fast Robots at Cornell University. My work builds off of course starter code and the work from past students. You can find all of their pages <a href="https://cei-lab.github.io/FastRobots-2023/StudentPages.html">here</a>. Special thanks to Professor Kirstin Petersen for running a fantastic class.</p>
 
-    </article>
-    <div id="right_pad"></div>
+	</article>
+	<div id="right_pad"></div>
 </body>
 
 </html>
