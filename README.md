@@ -2,8 +2,8 @@
 
 Uses GNU Make paired with Node.js to create a static website generator.
 
-Articles are stored in `/projects`, which is crawled by make. 
-Component generators in `/generators` insert project data into the templates in `/templates`. Image assets are converted to `.webp` using ffmpeg for optimization. Everything is saved under `/docs`, where GitHub Pages is convigured to serve the website.
+Articles are stored in `/projects`, which is crawled by Make. 
+Component generators in `/generators` insert project data into the templates in `/templates`. Image assets are converted to `.webp` using ffmpeg for optimization. Everything is saved under `/docs`, where GitHub Pages is configured to serve the website.
 
 Run `npm install && make` to build the website. Subsequent calls to `make` will only rebuild files that have been edited since the last build.
 
