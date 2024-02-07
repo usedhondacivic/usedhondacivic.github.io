@@ -14,6 +14,18 @@
 	src: url(../fonts/dejavu-sans-mono/DejaVuSansMono.ttf);
 }
 
+@font-face {
+	font-family: RobotoMono;
+	src: url(../fonts/roboto_mono/RobotoMono-VariableFont_wght.ttf);
+}
+
+@font-face {
+	font-family: CodecPro;
+	font-size: 100px;
+	font-weight: 300;
+	src: url(../fonts/codec_pro/CodecPro-Regular.ttf);
+}
+
 html {
 	display: flex;
 	min-height: 100vh;
@@ -23,13 +35,18 @@ html {
 
 body {
 	margin: auto;
-	font-family: DejaVuSansMono, SourceCodePro, monospace;
+	font-family: RobotoMono, DejaVuSansMono, SourceCodePro, monospace;
 	font-weight: normal;
 	color: #fefff5;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	margin-bottom: 30px;
+}
+
+h2 {
+	font-family: CodecPro, DejaVuMono, SourceCodePro, monospace;
+	font-size: 1.75em;
 }
 
 a {
