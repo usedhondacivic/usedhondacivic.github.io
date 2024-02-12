@@ -20,7 +20,7 @@ setup: $(wildcard STYLES/*) $(wildcard FONTS/*) $(wildcard GLOBAL_ASSETS/*)
 	@cp -r -f "$(FONTS)" "$(BUILD)"
 	@mkdir -p "$(BUILD)/$(GLOBAL_ASSETS)"
 	@cp -r -f "$(GLOBAL_ASSETS)" "$(BUILD)"
-	@echo michael-crum.com >> "$(BUILD)/CNAME"
+	@echo michael-crum.com > "$(BUILD)/CNAME"
 
 pages: docs/index.html $(PROJECT_PAGES)
 	
