@@ -20,11 +20,6 @@
 	src: url(../fonts/roboto_mono/RobotoMono-VariableFont_wght.ttf);
 }
 
-@font-face {
-	font-family: CodecPro;
-	src: url(../fonts/codec_pro/CodecPro-Regular.ttf);
-}
-
 html {
 	min-height: 100vh;
 	background-color: #141414;
@@ -45,7 +40,7 @@ h1,
 h2,
 h3,
 h4 {
-	font-family: CodecPro, DejaVuMono, SourceCodePro, monospace;
+	font-family: DejaVuMono, SourceCodePro, monospace;
 }
 
 h2 {
